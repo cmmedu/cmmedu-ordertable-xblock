@@ -92,4 +92,85 @@
 
 .eol-order-xblock-studio .actions-cell {
     width: 120px;
+}
+
+.eol-order-edit {
+    padding: 20px;
+}
+
+.eol-order-edit .wrapper-comp-settings {
+    margin-bottom: 30px;
+}
+
+.eol-order-edit .table-rows-container {
+    margin-top: 20px;
+}
+
+.eol-order-edit .table-rows {
+    margin: 15px 0;
+}
+
+.eol-order-edit .table-row {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.eol-order-edit .row-content {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.eol-order-edit .row-content-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.eol-order-edit .row-actions {
+    display: flex;
+    align-items: flex-start;
+}
+
+.eol-order-edit .remove-row {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.eol-order-edit .remove-row:hover {
+    background-color: #c82333;
+}
+
+.eol-order-edit .add-row-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.eol-order-edit .add-row-button:hover {
+    background-color: #218838;
+}
+
+.eol-order-edit .input.setting-input[type="color"] {
+    width: 50px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ccc;
+}
+
+.eol-order-edit .input.setting-input[type="checkbox"] {
+    width: auto;
+    margin-top: 5px;
 } 

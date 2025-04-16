@@ -1,82 +1,158 @@
-"""
-EOL Order XBlock implementation
-"""
-import json
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Bloque de tabla ordenada"""
+
 import pkg_resources
-from web_fragments.fragment import Fragment
 from xblock.core import XBlock
-from xblock.fields import Scope, String, List, Boolean
-from xblockutils.studio_editable import StudioEditableXBlockMixin
+from xblock.fields import String, Dict, Scope, Boolean
+from xblockutils.resources import ResourceLoader
+from xblock.fragment import Fragment
+import json
 
+loader = ResourceLoader(__name__)
 
-class EolOrderXBlock(StudioEditableXBlockMixin, XBlock):
+@XBlock.needs('i18n')
+class EolOrderXBlock(XBlock):
     """
-    XBlock for ordering items
+    XBlock para crear tablas ordenadas con diferentes tipos de numeración
     """
     display_name = String(
         display_name="Display Name",
-        help="This name appears in the horizontal navigation at the top of the page.",
+        help="Nombre del componente",
         scope=Scope.settings,
-        default="Order Items"
+        default="Eol Order Table XBlock"
     )
 
-    items = List(
-        display_name="Items",
-        help="List of items to be ordered",
-        scope=Scope.content,
-        default=[]
+    table_name = String(
+        display_name="Nombre de la tabla",
+        help="Nombre que se mostrará en la cabecera de la tabla",
+        scope=Scope.settings,
+        default="Tabla Ordenada"
     )
 
-    editable_fields = ('display_name', 'items')
+    background_color = String(
+        display_name="Color de fondo",
+        help="Color de fondo de la tabla en formato hexadecimal",
+        scope=Scope.settings,
+        default="#ececec"
+    )
+
+    numbering_type = String(
+        display_name="Tipo de numeración",
+        help="Tipo de numeración para la primera columna",
+        scope=Scope.settings,
+        default="numbers",
+        values=["numbers", "numbers_zero", "letters", "roman", "none"]
+    )
+
+    uppercase_letters = Boolean(
+        display_name="Letras mayúsculas",
+        help="Usar letras mayúsculas en la numeración",
+        scope=Scope.settings,
+        default=False
+    )
+
+    ordeingelements = Dict(
+        default={'1':{'content':'paso 1'}, '2':{'content':'paso a'}},
+        scope=Scope.settings,
+        help="Lista de elementos a ordenar"
+    )
+
+    has_score = False
+    icon_class = "problem"
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
-    def studio_view(self, context=None):
+    def build_fragment(
+            self,
+            rendered_template,
+            initialize_js_func,
+            additional_css=[],
+            additional_js=[],
+    ):
         """
-        The studio view of the EolOrderXBlock, shown to course authors
-        when editing the block.
+        Create a fragment for display.
         """
-        html = self.resource_string("static/html/eolorder_studio.html")
-        frag = Fragment(html.format(
-            display_name=self.display_name,
-            items=self.items
-        ))
-        frag.add_css(self.resource_string("static/css/eolorder.css"))
-        frag.add_javascript(self.resource_string("static/js/src/eolorder.js"))
-        frag.initialize_js('EolOrderXBlockEdit')
-        return frag
+        fragment = Fragment(rendered_template)
+        for item in additional_css:
+            fragment.add_css(self.resource_string(item))
+        for item in additional_js:
+            fragment.add_javascript(self.resource_string(item))
+        fragment.initialize_js(initialize_js_func)
+        return fragment
 
     def student_view(self, context=None):
         """
         The primary view of the EolOrderXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/eolorder.html")
-        frag = Fragment(html.format(
-            display_name=self.display_name,
-            items=self.items
-        ))
-        frag.add_css(self.resource_string("static/css/eolorder.css"))
-        frag.add_javascript(self.resource_string("static/js/src/eolorder.js"))
-        frag.initialize_js('EolOrderXBlock')
+        context = {
+            'table_name': self.table_name,
+            'background_color': self.background_color,
+            'numbering_type': self.numbering_type,
+            'uppercase_letters': self.uppercase_letters,
+            'ordeingelements': self.ordeingelements
+        }
+        
+        html = loader.render_template('static/html/eolorder.html', context)
+        frag = self.build_fragment(
+            html,
+            self._get_js_init(),
+            ['static/css/eolorder.css'],
+            ['static/js/src/eolorder.js']
+        )
+        return frag
+
+    def studio_view(self, context=None):
+        """
+        The view shown in Studio when editing the XBlock.
+        """
+        context = {
+            'table_name': self.table_name,
+            'background_color': self.background_color,
+            'numbering_type': self.numbering_type,
+            'uppercase_letters': self.uppercase_letters,
+            'ordeingelements': self.ordeingelements
+        }
+        
+        html = loader.render_template('static/html/eolorder_edit.html', context)
+        frag = self.build_fragment(
+            html,
+            self._get_js_init(),
+            ['static/css/eolorder_edit.css'],
+            ['static/js/src/eolorder_edit.js']
+        )
         return frag
 
     @XBlock.json_handler
     def studio_submit(self, data, suffix=''):
         """
-        Handle studio submissions
+        Handle studio submissions.
         """
-        self.display_name = data.get('display_name', self.display_name)
-        self.items = data.get('items', self.items)
+        self.table_name = data.get('table_name', self.table_name)
+        self.background_color = data.get('background_color', self.background_color)
+        self.numbering_type = data.get('numbering_type', self.numbering_type)
+        self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
+        self.ordeingelements = data.get('ordeingelements', self.ordeingelements)
+        
         return {'result': 'success'}
 
     @XBlock.json_handler
-    def submit_answer(self, data, suffix=''):
+    def add_row(self, data, suffix=''):
         """
-        Handle student submissions
+        Add a new row to the table.
         """
-        # Implement your submission logic here
-        return {'result': 'success'} 
+        row_id = str(len(self.ordeingelements) + 1)
+        self.ordeingelements[row_id] = {
+            'content': data.get('content', '')
+        }
+        return {'result': 'success', 'row_id': row_id}
+
+    def _get_js_init(self):
+        """
+        Get the JS initialization function.
+        """
+        return "EolOrderXBlock" 
