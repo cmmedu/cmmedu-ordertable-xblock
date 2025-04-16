@@ -1,0 +1,96 @@
+.eol-order-block {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.eol-order-title {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.eol-order-items {
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.order-number {
+    margin-right: 15px;
+    font-weight: bold;
+    color: #0075b4;
+}
+
+.item-content {
+    flex-grow: 1;
+}
+
+.eol-order-controls {
+    text-align: right;
+}
+
+.eol-order-submit {
+    padding: 8px 16px;
+    background-color: #0075b4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.eol-order-submit:hover {
+    background-color: #005a8c;
+}
+
+/* Studio view styles */
+.eol-order-xblock-studio .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.eol-order-xblock-studio .order-table th,
+.eol-order-xblock-studio .order-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.eol-order-xblock-studio .item-content {
+    width: 100%;
+    min-height: 60px;
+    padding: 5px;
+}
+
+.eol-order-xblock-studio .actions-cell {
+    white-space: nowrap;
+}
+
+.eol-order-xblock-studio .move-up-button,
+.eol-order-xblock-studio .move-down-button,
+.eol-order-xblock-studio .delete-button {
+    padding: 4px 8px;
+    margin: 0 2px;
+    cursor: pointer;
+}
+
+.eol-order-xblock-studio .add-item-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #0075b4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.eol-order-xblock-studio .add-item-button:hover {
+    background-color: #005a8c;
+} 
