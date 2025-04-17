@@ -118,12 +118,12 @@ class EolOrderXBlock(XBlock):
             'ordeingelements': self.ordeingelements
         }
         
-        html = loader.render_template('static/html/eolorder_edit.html', context)
+        html = loader.render_template('static/html/eolorder_studio.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/eolorder_edit.css'],
-            ['static/js/src/eolorder_edit.js']
+            ['static/css/eolorder_studio.css'],
+            ['static/js/src/eolorder_studio.js']
         )
         return frag
 
@@ -132,13 +132,20 @@ class EolOrderXBlock(XBlock):
         """
         Handle studio submissions.
         """
-        self.table_name = data.get('table_name', self.table_name)
-        self.background_color = data.get('background_color', self.background_color)
-        self.numbering_type = data.get('numbering_type', self.numbering_type)
-        self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
-        self.ordeingelements = data.get('ordeingelements', self.ordeingelements)
-        
-        return {'result': 'success'}
+        try:
+            self.table_name = data.get('table_name', self.table_name)
+            self.background_color = data.get('background_color', self.background_color)
+            self.numbering_type = data.get('numbering_type', self.numbering_type)
+            self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
+            
+            # Asegurarse de que ordeingelements sea un diccionario válido
+            ordeingelements = data.get('ordeingelements', {})
+            if isinstance(ordeingelements, dict):
+                self.ordeingelements = ordeingelements
+            
+            return {'result': 'success'}
+        except Exception as e:
+            return {'result': 'error', 'message': str(e)}
 
     @XBlock.json_handler
     def add_row(self, data, suffix=''):

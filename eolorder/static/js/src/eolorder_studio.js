@@ -13,7 +13,7 @@ function EolOrderXBlock(runtime, element) {
             background_color: $element.find('#background_color').val(),
             numbering_type: $element.find('#numbering_type').val(),
             uppercase_letters: $element.find('#uppercase_letters').is(':checked'),
-            table_rows: getTableRowsData()
+            ordeingelements: getTableRowsData()
         };
     }
 
@@ -56,14 +56,31 @@ function EolOrderXBlock(runtime, element) {
             type: 'POST',
             url: handlerUrl,
             data: JSON.stringify(data),
-            success: function() {
-                window.location.reload(false);
+            success: function(response) {
+                if (response.result === 'success') {
+                    // Cerrar el modal de edición
+                    runtime.notify('save', {
+                        state: 'end'
+                    });
+                } else {
+                    showMessage('Error al guardar: ' + response.message, 'error');
+                }
+            },
+            error: function() {
+                showMessage('Error al guardar los cambios', 'error');
             }
         });
     }
 
     function cancelChanges() {
-        window.location.reload(false);
+        // Cerrar el modal de edición sin guardar
+        runtime.notify('cancel', {});
+    }
+
+    function showMessage(message, type) {
+        var $messageContainer = $('.xblock-editor-error-message');
+        $messageContainer.text(message);
+        $messageContainer.removeClass('success error').addClass(type);
     }
 
     $addRowButton.on('click', addRow);

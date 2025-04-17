@@ -104,6 +104,17 @@
 
 .eol-order-edit .table-rows-container {
     margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.eol-order-edit .table-rows-container h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.2em;
 }
 
 .eol-order-edit .table-rows {
@@ -112,38 +123,57 @@
 
 .eol-order-edit .table-row {
     display: flex;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
 }
 
 .eol-order-edit .row-content {
-    flex-grow: 1;
-    margin-right: 10px;
+    flex: 1;
+    margin-right: 15px;
 }
 
 .eol-order-edit .row-content-input {
     width: 100%;
     min-height: 100px;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    border: 1px solid #ced4da;
     border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
     resize: vertical;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.eol-order-edit .row-content-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.eol-order-edit .row-content-input::placeholder {
+    color: #6c757d;
+    opacity: 0.7;
 }
 
 .eol-order-edit .row-actions {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .eol-order-edit .remove-row {
+    padding: 8px 12px;
     background-color: #dc3545;
     color: white;
     border: none;
-    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.15s ease-in-out;
 }
 
 .eol-order-edit .remove-row:hover {
@@ -151,12 +181,15 @@
 }
 
 .eol-order-edit .add-row-button {
+    padding: 10px 15px;
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.15s ease-in-out;
+    margin-top: 10px;
 }
 
 .eol-order-edit .add-row-button:hover {
@@ -173,4 +206,25 @@
 .eol-order-edit .input.setting-input[type="checkbox"] {
     width: auto;
     margin-top: 5px;
+}
+
+.xblock-editor-error-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.xblock-editor-error-message.success {
+    display: block;
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+}
+
+.xblock-editor-error-message.error {
+    display: block;
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
 } 
