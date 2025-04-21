@@ -1,49 +1,90 @@
 .eol-order-block {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
 }
 
-.eol-order-title {
-    margin-bottom: 20px;
+.table-title {
+    margin-bottom: 15px;
     color: #333;
 }
 
-.eol-order-items {
-    margin-bottom: 20px;
+.eol-order-table {
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.order-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+.eol-order-table-content {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.eol-order-table-content th {
+    text-align: left;
     padding: 10px;
-    border: 1px solid #eee;
-    border-radius: 4px;
+    background-color: rgba(255,255,255,0.2);
+    border-bottom: 2px solid rgba(0,0,0,0.1);
 }
 
-.order-number {
-    margin-right: 15px;
+.eol-order-table-content td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.item-row {
+    transition: background-color 0.3s ease;
+}
+
+.item-row:hover {
+    background-color: rgba(255,255,255,0.3);
+}
+
+.order-cell {
+    width: 10%;
     font-weight: bold;
+}
+
+.content-cell {
+    width: 70%;
+}
+
+.actions-cell {
+    width: 20%;
+    text-align: center;
+}
+
+.move-up-button,
+.move-down-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px 10px;
+    margin: 0 2px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.move-up-button:hover,
+.move-down-button:hover {
     color: #0075b4;
 }
 
-.item-content {
-    flex-grow: 1;
-}
-
-.eol-order-controls {
-    text-align: right;
+.move-up-button:disabled,
+.move-down-button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
 }
 
 .eol-order-submit {
-    padding: 8px 16px;
+    margin-top: 15px;
+    padding: 10px 20px;
     background-color: #0075b4;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .eol-order-submit:hover {

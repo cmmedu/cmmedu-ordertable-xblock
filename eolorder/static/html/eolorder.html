@@ -1,3 +1,45 @@
 <div class="eol-order-block">
-    <h3 class="eol-order-title">{{ display_name }}</h3>
+    <h3 class="table-title">{{ table_name }}</h3>
+    <div class="eol-order-table">
+        <table class="eol-order-table-content">
+            <thead>
+                <tr>
+                    <th class="order-header" style="background-color: {{ background_color }};">Orden</th>
+                    <th class="content-header" style="background-color: {{ background_color }};">Contenido</th>
+                    <th class="actions-header" style="background-color: {{ background_color }};">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="items-container">
+                {% for item in elements %}
+                <tr class="item-row" data-index="{{ item.key }}">
+                    <td class="order-cell">
+                        {% if numbering_type == 'numbers' %}
+                            {{ item.key }}
+                        {% elif numbering_type == 'numbers_zero' %}
+                            {{ item.zero_index }}
+                        {% elif numbering_type == 'letters' %}
+                            {% if uppercase_letters %}
+                                {{ item.letter_upper }}
+                            {% else %}
+                                {{ item.letter_lower }}
+                            {% endif %}
+                        {% elif numbering_type == 'roman' %}
+                            {% if uppercase_letters %}
+                                {{ item.roman_upper }}
+                            {% else %}
+                                {{ item.roman_lower }}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="content-cell">{{ item.content }}</td>
+                    <td class="actions-cell">
+                        <button class="move-up-button">↑</button>
+                        <button class="move-down-button">↓</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button class="eol-order-submit">Guardar orden</button>
 </div> 

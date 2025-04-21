@@ -7,11 +7,18 @@ function EolOrderXBlockEdit(runtime, element) {
     var $saveButton = $element.find('.save-button');
     var $cancelButton = $element.find('.cancel-button');
     var $displayName = $element.find('#display_name');
+    var currentOrderNumber = 1;
 
     function updateOrderNumbers() {
+        var rowCount = $itemsContainer.find('.item-row').length;
+        if (rowCount === 0) {
+            currentOrderNumber = 1;
+            return;
+        }
+        
         $itemsContainer.find('.item-row').each(function(index) {
-            $(this).find('.order-cell').text(index + 1);
-            $(this).attr('data-index', index);
+            $(this).find('.order-cell').text(currentOrderNumber + index);
+            $(this).attr('data-index', currentOrderNumber + index);
         });
     }
 
@@ -128,13 +135,67 @@ function EolOrderXBlock(runtime, element) {
     'use strict';
 
     var $element = $(element);
+    var $itemsContainer = $element.find('.items-container');
     var $submitButton = $element.find('.eol-order-submit');
     var handlerUrl = runtime.handlerUrl(element, 'submit_answer');
+
+    function updateButtonStates() {
+        $itemsContainer.find('.item-row').each(function(index) {
+            var $row = $(this);
+            var $upButton = $row.find('.move-up-button');
+            var $downButton = $row.find('.move-down-button');
+            
+            $upButton.prop('disabled', index === 0);
+            $downButton.prop('disabled', index === $itemsContainer.find('.item-row').length - 1);
+        });
+    }
+
+    function moveItem($row, direction) {
+        var $targetRow;
+        if (direction === 'up') {
+            $targetRow = $row.prev('.item-row');
+        } else {
+            $targetRow = $row.next('.item-row');
+        }
+        
+        if ($targetRow.length) {
+            // Guardar el contenido de ambas filas
+            var currentContent = $row.find('.content-cell').html();
+            var targetContent = $targetRow.find('.content-cell').html();
+            
+            // Intercambiar solo el contenido
+            $row.find('.content-cell').html(targetContent);
+            $targetRow.find('.content-cell').html(currentContent);
+            
+            updateButtonStates();
+        }
+    }
+
+    function getCurrentOrder() {
+        var order = [];
+        $itemsContainer.find('.item-row').each(function() {
+            order.push({
+                key: $(this).attr('data-index'),
+                content: $(this).find('.content-cell').html()
+            });
+        });
+        return order;
+    }
+
+    $itemsContainer.on('click', '.move-up-button', function(e) {
+        e.preventDefault();
+        moveItem($(this).closest('.item-row'), 'up');
+    });
+
+    $itemsContainer.on('click', '.move-down-button', function(e) {
+        e.preventDefault();
+        moveItem($(this).closest('.item-row'), 'down');
+    });
 
     $submitButton.on('click', function(e) {
         e.preventDefault();
         var data = {
-            // Add any data you want to submit
+            order: getCurrentOrder()
         };
         
         $.ajax({
@@ -143,9 +204,17 @@ function EolOrderXBlock(runtime, element) {
             data: JSON.stringify(data),
             success: function(response) {
                 if (response.result === 'success') {
-                    // Handle success
+                    alert('¡Orden guardado correctamente!');
+                } else {
+                    alert('Error al guardar el orden: ' + response.message);
                 }
+            },
+            error: function() {
+                alert('Error al guardar el orden. Por favor, intente nuevamente.');
             }
         });
     });
+
+    // Initialize button states
+    updateButtonStates();
 } 
