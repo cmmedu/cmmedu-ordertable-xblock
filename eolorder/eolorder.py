@@ -82,9 +82,16 @@ class EolOrderXBlock(XBlock):
         help="Lista de elementos a ordenar"
     )
 
+    correct_answers = List(
+        default=[],
+        scope=Scope.settings,
+        help="Lista respuestas correctas"
+    )
+
     disordered_order = List(
         default=[],
         scope=Scope.settings,
+        display_name="Orden desordenado",
         help="Orden desordenado para mostrar a los estudiantes"
     )
 
@@ -144,8 +151,11 @@ class EolOrderXBlock(XBlock):
             'background_color': self.background_color,
             'numbering_type': self.numbering_type,
             'uppercase_letters': self.uppercase_letters,
+            'correct_answers': self.correct_answers,
             'random_disorder': self.random_disorder,
-            'elements': elements
+            'elements': elements,
+            'correct_answers': self.correct_answers,
+            'disordered_order': self.disordered_order
         }
         
         html = loader.render_template('static/html/eolorder.html', context)
@@ -166,13 +176,46 @@ class EolOrderXBlock(XBlock):
             self.disordered_order = list(self.ordeingelements.keys())
         
         context = {
-            'table_name': self.table_name,
-            'background_color': self.background_color,
-            'numbering_type': self.numbering_type,
-            'uppercase_letters': self.uppercase_letters,
-            'ordeingelements': self.ordeingelements,
-            'disordered_order': self.disordered_order,
-            'random_disorder': self.random_disorder
+            'table_name': {
+                'value': self.table_name,
+                'display_name': self.fields['table_name'].display_name,
+                'help': self.fields['table_name'].help
+            },
+            'background_color': {
+                'value': self.background_color,
+                'display_name': self.fields['background_color'].display_name,
+                'help': self.fields['background_color'].help
+            },
+            'numbering_type': {
+                'value': self.numbering_type,
+                'display_name': self.fields['numbering_type'].display_name,
+                'help': self.fields['numbering_type'].help
+            },
+            'uppercase_letters': {
+                'value': self.uppercase_letters,
+                'display_name': self.fields['uppercase_letters'].display_name,
+                'help': self.fields['uppercase_letters'].help
+            },
+            'ordeingelements': {
+                'value': self.ordeingelements,
+                'display_name': 'Elementos a ordenar',
+                'help': self.fields['ordeingelements'].help
+            },
+            'correct_answers': {
+                'value': self.correct_answers,
+                'display_name': 'Respuestas correctas',
+                'help': self.fields['correct_answers'].help
+            },
+            'disordered_order': {
+                'value': self.disordered_order,
+                'display_name': self.fields['disordered_order'].display_name,
+                'help': self.fields['disordered_order'].help
+            },
+            'random_disorder': {
+                'value': self.random_disorder,
+                'display_name': self.fields['random_disorder'].display_name,
+                'help': self.fields['random_disorder'].help
+            }
         }
         
         html = loader.render_template('static/html/eolorder_studio.html', context)

@@ -4,43 +4,48 @@
         <ul class="list-input settings-list">
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="table_name">Nombre de la tabla</label>
-                    <input class="input setting-input" name="table_name" id="table_name" value="{{table_name}}"
+                    <label class="label setting-label" for="table_name">{{table_name.display_name}}</label>
+                    <span class="tip setting-help">{{table_name.help}}</span>
+                    <input class="input setting-input" name="table_name" id="table_name" value="{{table_name.value}}"
                         type="text" />
                 </div>
             </li>
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="background_color">Color de fondo</label>
+                    <label class="label setting-label" for="background_color">{{background_color.display_name}}</label>
+                    <span class="tip setting-help">{{background_color.help}}</span>
                     <input class="input setting-input" name="background_color" id="background_color"
-                        value="{{background_color}}" />
+                        value="{{background_color.value}}" />
                 </div>
             </li>
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="numbering_type">Tipo de numeración"</label>
+                    <label class="label setting-label" for="numbering_type">{{numbering_type.display_name}}</label>
+                    <span class="tip setting-help">{{numbering_type.help}}</span>
                     <select class="input setting-input" name="numbering_type" id="numbering_type">
-                        <option value="numbers" ${'selected' if numbering_type=='numbers' else '' }>1, 2, 3...</option>
-                        <option value="numbers_zero" ${'selected' if numbering_type=='numbers_zero' else '' }>0, 1, 2...
+                        <option value="numbers" ${'selected' if numbering_type.value=='numbers' else '' }>1, 2, 3...</option>
+                        <option value="numbers_zero" ${'selected' if numbering_type.value=='numbers_zero' else '' }>0, 1, 2...
                         </option>
-                        <option value="letters" ${'selected' if numbering_type=='letters' else '' }>a, b, c...</option>
-                        <option value="roman" ${'selected' if numbering_type=='roman' else '' }>i, ii, iii...</option>
-                        <option value="none" ${'selected' if numbering_type=='none' else '' }>No crear</option>
+                        <option value="letters" ${'selected' if numbering_type.value=='letters' else '' }>a, b, c...</option>
+                        <option value="roman" ${'selected' if numbering_type.value=='roman' else '' }>i, ii, iii...</option>
+                        <option value="none" ${'selected' if numbering_type.value=='none' else '' }>No crear</option>
                     </select>
                 </div>
             </li>
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="uppercase_letters">Letras mayúsculas</label>
+                    <label class="label setting-label" for="uppercase_letters">{{uppercase_letters.display_name}}</label>
+                    <span class="tip setting-help">{{uppercase_letters.help}}</span>
                     <input class="input setting-input" name="uppercase_letters" id="uppercase_letters" type="checkbox"
-                        ${'checked' if uppercase_letters else '' } />
+                        ${'checked' if uppercase_letters.value else '' } />
                 </div>
             </li>
             <li>
                 <div class="table-rows-container">
-                    <h3>Elementos a ordenar</h3>
+                    <h3>{{ordeingelements.display_name}}</h3>
+                    <span class="tip setting-help">{{ordeingelements.help}}</span>
                     <div class="table-rows">
-                        {% for key, value in ordeingelements.items %}
+                        {% for key, value in ordeingelements.value.items %}
                         <div class="table-row" data-row-id="{{key}}">
                             <div class="row-content">
                                 <p>Label: {{key}}</divp>
@@ -60,13 +65,33 @@
             </li>
             <li>
                 <div class="eol-order-disorder">
-                    <h3>Orden desordenado para estudiantes</h3>
+                    <h3>{{disordered_order.display_name}}</h3>
+                    <span class="tip setting-help">{{disordered_order.help}}</span>
                     <div class="disorder-preview">
-                        {% for key in disordered_order %}
+                        {% for key in disordered_order.value %}
                         <span class="disorder-item">{{ key }}</span>
                         {% endfor %}
                     </div>
                 </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="random_disorder">{{random_disorder.display_name}}</label>
+                    <span class="tip setting-help">{{random_disorder.help}}</span>
+                    <input class="input setting-input" name="random_disorder" id="random_disorder" type="checkbox"
+                        ${'checked' if random_disorder.value else '' } />
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="xblock-actions">
+        <span class="xblock-editor-error-message"></span>
+        <ul>
+            <li class="action-item">
+                <a href="#" class="button action-primary save-button">{% trans "Save" %}</a>
+            </li>
+            <li class="action-item">
+                <a href="#" class="button cancel-button">{% trans "cancel" %}</a>
             </li>
         </ul>
     </div>
