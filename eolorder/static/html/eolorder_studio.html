@@ -58,19 +58,15 @@
                     <button class="add-row-button">Agregar</button>
                 </div>
             </li>
-        </ul>
-    </div>
-
-
-
-    <div class="xblock-actions">
-        <span class="xblock-editor-error-message"></span>
-        <ul>
-            <li class="action-item">
-                <a href="#" class="button action-primary save-button">{% trans "Save" %}</a>
-            </li>
-            <li class="action-item">
-                <a href="#" class="button cancel-button">{% trans "cancel" %}</a>
+            <li>
+                <div class="eol-order-disorder">
+                    <h3>Orden desordenado para estudiantes</h3>
+                    <div class="disorder-preview">
+                        {% for key in disordered_order %}
+                        <span class="disorder-item">{{ key }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
             </li>
         </ul>
     </div>

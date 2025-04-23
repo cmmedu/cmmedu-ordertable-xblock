@@ -4,7 +4,7 @@
 
 import pkg_resources
 from xblock.core import XBlock
-from xblock.fields import String, Dict, Scope, Boolean
+from xblock.fields import String, Dict, Scope, Boolean, List
 from xblockutils.resources import ResourceLoader
 from xblock.fragment import Fragment
 import json
@@ -71,7 +71,7 @@ class EolOrderXBlock(XBlock):
 
     uppercase_letters = Boolean(
         display_name="Letras mayúsculas",
-        help="Usar letras mayúsculas en la numeración",
+        help="Usar letras mayúsculas en la numeración (solo aplicable a letras)",
         scope=Scope.settings,
         default=False
     )
@@ -80,6 +80,19 @@ class EolOrderXBlock(XBlock):
         default={'1':{'content':'paso 1'}, '2':{'content':'paso a'}},
         scope=Scope.settings,
         help="Lista de elementos a ordenar"
+    )
+
+    disordered_order = List(
+        default=[],
+        scope=Scope.settings,
+        help="Orden desordenado para mostrar a los estudiantes"
+    )
+
+    random_disorder = Boolean(
+        display_name="Desordenar aleatoriamente",
+        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado)",
+        scope=Scope.settings,
+        default=False
     )
 
     has_score = False
@@ -131,6 +144,7 @@ class EolOrderXBlock(XBlock):
             'background_color': self.background_color,
             'numbering_type': self.numbering_type,
             'uppercase_letters': self.uppercase_letters,
+            'random_disorder': self.random_disorder,
             'elements': elements
         }
         
@@ -147,12 +161,18 @@ class EolOrderXBlock(XBlock):
         """
         The view shown in Studio when editing the XBlock.
         """
+        # Si no hay orden desordenado, generarlo
+        if not self.disordered_order:
+            self.disordered_order = list(self.ordeingelements.keys())
+        
         context = {
             'table_name': self.table_name,
             'background_color': self.background_color,
             'numbering_type': self.numbering_type,
             'uppercase_letters': self.uppercase_letters,
-            'ordeingelements': self.ordeingelements
+            'ordeingelements': self.ordeingelements,
+            'disordered_order': self.disordered_order,
+            'random_disorder': self.random_disorder
         }
         
         html = loader.render_template('static/html/eolorder_studio.html', context)
@@ -174,19 +194,24 @@ class EolOrderXBlock(XBlock):
             self.background_color = data.get('background_color', self.background_color)
             self.numbering_type = data.get('numbering_type', self.numbering_type)
             self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
-            
+            self.random_disorder = data.get('random_disorder', self.random_disorder)
             # Asegurarse de que ordeingelements sea un diccionario válido
             ordeingelements = data.get('ordeingelements', {})
             if isinstance(ordeingelements, dict):
                 # Si no hay elementos, reiniciar la numeración
                 if not ordeingelements:
                     self.ordeingelements = {}
+                    self.disordered_order = []
                 else:
                     # Reordenar los elementos manteniendo la numeración secuencial
                     new_ordeingelements = {}
                     for i, (key, value) in enumerate(ordeingelements.items(), 1):
                         new_ordeingelements[str(i)] = value
                     self.ordeingelements = new_ordeingelements
+                    
+                    # Actualizar el orden desordenado si es necesario
+                    if not self.disordered_order or len(self.disordered_order) != len(new_ordeingelements):
+                        self.disordered_order = list(new_ordeingelements.keys())
             
             return {'result': 'success'}
         except Exception as e:
