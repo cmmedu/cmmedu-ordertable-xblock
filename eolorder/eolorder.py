@@ -4,7 +4,7 @@
 
 import pkg_resources
 from xblock.core import XBlock
-from xblock.fields import String, Dict, Scope, Boolean, List, Float
+from xblock.fields import String, Dict, Scope, Boolean
 from xblockutils.resources import ResourceLoader
 from xblock.fragment import Fragment
 import json
@@ -82,28 +82,8 @@ class EolOrderXBlock(XBlock):
         help="Lista de elementos a ordenar"
     )
 
-    random_order = Boolean(
-        display_name="Orden aleatorio",
-        help="Si está marcado, el orden se generará aleatoriamente para cada estudiante",
-        scope=Scope.settings,
-        default=True
-    )
-
-    custom_disorder = List(
-        display_name="Orden personalizado",
-        help="Lista de índices que define el orden desordenado (solo se usa si orden aleatorio está desactivado)",
-        scope=Scope.settings,
-        default=[]
-    )
-
-    has_score = True
+    has_score = False
     icon_class = "problem"
-    weight = Float(
-        display_name="Peso",
-        help="Peso de la pregunta en la calificación",
-        scope=Scope.settings,
-        default=1.0
-    )
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -135,21 +115,9 @@ class EolOrderXBlock(XBlock):
         """
         # Preparar los elementos con la numeración correcta
         elements = []
-        ordered_keys = sorted(self.ordeingelements.keys(), key=int)
-        
-        # Determinar el orden desordenado
-        if self.random_order:
-            import random
-            disorder_keys = ordered_keys.copy()
-            random.shuffle(disorder_keys)
-        else:
-            disorder_keys = self.custom_disorder if self.custom_disorder else ordered_keys
-        
-        # Crear los elementos en el orden desordenado
-        for i, key in enumerate(disorder_keys):
-            item = self.ordeingelements[key]
+        for i, (key, item) in enumerate(self.ordeingelements.items()):
             elements.append({
-                'key': key,
+                'key': str(i + 1),
                 'content': item['content'],
                 'zero_index': str(i),
                 'letter_upper': number_to_letter(i + 1, True),
@@ -163,8 +131,7 @@ class EolOrderXBlock(XBlock):
             'background_color': self.background_color,
             'numbering_type': self.numbering_type,
             'uppercase_letters': self.uppercase_letters,
-            'elements': elements,
-            'ordered_keys': ordered_keys  # Guardamos las claves ordenadas para la evaluación
+            'elements': elements
         }
         
         html = loader.render_template('static/html/eolorder.html', context)
@@ -249,31 +216,18 @@ class EolOrderXBlock(XBlock):
             if not submitted_order:
                 return {'result': 'error', 'message': 'No se recibió ningún orden'}
             
-            # Obtener las claves en el orden correcto
-            correct_order = sorted(self.ordeingelements.keys(), key=int)
+            # Crear un nuevo diccionario con el orden y contenido actualizado
+            new_elements = {}
+            for item in submitted_order:
+                if item['key'] in self.ordeingelements:
+                    new_elements[item['key']] = {
+                        'content': item['content']
+                    }
             
-            # Verificar que el orden del estudiante coincida con el orden correcto
-            student_order = [item['key'] for item in submitted_order]
+            # Actualizar el orden de los elementos
+            self.ordeingelements = new_elements
             
-            # Calcular la puntuación
-            score = 1.0 if student_order == correct_order else 0.0
-            
-            # Guardar la calificación
-            self.runtime.publish(
-                self,
-                'grade',
-                {
-                    'value': score * self.weight,
-                    'max_value': self.weight
-                }
-            )
-            
-            return {
-                'result': 'success',
-                'score': score,
-                'correct_order': correct_order,
-                'student_order': student_order
-            }
+            return {'result': 'success'}
         except Exception as e:
             return {'result': 'error', 'message': str(e)}
 

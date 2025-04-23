@@ -1,90 +1,77 @@
 {% load i18n %}
-<div class="eol-order-studio">
-    <div class="wrapper-comp-settings is-active editor-with-buttons">
-        <div class="xblock-input-settings">
-            <div class="wrapper-message wrapper-message-error" style="display: none;">
-                <span class="message-text"></span>
-            </div>
-            
-            <div class="input-settings">
-                <div class="field">
-                    <label for="display_name">Nombre del componente</label>
-                    <input type="text" id="display_name" value="{{ display_name }}">
+<div class="editor-with-buttons">
+    <div class="wrapper-comp-settings is-active editor-with-buttons" id="settings-tab">
+        <ul class="list-input settings-list">
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="table_name">Nombre de la tabla</label>
+                    <input class="input setting-input" name="table_name" id="table_name" value="{{table_name}}"
+                        type="text" />
                 </div>
-                
-                <div class="field">
-                    <label for="table_name">Nombre de la tabla</label>
-                    <input type="text" id="table_name" value="{{ table_name }}">
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="background_color">Color de fondo</label>
+                    <input class="input setting-input" name="background_color" id="background_color"
+                        value="{{background_color}}" />
                 </div>
-                
-                <div class="field">
-                    <label for="background_color">Color de fondo</label>
-                    <input type="color" id="background_color" value="{{ background_color }}">
-                </div>
-                
-                <div class="field">
-                    <label for="numbering_type">Tipo de numeración</label>
-                    <select id="numbering_type">
-                        <option value="numbers" {% if numbering_type == 'numbers' %}selected{% endif %}>Números</option>
-                        <option value="numbers_zero" {% if numbering_type == 'numbers_zero' %}selected{% endif %}>Números desde cero</option>
-                        <option value="letters" {% if numbering_type == 'letters' %}selected{% endif %}>Letras</option>
-                        <option value="roman" {% if numbering_type == 'roman' %}selected{% endif %}>Números romanos</option>
-                        <option value="none" {% if numbering_type == 'none' %}selected{% endif %}>Ninguno</option>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="numbering_type">Tipo de numeración"</label>
+                    <select class="input setting-input" name="numbering_type" id="numbering_type">
+                        <option value="numbers" ${'selected' if numbering_type=='numbers' else '' }>1, 2, 3...</option>
+                        <option value="numbers_zero" ${'selected' if numbering_type=='numbers_zero' else '' }>0, 1, 2...
+                        </option>
+                        <option value="letters" ${'selected' if numbering_type=='letters' else '' }>a, b, c...</option>
+                        <option value="roman" ${'selected' if numbering_type=='roman' else '' }>i, ii, iii...</option>
+                        <option value="none" ${'selected' if numbering_type=='none' else '' }>No crear</option>
                     </select>
                 </div>
-                
-                <div class="field">
-                    <label>
-                        <input type="checkbox" id="uppercase_letters" {% if uppercase_letters %}checked{% endif %}>
-                        Usar letras mayúsculas
-                    </label>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="uppercase_letters">Letras mayúsculas</label>
+                    <input class="input setting-input" name="uppercase_letters" id="uppercase_letters" type="checkbox"
+                        ${'checked' if uppercase_letters else '' } />
                 </div>
-
-                <div class="field">
-                    <label for="weight">Peso de la pregunta</label>
-                    <input type="number" id="weight" min="0" step="0.1" value="{{ weight }}">
-                </div>
-            </div>
-            
-            <div class="order-settings">
-                <h3>Configuración del orden</h3>
-                <div class="field">
-                    <label>
-                        <input type="checkbox" id="random_order" {% if random_order %}checked{% endif %}>
-                        Orden aleatorio
-                    </label>
-                </div>
-
-                <div class="field" id="custom_disorder_field" {% if random_order %}style="display: none;"{% endif %}>
-                    <label for="custom_disorder">Orden personalizado</label>
-                    <textarea id="custom_disorder" rows="5" placeholder="Ingrese los índices separados por comas (ej: 2,1,3,4)">{% if custom_disorder %}{{ custom_disorder|join:',' }}{% endif %}</textarea>
-                    <div class="help-text">
-                        Ingrese los índices en el orden en que desea que aparezcan los elementos.<br>
-                        Si está vacío, se usará el orden original.
-                    </div>
-                </div>
-            </div>
-            
-            <div class="table-container">
-                <h3>Elementos de la tabla</h3>
-                <div class="items-container">
-                    {% for key, item in ordeingelements.items %}
-                    <div class="item-box" data-index="{{ key }}" draggable="true">
-                        <div class="item-header">
-                            <span class="item-number">{{ key }}</span>
-                            <button class="delete-button">×</button>
+            </li>
+            <li>
+                <div class="table-rows-container">
+                    <h3>Elementos a ordenar</h3>
+                    <div class="table-rows">
+                        {% for key, value in ordeingelements.items %}
+                        <div class="table-row" data-row-id="{{key}}">
+                            <div class="row-content">
+                                <p>Label: {{key}}</divp>
+                            </div>
+                            <div class="row-content">
+                                <textarea class="row-content-input" placeholder="Contenido de la fila (HTML permitido)"
+                                    name="content">{{value.content}}</textarea>
+                            </div>
+                            <div class="row-actions">
+                                <button class="remove-row">Eliminar</button>
+                            </div>
                         </div>
-                        <textarea class="item-content">{{ item.content }}</textarea>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                    <button class="add-row-button">Agregar</button>
                 </div>
-                <button class="add-item-button">Agregar elemento</button>
-            </div>
-        </div>
-        
-        <div class="xblock-actions">
-            <button class="action-primary save-button">Guardar</button>
-            <button class="action-secondary cancel-button">Cancelar</button>
-        </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div class="xblock-actions">
+        <span class="xblock-editor-error-message"></span>
+        <ul>
+            <li class="action-item">
+                <a href="#" class="button action-primary save-button">{% trans "Save" %}</a>
+            </li>
+            <li class="action-item">
+                <a href="#" class="button cancel-button">{% trans "cancel" %}</a>
+            </li>
+        </ul>
     </div>
 </div>
