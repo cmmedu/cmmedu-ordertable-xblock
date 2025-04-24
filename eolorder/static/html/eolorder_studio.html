@@ -67,9 +67,11 @@
                 <div class="eol-order-disorder">
                     <h3>{{disordered_order.display_name}}</h3>
                     <span class="tip setting-help">{{disordered_order.help}}</span>
-                    <div class="disorder-preview">
+                    <div class="disorder-preview" id="disorder-container">
                         {% for key in disordered_order.value %}
-                        <span class="disorder-item">{{ key }}</span>
+                        <div class="disorder-item" draggable="true" data-value="{{ key }}">
+                            <span class="item-content">{{ key }}</span>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

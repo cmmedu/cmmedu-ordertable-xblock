@@ -134,4 +134,63 @@
 
 .eol-order-xblock-studio .add-item-button:hover {
     background-color: #005a8c;
+}
+
+/* Horizontal Drag and Drop Styles */
+.eol-order-disorder {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.disorder-preview {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    min-height: 100px;
+}
+
+.disorder-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    cursor: grab;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+.disorder-item:hover {
+    background: #e8f0ff;
+    transform: scale(1.03);
+}
+
+.disorder-item.dragging {
+    opacity: 0.7;
+    transform: rotate(-2deg);
+}
+
+.disorder-item.over {
+    border: 2px dashed #ff8c42;
+    background: #fff3e0;
+}
+
+.drag-handle {
+    margin-right: 10px;
+    cursor: grab;
+    color: #666;
+}
+
+.item-content {
+    flex-grow: 1;
+    color: #333;
+    font-weight: bold;
 } 

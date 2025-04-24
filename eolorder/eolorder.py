@@ -9,6 +9,11 @@ from xblockutils.resources import ResourceLoader
 from xblock.fragment import Fragment
 import json
 from django.template import Context, Template
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
 
 loader = ResourceLoader(__name__)
 
@@ -77,7 +82,7 @@ class EolOrderXBlock(XBlock):
     )
 
     ordeingelements = Dict(
-        default={'1':{'content':'paso 1'}, '2':{'content':'paso a'}},
+        default={1: {'content':'paso 1'}, 2: {'content':'paso a'}},
         scope=Scope.settings,
         help="Lista de elementos a ordenar"
     )
@@ -137,9 +142,9 @@ class EolOrderXBlock(XBlock):
         elements = []
         for i, (key, item) in enumerate(self.ordeingelements.items()):
             elements.append({
-                'key': str(i + 1),
+                'key': int(key) if isinstance(key, str) else key,
                 'content': item['content'],
-                'zero_index': str(i),
+                'zero_index': i,
                 'letter_upper': number_to_letter(i + 1, True),
                 'letter_lower': number_to_letter(i + 1, False),
                 'roman_upper': number_to_roman(i + 1, True),
@@ -163,7 +168,7 @@ class EolOrderXBlock(XBlock):
             html,
             self._get_js_init(),
             ['static/css/eolorder.css'],
-            ['static/js/src/eolorder.js']
+            ['static/js/eolorder.js']
         )
         return frag
 
@@ -173,7 +178,7 @@ class EolOrderXBlock(XBlock):
         """
         # Si no hay orden desordenado, generarlo
         if not self.disordered_order:
-            self.disordered_order = list(self.ordeingelements.keys())
+            self.disordered_order = [int(key) for key in self.ordeingelements.keys()]
         
         context = {
             'table_name': {
@@ -223,8 +228,11 @@ class EolOrderXBlock(XBlock):
             html,
             self._get_js_init(),
             ['static/css/eolorder_studio.css'],
-            ['static/js/src/eolorder_studio.js']
+            ['static/js/drag-and-drop.js', 'static/js/eolorder_studio.js']
         )
+        
+        # Add the JavaScript file directly to the fragment
+        frag.add_javascript(self.resource_string('static/js/drag-and-drop.js'))
         return frag
 
     @XBlock.json_handler

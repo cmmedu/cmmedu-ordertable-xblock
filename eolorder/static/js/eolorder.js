@@ -217,4 +217,53 @@ function EolOrderXBlock(runtime, element) {
 
     // Initialize button states
     updateButtonStates();
-} 
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const disorderContainer = document.getElementById('disorder-container');
+    let draggingItem = null;
+
+    if (disorderContainer) {
+        disorderContainer.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('disorder-item')) {
+                draggingItem = e.target;
+                e.target.classList.add('dragging');
+            }
+        });
+
+        disorderContainer.addEventListener('dragend', (e) => {
+            if (e.target.classList.contains('disorder-item')) {
+                e.target.classList.remove('dragging');
+                document.querySelectorAll('.disorder-item')
+                    .forEach(item => item.classList.remove('over'));
+                draggingItem = null;
+            }
+        });
+
+        disorderContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingOverItem = getDragAfterElement(disorderContainer, e.clientX);
+            document.querySelectorAll('.disorder-item').forEach(item => item.classList.remove('over'));
+            
+            if (draggingOverItem) {
+                draggingOverItem.classList.add('over');
+                disorderContainer.insertBefore(draggingItem, draggingOverItem);
+            } else {
+                disorderContainer.appendChild(draggingItem);
+            }
+        });
+
+        function getDragAfterElement(container, x) {
+            const draggableElements = [...container.querySelectorAll('.disorder-item:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+    }
+}); 
