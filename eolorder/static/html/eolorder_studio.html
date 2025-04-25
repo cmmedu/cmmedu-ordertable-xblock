@@ -68,9 +68,16 @@
                     <h3>{{disordered_order.display_name}}</h3>
                     <span class="tip setting-help">{{disordered_order.help}}</span>
                     <div class="disorder-preview" id="disorder-container">
+                        <div class="order-label">
+                            <span>Orden actual: </span>
+                            <input type="text" id="current-order-value" class="order-input" value="{{disordered_order.value|join:", "}}" readonly />
+                        </div>
+                        <br/>
                         {% for key in disordered_order.value %}
                         <div class="disorder-item" draggable="true" data-value="{{ key }}">
+                            <button class="move-up-button" title="Mover arriba">↑</button>
                             <span class="item-content">{{ key }}</span>
+                            <button class="move-down-button" title="Mover abajo">↓</button>
                         </div>
                         {% endfor %}
                     </div>

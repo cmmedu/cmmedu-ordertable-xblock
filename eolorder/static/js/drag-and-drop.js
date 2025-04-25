@@ -1,233 +1,237 @@
 (function() {
     console.log('drag-and-drop.js script loaded');
     
-    let initialized = false;
+    let observer = null;
     let currentContainer = null;
-    let mouseMoveHandler = null;
-    let mouseUpHandler = null;
-    let mouseDownHandler = null;
+    let draggedItem = null;
+    let draggedItemIndex = -1;
+    let dropTarget = null;
+    let isDragging = false;
     
     function cleanup() {
-        console.log('Cleaning up drag and drop');
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+        
         if (currentContainer) {
             const items = currentContainer.querySelectorAll('.disorder-item');
             items.forEach(item => {
-                if (mouseDownHandler) {
-                    item.removeEventListener('mousedown', mouseDownHandler);
-                }
+                item.removeAttribute('draggable');
+                item.removeEventListener('dragstart', handleDragStart);
+                item.removeEventListener('dragend', handleDragEnd);
             });
+            currentContainer.removeEventListener('dragover', handleDragOver);
+            currentContainer.removeEventListener('drop', handleDrop);
             currentContainer = null;
         }
         
-        if (mouseMoveHandler) {
-            document.removeEventListener('mousemove', mouseMoveHandler);
-            mouseMoveHandler = null;
+        draggedItem = null;
+        draggedItemIndex = -1;
+        dropTarget = null;
+        isDragging = false;
+    }
+    
+    function handleDragStart(e) {
+        console.log('DragStart');
+        isDragging = true;
+        draggedItem = e.target;
+        draggedItemIndex = Array.from(currentContainer.children).indexOf(draggedItem);
+        console.log('Dragged item index:', draggedItemIndex);
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', e.target.id);
+    }
+    
+    function handleDragEnd(e) {
+        console.log('DragEnd');
+        e.target.classList.remove('dragging');
+        draggedItem = null;
+        draggedItemIndex = -1;
+        dropTarget = null;
+        isDragging = false;
+    }
+    
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        if (!draggedItem) {
+            console.log('No dragged item');
+            return;
         }
         
-        if (mouseUpHandler) {
-            document.removeEventListener('mouseup', mouseUpHandler);
-            mouseUpHandler = null;
+        const items = Array.from(currentContainer.querySelectorAll('.disorder-item:not(.dragging)'));
+        let closest = null;
+        let closestOffset = Number.NEGATIVE_INFINITY;
+        
+        // Verificar cada elemento horizontalmente
+        items.forEach(item => {
+            const box = item.getBoundingClientRect();
+            const offset = e.clientX - (box.left + box.width / 2);
+            
+            // Log para cada elemento que estamos pasando
+            const labelElement = item.querySelector('.item-label');
+            const labelText = labelElement ? labelElement.textContent.trim() : 'No label found';
+            const itemIndex = Array.from(currentContainer.children).indexOf(item);
+            
+            console.log('=== Passing Over Item ===');
+            console.log('Item index:', itemIndex);
+            console.log('Item label:', labelText);
+            console.log('Horizontal offset from center:', offset);
+            console.log('Is to the left of center:', offset < 0);
+            console.log('=======================');
+
+            // Encontrar el elemento más cercano horizontalmente
+            if (offset < 0 && offset > closestOffset) {
+                closestOffset = offset;
+                closest = item;
+            }
+        });
+        
+        if (closest) {
+            const rect = closest.getBoundingClientRect();
+            const offset = e.clientX - (rect.left + rect.width / 2);
+            const closestIndex = Array.from(currentContainer.children).indexOf(closest);
+            
+            console.log('=== Selected Target ===');
+            console.log('Selected item index:', closestIndex);
+            console.log('Selected item label:', closest.querySelector('.item-label')?.textContent.trim());
+            console.log('Final horizontal offset:', offset);
+            console.log('Insert before:', offset < 0);
+            console.log('=======================');
+
+            // Actualizar el dropTarget con la nueva posición
+            dropTarget = {
+                element: closest,
+                insertBefore: offset < 0
+            };
+            
+            // Solo mover visualmente si la posición ha cambiado significativamente
+            if (Math.abs(closestIndex - draggedItemIndex) > 0) {
+                if (offset < 0) {
+                    currentContainer.insertBefore(draggedItem, closest);
+                } else {
+                    currentContainer.insertBefore(draggedItem, closest.nextSibling);
+                }
+                draggedItemIndex = Array.from(currentContainer.children).indexOf(draggedItem);
+                console.log('New dragged index:', draggedItemIndex);
+            }
+        } else {
+            console.log('No closest item found - outside container bounds');
+        }
+    }
+    
+    function handleDrop(e) {
+        console.log('Drop');
+        e.preventDefault();
+        
+        if (!draggedItem || !dropTarget) {
+            console.log('No dragged item or drop target');
+            return;
         }
         
-        initialized = false;
+        console.log('Performing drop');
+        console.log('Dragged item:', draggedItem.id);
+        console.log('Drop target:', dropTarget.element.id);
+        console.log('Insert before:', dropTarget.insertBefore);
+        
+        if (dropTarget.insertBefore) {
+            currentContainer.insertBefore(draggedItem, dropTarget.element);
+        } else {
+            currentContainer.insertBefore(draggedItem, dropTarget.element.nextSibling);
+        }
+        
+        const newOrder = Array.from(currentContainer.children).map((item, index) => {
+            return {
+                id: item.id,
+                order: index
+            };
+        });
+        
+        console.log('New order:', newOrder);
+        
+        draggedItem.classList.remove('dragging');
+        draggedItem = null;
+        draggedItemIndex = -1;
+        dropTarget = null;
+        isDragging = false;
     }
     
     function initDragAndDrop() {
-        console.log('Initializing drag and drop');
-        console.log('Document readyState:', document.readyState);
-        
-        // Clean up any existing listeners
+        // No reinicializar si hay un arrastre en curso
+        if (isDragging) {
+            console.log('Skipping reinitialization during drag');
+            return;
+        }
+
         cleanup();
         
-        // Wait a bit to ensure DOM is fully loaded
-        setTimeout(function() {
-            const container = document.getElementById('disorder-container');
-            console.log('Container found:', container);
-            
-            if (!container) {
-                console.error('Container not found, retrying...');
-                // Try to find the container by class as fallback
-                const containers = document.getElementsByClassName('disorder-preview');
-                console.log('Found containers by class:', containers.length);
-                if (containers.length > 0) {
-                    container = containers[0];
-                    console.log('Using first container found by class');
-                }
-            }
+        const container = document.getElementById('disorder-container');
+        if (!container) {
+            console.log('Container not found, waiting...');
+            return;
+        }
+        
+        currentContainer = container;
+        
+        // Make items draggable
+        const items = container.querySelectorAll('.disorder-item');
+        items.forEach(item => {
+            item.setAttribute('draggable', 'true');
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
 
-            if (!container) {
-                console.error('Container still not found after retry');
+        // Add container event listeners
+        container.addEventListener('dragover', handleDragOver);
+        container.addEventListener('drop', handleDrop);
+        
+        // Set up observer to watch for changes in the container
+        observer = new MutationObserver((mutations) => {
+            // No reinicializar si hay un arrastre en curso
+            if (isDragging) {
+                console.log('Skipping observer during drag');
                 return;
             }
-
-            currentContainer = container;
-            let draggingEle;
-            let placeholder;
-            let isDraggingStarted = false;
-            let x = 0;
-            let y = 0;
-
-            // Swap two nodes
-            const swap = function (nodeA, nodeB) {
-                const parentA = nodeA.parentNode;
-                const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
-
-                // Move nodeA to before the nodeB
-                nodeB.parentNode.insertBefore(nodeA, nodeB);
-
-                // Move nodeB to before the sibling of nodeA
-                parentA.insertBefore(nodeB, siblingA);
-            };
-
-            // Check if nodeA is to the left of nodeB
-            const isLeft = function (nodeA, nodeB) {
-                const rectA = nodeA.getBoundingClientRect();
-                const rectB = nodeB.getBoundingClientRect();
-                return rectA.left + rectA.width / 2 < rectB.left + rectB.width / 2;
-            };
-
-            mouseDownHandler = function (e) {
-                console.log('mousedown event triggered');
-                draggingEle = e.target;
-                console.log('Target element:', draggingEle);
-                
-                if (!draggingEle.classList.contains('disorder-item')) {
-                    console.log('Not a disorder-item, ignoring');
-                    return;
-                }
-
-                // Calculate the mouse position relative to the element's center
-                const rect = draggingEle.getBoundingClientRect();
-                x = e.clientX - (rect.left + rect.width / 2);
-                y = e.clientY - (rect.top + rect.height / 2);
-
-                // Add dragging class
-                draggingEle.classList.add('dragging');
-
-                // Create placeholder
-                placeholder = document.createElement('div');
-                placeholder.classList.add('placeholder');
-                draggingEle.parentNode.insertBefore(placeholder, draggingEle.nextSibling);
-                placeholder.style.width = rect.width + 'px';
-                placeholder.style.height = rect.height + 'px';
-
-                // Set position for dragging element
-                draggingEle.style.position = 'absolute';
-                draggingEle.style.top = (e.clientY - y) + 'px';
-                draggingEle.style.left = (e.clientX - x) + 'px';
-                draggingEle.style.width = rect.width + 'px';
-                draggingEle.style.zIndex = '1000';
-                draggingEle.style.cursor = 'grabbing';
-                draggingEle.style.transform = 'scale(1.05)';
-
-                // Prevent text selection while dragging
-                document.body.style.userSelect = 'none';
-
-                // Attach the listeners to document
-                document.addEventListener('mousemove', mouseMoveHandler);
-                document.addEventListener('mouseup', mouseUpHandler);
-            };
-
-            mouseMoveHandler = function (e) {
-                console.log('mousemove event triggered');
-                if (!draggingEle) return;
-
-                // Update position of dragging element, centering it on the cursor
-                draggingEle.style.top = (e.clientY - y) + 'px';
-                draggingEle.style.left = (e.clientX - x) + 'px';
-
-                // Get all items except the dragging one
-                const items = Array.from(container.querySelectorAll('.disorder-item:not(.dragging)'));
-
-                // Find the closest item
-                const closest = items.reduce((closest, child) => {
-                    const box = child.getBoundingClientRect();
-                    const offset = e.clientX - (box.left + box.width / 2);
-
-                    if (offset < 0 && offset > closest.offset) {
-                        return { offset: offset, element: child };
-                    } else {
-                        return closest;
-                    }
-                }, { offset: Number.NEGATIVE_INFINITY }).element;
-
-                if (closest) {
-                    if (isLeft(draggingEle, closest)) {
-                        container.insertBefore(placeholder, closest);
-                    } else {
-                        container.insertBefore(placeholder, closest.nextSibling);
-                    }
-                }
-            };
-
-            mouseUpHandler = function () {
-                console.log('mouseup event triggered');
-                if (!draggingEle) return;
-
-                // Remove placeholder
-                if (placeholder && placeholder.parentNode) {
-                    placeholder.parentNode.removeChild(placeholder);
-                }
-
-                // Reset dragging element
-                draggingEle.style.removeProperty('top');
-                draggingEle.style.removeProperty('left');
-                draggingEle.style.removeProperty('position');
-                draggingEle.style.removeProperty('width');
-                draggingEle.style.removeProperty('z-index');
-                draggingEle.style.removeProperty('cursor');
-                draggingEle.style.removeProperty('transform');
-                draggingEle.classList.remove('dragging');
-
-                // Reset text selection
-                document.body.style.removeProperty('user-select');
-
-                // Reset variables
-                draggingEle = null;
-                placeholder = null;
-                isDraggingStarted = false;
-                x = 0;
-                y = 0;
-
-                // Remove the handlers
-                document.removeEventListener('mousemove', mouseMoveHandler);
-                document.removeEventListener('mouseup', mouseUpHandler);
-            };
-
-            // Add event listeners to each draggable item
-            const items = container.querySelectorAll('.disorder-item');
-            console.log('Found items:', items.length);
             
-            items.forEach(item => {
-                console.log('Adding mousedown listener to item');
-                item.addEventListener('mousedown', mouseDownHandler);
-            });
-            
-            initialized = true;
-        }, 1000); // Wait 1 second before initializing
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    // Reinitialize if items are added or removed
+                    initDragAndDrop();
+                }
+    });
+});
+        
+        observer.observe(container, {
+            childList: true,
+            subtree: true
+        });
+        
+        console.log('Drag and drop initialized');
     }
-
-    // Try to initialize when DOM is loaded
+    
+    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initDragAndDrop);
     } else {
         initDragAndDrop();
     }
     
-    // Reinitialize when the editor is reopened
-    function checkForEditor() {
+    // Also initialize when the editor is opened
+    const checkForEditor = setInterval(() => {
+        // No reinicializar si hay un arrastre en curso
+        if (isDragging) {
+            console.log('Skipping editor check during drag');
+            return;
+        }
+        
         const editor = document.querySelector('.wrapper-comp-settings');
-        if (editor && !initialized) {
-            console.log('Editor detected, reinitializing drag and drop');
+        if (editor) {
             initDragAndDrop();
         }
-    }
+    }, 1000);
     
-    // Check for editor periodically
-    setInterval(checkForEditor, 1000);
-    
-    // Also check when clicking anywhere in the document
-    document.addEventListener('click', function(e) {
-        checkForEditor();
-    });
+    // Clean up when the page is unloaded
+    window.addEventListener('unload', cleanup);
 })();

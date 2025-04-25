@@ -316,7 +316,7 @@
     border-radius: 4px;
     background-color: #f9f9f9;
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
     gap: 10px;
     align-items: center;
     overflow-x: auto;
@@ -324,39 +324,69 @@
 }
 
 .disorder-item {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    padding: 8px 12px;
-    background-color: white;
-    border: 1px solid #ddd;
+    gap: 8px;
+    padding: 8px;
+    margin: 4px 0;
+    background-color: #f5f5f5;
     border-radius: 4px;
     cursor: move;
-    transition: all 0.2s ease;
-    min-width: 100px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    user-select: none;
-    position: relative;
-    margin-right: 10px;
+    min-width: 120px;
 }
 
-.disorder-item:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.disorder-item.dragging {
-    opacity: 0.5;
-    background-color: #e0e0e0;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.drag-handle {
-    margin-right: 8px;
-    color: #666;
-    cursor: move;
+.move-up-button,
+.move-down-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
     font-size: 16px;
+    color: #666;
+    transition: color 0.2s;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.move-up-button::before,
+.move-down-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.move-up-button::before {
+    border-width: 8px 12px 8px 0;
+    border-color: transparent #666 transparent transparent;
+}
+
+.move-down-button::before {
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent #666;
+}
+
+.move-up-button:hover::before,
+.move-down-button:hover::before {
+    border-color: transparent #333 transparent transparent;
+}
+
+.move-down-button:hover::before {
+    border-color: transparent transparent transparent #333;
+}
+
+.move-up-button:disabled::before,
+.move-down-button:disabled::before {
+    border-color: transparent #ccc transparent transparent;
+}
+
+.move-down-button:disabled::before {
+    border-color: transparent transparent transparent #ccc;
 }
 
 .item-content {
@@ -447,4 +477,46 @@
     vertical-align: middle;
     margin-right: 10px;
     transition: all 0.2s ease;
+}
+
+.order-label {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.order-label span {
+    font-weight: bold;
+}
+
+#current-order-value {
+    color: #0075b4;
+    font-family: monospace;
+}
+
+.order-input {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-family: monospace;
+}
+
+.order-input:focus {
+    border-color: #0075b4;
+    outline: none;
+    box-shadow: 0 0 3px rgba(0,117,180,0.3);
+}
+
+.order-label {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
 } 

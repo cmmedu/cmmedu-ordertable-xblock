@@ -87,14 +87,14 @@ class EolOrderXBlock(XBlock):
         help="Lista de elementos a ordenar"
     )
 
-    correct_answers = List(
-        default=[],
+    correct_answers = String(
+        default="",
         scope=Scope.settings,
         help="Lista respuestas correctas"
     )
 
-    disordered_order = List(
-        default=[],
+    disordered_order = String(
+        default="",
         scope=Scope.settings,
         display_name="Orden desordenado",
         help="Orden desordenado para mostrar a los estudiantes"
@@ -151,6 +151,11 @@ class EolOrderXBlock(XBlock):
                 'roman_lower': number_to_roman(i + 1, False)
             })
 
+        # Convertir el orden desordenado a lista para la vista del estudiante
+        disordered_order_list = []
+        if self.disordered_order:
+            disordered_order_list = self.disordered_order.split('_')
+
         context = {
             'table_name': self.table_name,
             'background_color': self.background_color,
@@ -160,7 +165,7 @@ class EolOrderXBlock(XBlock):
             'random_disorder': self.random_disorder,
             'elements': elements,
             'correct_answers': self.correct_answers,
-            'disordered_order': self.disordered_order
+            'disordered_order': disordered_order_list
         }
         
         html = loader.render_template('static/html/eolorder.html', context)
@@ -176,9 +181,16 @@ class EolOrderXBlock(XBlock):
         """
         The view shown in Studio when editing the XBlock.
         """
-        # Si no hay orden desordenado, generarlo
+        # Asegurarse de que el orden desordenado sea un string
         if not self.disordered_order:
-            self.disordered_order = [int(key) for key in self.ordeingelements.keys()]
+            self.disordered_order = '_'.join([str(key) for key in self.ordeingelements.keys()])
+        elif isinstance(self.disordered_order, list):
+            self.disordered_order = '_'.join([str(item) for item in self.disordered_order])
+        
+        # Convertir el orden desordenado a lista para la vista del editor
+        disordered_order_list = []
+        if self.disordered_order:
+            disordered_order_list = self.disordered_order.split('_')
         
         context = {
             'table_name': {
@@ -212,7 +224,7 @@ class EolOrderXBlock(XBlock):
                 'help': self.fields['correct_answers'].help
             },
             'disordered_order': {
-                'value': self.disordered_order,
+                'value': disordered_order_list,
                 'display_name': self.fields['disordered_order'].display_name,
                 'help': self.fields['disordered_order'].help
             },
@@ -233,6 +245,14 @@ class EolOrderXBlock(XBlock):
         
         # Add the JavaScript file directly to the fragment
         frag.add_javascript(self.resource_string('static/js/drag-and-drop.js'))
+        
+        # Add the disordered order as a data attribute
+        frag.add_javascript("""
+            $(function() {
+                $('.eolorder-studio').data('disordered-order', '%s');
+            });
+        """ % self.disordered_order)
+        
         return frag
 
     @XBlock.json_handler
@@ -246,26 +266,48 @@ class EolOrderXBlock(XBlock):
             self.numbering_type = data.get('numbering_type', self.numbering_type)
             self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
             self.random_disorder = data.get('random_disorder', self.random_disorder)
+            
             # Asegurarse de que ordeingelements sea un diccionario válido
             ordeingelements = data.get('ordeingelements', {})
             if isinstance(ordeingelements, dict):
-                # Si no hay elementos, reiniciar la numeración
-                if not ordeingelements:
-                    self.ordeingelements = {}
-                    self.disordered_order = []
-                else:
-                    # Reordenar los elementos manteniendo la numeración secuencial
-                    new_ordeingelements = {}
-                    for i, (key, value) in enumerate(ordeingelements.items(), 1):
-                        new_ordeingelements[str(i)] = value
-                    self.ordeingelements = new_ordeingelements
-                    
-                    # Actualizar el orden desordenado si es necesario
-                    if not self.disordered_order or len(self.disordered_order) != len(new_ordeingelements):
-                        self.disordered_order = list(new_ordeingelements.keys())
+                self.ordeingelements = ordeingelements
             
-            return {'result': 'success'}
+            # Guardar el orden desordenado como string
+            disordered_order = data.get('disordered_order', '')
+            print("Received disordered_order:", disordered_order)
+            print("Type of disordered_order:", type(disordered_order))
+            
+            # Asegurarse de que disordered_order sea un string válido
+            if isinstance(disordered_order, str):
+                if disordered_order:
+                    # Verificar que el string tenga el formato correcto
+                    if not disordered_order.startswith('_') and not disordered_order.endswith('_'):
+                        self.disordered_order = disordered_order
+                    else:
+                        # Limpiar el string si tiene guiones bajos al inicio o final
+                        self.disordered_order = disordered_order.strip('_')
+                else:
+                    # Si está vacío, generar un nuevo orden
+                    self.disordered_order = '_'.join([str(key) for key in self.ordeingelements.keys()])
+            elif isinstance(disordered_order, list):
+                # Convertir lista a string
+                self.disordered_order = '_'.join([str(item) for item in disordered_order])
+            else:
+                # Si no es string ni lista, generar un nuevo orden
+                self.disordered_order = '_'.join([str(key) for key in self.ordeingelements.keys()])
+            
+            print("Saving disordered order:", self.disordered_order)
+            print("Type of saved disordered_order:", type(self.disordered_order))
+            
+            # Actualizar el atributo de datos para el frontend
+            self.runtime.publish(self, 'edx.xblock.studio_submit', {
+                'disordered_order': self.disordered_order
+            })
+            
+            return {'result': 'success', 'disordered_order': self.disordered_order}
         except Exception as e:
+            print("Error saving disordered order:", str(e))
+            print("Error type:", type(e))
             return {'result': 'error', 'message': str(e)}
 
     @XBlock.json_handler
