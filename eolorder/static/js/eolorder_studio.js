@@ -64,14 +64,10 @@ function EolOrderXBlock(runtime, element) {
 
     function getDisorderList() {
         var disorderList = [];
-        $('.table-row').each(function() {
-            var $label = $(this).find('.row-content p');
-            if ($label.length) {
-                var label = $label.text().replace('Label:', '').trim();
-                if (label) {
-                    disorderList.push(label);
-                }
-            }
+        $('.table-row').each(function(index) {
+            var $row = $(this);
+            var rowNumber = index + 1; // Usar el número de orden basado en la posición
+            disorderList.push(rowNumber.toString());
         });
         console.log('Getting disorder list:', disorderList);
         return disorderList;
@@ -183,7 +179,7 @@ function EolOrderXBlock(runtime, element) {
                 }
                 
                 updateMoveButtons();
-                updateCurrentOrder(); // Esto ahora guardará los cambios automáticamente
+                updateCurrentOrder();
             }
         });
         
@@ -223,10 +219,9 @@ function EolOrderXBlock(runtime, element) {
     }
 
     function addRow() {
-        var rowId = Date.now().toString();
         var nextLabelNumber = $('.table-row').length + 1;
         var rowHtml = `
-            <div class="table-row" data-row-id="${rowId}">
+            <div class="table-row" data-row-id="${nextLabelNumber}">
                 <div class="row-content">
                     <p>Label: ${nextLabelNumber}</p>
                 </div>
@@ -269,8 +264,8 @@ function EolOrderXBlock(runtime, element) {
             return;
         }
         
-        var $label = $row.find('.row-content p');
-        var label = $label.length ? $label.text().replace('Label:', '').trim() : '';
+        var rowIndex = $row.index();
+        var label = (rowIndex + 1).toString();
         console.log('Removing row with label:', label);
         
         // Remover la fila
@@ -287,14 +282,8 @@ function EolOrderXBlock(runtime, element) {
                 var newNumber = index + 1;
                 console.log('Renumbering row', index, 'to', newNumber);
                 $currentLabel.text('Label: ' + newNumber);
+                $(this).attr('data-row-id', newNumber);
             }
-        });
-        
-        // Verificar la numeración después de renumerar
-        $('.table-row').each(function(index) {
-            var $currentLabel = $(this).find('.row-content p');
-            var currentLabel = $currentLabel.length ? $currentLabel.text().replace('Label:', '').trim() : '';
-            console.log('Row', index, 'has label:', currentLabel);
         });
         
         // Obtener el valor actual del input
