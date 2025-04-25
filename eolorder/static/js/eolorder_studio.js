@@ -83,9 +83,6 @@ function EolOrderXBlock(runtime, element) {
         // Actualizar el input oculto con el orden actual
         var orderString = arrayToString(currentOrder);
         $('#current-order-value').val(orderString);
-        
-        // Guardar los cambios automáticamente
-        saveChanges();
     }
 
     function updateDisorderPreview() {
@@ -236,18 +233,18 @@ function EolOrderXBlock(runtime, element) {
         `;
         $('.table-rows').append(rowHtml);
         
-        // Obtener el valor actual del input
-        var currentValue = $('#current-order-value').val();
-        var currentArray = stringToArray(currentValue);
+        // Obtener todos los labels actuales
+        var newOrder = [];
+        $('.table-row').each(function() {
+            var label = $(this).find('.row-content p').text().replace('Label: ', '');
+            newOrder.push(label);
+        });
         
-        // Agregar el nuevo elemento al array
-        currentArray.push(nextLabelNumber.toString());
-        
-        // Actualizar el input con el nuevo array
-        $('#current-order-value').val(arrayToString(currentArray));
+        // Actualizar el input con el nuevo orden
+        $('#current-order-value').val(arrayToString(newOrder));
         
         // Actualizar el preview con el nuevo orden
-        currentOrder = currentArray;
+        currentOrder = newOrder;
         updateDisorderPreview();
     }
 
@@ -263,10 +260,6 @@ function EolOrderXBlock(runtime, element) {
             console.log('No row found to remove');
             return;
         }
-        
-        var rowIndex = $row.index();
-        var label = (rowIndex + 1).toString();
-        console.log('Removing row with label:', label);
         
         // Remover la fila
         $row.remove();
@@ -286,27 +279,24 @@ function EolOrderXBlock(runtime, element) {
             }
         });
         
-        // Obtener el valor actual del input
-        var currentValue = $('#current-order-value').val();
-        var currentArray = stringToArray(currentValue);
+        // Obtener todos los labels actuales
+        var newOrder = [];
+        $('.table-row').each(function() {
+            var label = $(this).find('.row-content p').text().replace('Label: ', '');
+            newOrder.push(label);
+        });
         
-        // Remover el elemento del array
-        var index = currentArray.indexOf(label);
-        if (index !== -1) {
-            currentArray.splice(index, 1);
-        }
-        
-        // Actualizar el input con el nuevo array
-        $('#current-order-value').val(arrayToString(currentArray));
+        // Actualizar el input con el nuevo orden
+        $('#current-order-value').val(arrayToString(newOrder));
         
         // Actualizar el preview con el nuevo orden
-        currentOrder = currentArray;
+        currentOrder = newOrder;
         updateDisorderPreview();
     }
 
     function saveChanges(event) {
         if (event) {
-            event.preventDefault();
+        event.preventDefault();
         }
         console.log('Starting save process...');
         var data = getFormData();
