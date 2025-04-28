@@ -63,6 +63,29 @@
                     <button class="add-row-button">Agregar</button>
                 </div>
             </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="correct_answers">{{correct_answers.display_name}}</label>
+                    <span class="tip setting-help">{{correct_answers.help}}</span>
+                    <div class="correct-answers-container">
+                        <div class="order-label">
+                            <span>Orden actual: </span>
+                            <input type="hidden" id="current-answers-value" value="{{correct_answers.value|join:'_[|]_'}}" />
+                            <div class="order-display">{{correct_answers.value|join:'_[|]_'}}</div>
+                        </div>
+                        <div class="correct-answers-list">
+                            {% for answer in correct_answers.value %}
+                            <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
+                                <button class="move-left-button" title="Mover izquierda">⇦</button>
+                                <span class="item-content">{{answer}}</span>
+                                <button class="move-right-button" title="Mover derecha">⇨</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button class="add-answer-button">Agregar respuesta</button>
+                    </div>
+                </div>
+            </li>
             <li>
                 <div class="eol-order-disorder">
                     <h3>{{disordered_order.display_name}}</h3>
@@ -70,7 +93,8 @@
                     <div class="disorder-preview" id="disorder-container">
                         <div class="order-label">
                             <span>Orden actual: </span>
-                            <input type="text" id="current-order-value" class="order-input" value="{{disordered_order.value|join:", "}}" readonly />
+                            <input type="hidden" id="current-disorder-value" value="{{disordered_order.value|join:"_"}}" />
+                            <div class="order-display">{{disordered_order.value|join:"_"}}</div>
                         </div>
                         <br/>
                         {% for key in disordered_order.value %}

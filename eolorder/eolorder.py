@@ -87,10 +87,10 @@ class EolOrderXBlock(XBlock):
         help="Lista de elementos a ordenar"
     )
 
-    correct_answers = String(
-        default="",
+    correct_answers = List(
+        default=["1", "2"],
         scope=Scope.settings,
-        help="Lista respuestas correctas"
+        help="Lista respuestas correctas, se asume como respuesta correcta los elementos ordenados del primero al último tal como en la lista 'elementos a ordenar 1_2_..._n', considere agregar mas si existe mas de una respuesta correcta"
     )
 
     disordered_order = String(
