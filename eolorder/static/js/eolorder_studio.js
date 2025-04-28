@@ -128,19 +128,19 @@ function EolOrderXBlock(runtime, element) {
                 'data-value': label
             }).append(
                 $('<button>', {
-                    class: 'move-up-button',
-                    title: 'Mover arriba',
+                    class: 'move-left-button',
+                    title: 'Mover izquierda',
                     disabled: index === 0
-                }).text('↑'),
+                }).text('<'),
                 $('<span>', {
                     class: 'item-content',
                     text: label
                 }),
                 $('<button>', {
-                    class: 'move-down-button',
-                    title: 'Mover abajo',
+                    class: 'move-right-button',
+                    title: 'Mover derecha',
                     disabled: index === currentOrder.length - 1
-                }).text('↓')
+                }).text('>')
             );
             $disorderPreview.append($item);
         });
@@ -207,8 +207,8 @@ function EolOrderXBlock(runtime, element) {
     function updateMoveButtons() {
         $disorderPreview.find('.disorder-item').each(function(index) {
             var $item = $(this);
-            var $leftButton = $item.find('.move-up-button');
-            var $rightButton = $item.find('.move-down-button');
+            var $leftButton = $item.find('.move-left-button');
+            var $rightButton = $item.find('.move-right-button');
             
             $leftButton.prop('disabled', index === 0);
             $rightButton.prop('disabled', index === $disorderPreview.find('.disorder-item').length - 1);
@@ -350,8 +350,8 @@ function EolOrderXBlock(runtime, element) {
         runtime.notify('cancel', {});
     });
     
-    $disorderPreview.on('click', '.move-up-button', moveItemLeft);
-    $disorderPreview.on('click', '.move-down-button', moveItemRight);
+    $disorderPreview.on('click', '.move-left-button', moveItemLeft);
+    $disorderPreview.on('click', '.move-right-button', moveItemRight);
     
     // Inicializar el preview
     updateDisorderPreview();
