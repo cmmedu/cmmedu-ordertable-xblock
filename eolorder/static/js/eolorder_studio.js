@@ -6,7 +6,7 @@ function EolOrderXBlock(runtime, element) {
     var $addRowButton = $element.find('.add-row-button');
     var $saveButton = $element.find('.save-button');
     var $cancelButton = $element.find('.cancel-button');
-    var $disorderPreview = $element.find('.disorder-preview');
+    var $disorderPreview = $element.find('.disordered-list');
     var $correctAnswersList = $element.find('.correct-answers-list');
     var $addAnswerButton = $element.find('.add-answer-button');
     var currentOrder = [];
@@ -135,7 +135,7 @@ function EolOrderXBlock(runtime, element) {
         
         // Actualizar el input oculto y el display con el orden actual
         $('#current-disorder-value').val(orderString);
-        $('.order-display').text(orderString);
+        $('.disorder-preview .order-display').text(orderString);
     }
 
     function updateDisorderPreview() {
@@ -456,16 +456,22 @@ function EolOrderXBlock(runtime, element) {
         
         // Crear y agregar una nueva lista ordenada
         var $newAnswerGroup = $('<div class="correct-answers-group">');
-        var orderedLabels = getOrderedLabels();
+        var $groupHeader = $('<div class="group-header">' +
+            '<button class="remove-group-button">Eliminar grupo</button>' +
+            '</div>');
+        var $groupContent = $('<div class="group-content">');
         
+        $newAnswerGroup.append($groupHeader);
+        
+        var orderedLabels = getOrderedLabels();
         orderedLabels.forEach(function(label) {
             var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
-                '<button class="move-left-button" title="Mover izquierda">⇦</button>' +
+                '<button class="move-left-button" title="Mover izquierda"><</button>' +
                 '<span class="item-content">' + label + '</span>' +
-                '<button class="move-right-button" title="Mover derecha">⇨</button>' +
+                '<button class="move-right-button" title="Mover derecha">></button>' +
                 '</div>');
             
-            $newAnswerGroup.append($newAnswer);
+            $groupContent.append($newAnswer);
             
             // Hacer el elemento arrastrable
             $newAnswer.draggable({
@@ -481,10 +487,11 @@ function EolOrderXBlock(runtime, element) {
             });
         });
         
+        $newAnswerGroup.append($groupContent);
         $('.correct-answers-list').append($newAnswerGroup);
         
         // Hacer la lista droppable
-        $newAnswerGroup.droppable({
+        $groupContent.droppable({
             accept: '.correct-answer-item',
             drop: function(event, ui) {
                 var $draggedItem = ui.draggable;
@@ -497,7 +504,7 @@ function EolOrderXBlock(runtime, element) {
                         $draggedItem.insertBefore($targetItem);
                     }
                 } else {
-                    $newAnswerGroup.append($draggedItem);
+                    $(this).append($draggedItem);
                 }
                 
                 updateAnswerMoveButtons();
@@ -512,16 +519,22 @@ function EolOrderXBlock(runtime, element) {
     // Agregar nueva respuesta (crea una nueva lista completa)
     function addAnswer() {
         var $newAnswerGroup = $('<div class="correct-answers-group">');
-        var orderedLabels = getOrderedLabels();
+        var $groupHeader = $('<div class="group-header">' +
+            '<button class="remove-group-button">Eliminar grupo</button>' +
+            '</div>');
+        var $groupContent = $('<div class="group-content">');
         
+        $newAnswerGroup.append($groupHeader);
+        
+        var orderedLabels = getOrderedLabels();
         orderedLabels.forEach(function(label) {
             var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
-                '<button class="move-left-button" title="Mover izquierda">⇦</button>' +
+                '<button class="move-left-button" title="Mover izquierda">></button>' +
                 '<span class="item-content">' + label + '</span>' +
-                '<button class="move-right-button" title="Mover derecha">⇨</button>' +
+                '<button class="move-right-button" title="Mover derecha"><</button>' +
                 '</div>');
             
-            $newAnswerGroup.append($newAnswer);
+            $groupContent.append($newAnswer);
             
             // Hacer el elemento arrastrable
             $newAnswer.draggable({
@@ -537,11 +550,13 @@ function EolOrderXBlock(runtime, element) {
             });
         });
         
+        $newAnswerGroup.append($groupContent);
+        
         // Agregar la nueva lista al contenedor
         $('.correct-answers-list').append($newAnswerGroup);
         
         // Hacer la nueva lista droppable
-        $newAnswerGroup.droppable({
+        $groupContent.droppable({
             accept: '.correct-answer-item',
             drop: function(event, ui) {
                 var $draggedItem = ui.draggable;
@@ -554,7 +569,7 @@ function EolOrderXBlock(runtime, element) {
                         $draggedItem.insertBefore($targetItem);
                     }
                 } else {
-                    $newAnswerGroup.append($draggedItem);
+                    $(this).append($draggedItem);
                 }
                 
                 updateAnswerMoveButtons();
@@ -592,7 +607,7 @@ function EolOrderXBlock(runtime, element) {
         
         console.log('Updating correct answers:', answerString);
         $('#current-answers-value').val(answerString);
-        $('.order-display').text(answerString);
+        $('.correct-answers-container .order-display').text(answerString);
     }
 
     // Mover respuesta a la izquierda
@@ -665,6 +680,8 @@ function EolOrderXBlock(runtime, element) {
                 var $groupHeader = $('<div class="group-header">' +
                     '<button class="remove-group-button">Eliminar grupo</button>' +
                     '</div>');
+                var $groupContent = $('<div class="group-content">');
+                
                 $answerGroup.append($groupHeader);
                 
                 answerList.forEach(function(answer) {
@@ -674,7 +691,7 @@ function EolOrderXBlock(runtime, element) {
                         '<button class="move-right-button" title="Mover derecha"><</button>' +
                         '</div>');
                     
-                    $answerGroup.append($answerItem);
+                    $groupContent.append($answerItem);
                     
                     // Hacer el elemento arrastrable
                     $answerItem.draggable({
@@ -690,10 +707,11 @@ function EolOrderXBlock(runtime, element) {
                     });
                 });
                 
+                $answerGroup.append($groupContent);
                 $('.correct-answers-list').append($answerGroup);
                 
                 // Hacer el grupo droppable
-                $answerGroup.droppable({
+                $groupContent.droppable({
                     accept: '.correct-answer-item',
                     drop: function(event, ui) {
                         var $draggedItem = ui.draggable;

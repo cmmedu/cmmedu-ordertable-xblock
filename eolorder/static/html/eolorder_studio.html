@@ -84,13 +84,15 @@
                                 <div class="group-header">
                                     <button class="remove-group-button">Eliminar grupo</button>
                                 </div>
-                                {% for answer in answer_list|split:"_" %}
-                                <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
-                                    <button class="move-left-button" title="Mover izquierda"><</button>
-                                    <span class="item-content">{{answer}}</span>
-                                    <button class="move-right-button" title="Mover derecha">></button>
+                                <div class="group-content">
+                                    {% for answer in answer_list|split:"_" %}
+                                    <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
+                                        <button class="move-left-button" title="Mover izquierda"><</button>
+                                        <span class="item-content">{{answer}}</span>
+                                        <button class="move-right-button" title="Mover derecha">></button>
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
                             </div>
                             {% endfor %}
                         </div>
@@ -111,9 +113,9 @@
                         <div class="disordered-list">
                             {% for key in disordered_order.value %}
                             <div class="disorder-item" draggable="true" data-value="{{ key }}">
-                                <button class="move-left-button" title="Mover izquierda"><</button>
+                                <button class="move-left-button" title="Mover izquierda">&lt;</button>
                                 <span class="item-content">{{ key }}</span>
-                                <button class="move-right-button" title="Mover derecha">></button>
+                                <button class="move-right-button" title="Mover derecha">&gt;</button>
                             </div>
                             {% endfor %}
                         </div>
