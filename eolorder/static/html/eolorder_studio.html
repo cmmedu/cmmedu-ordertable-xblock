@@ -78,6 +78,10 @@
                             <input type="hidden" id="current-answers-value" value="{{correct_answers.value}}" />
                             <div class="order-display">{{correct_answers.value}}</div>
                         </div>
+                        <div class="previous-order-label">
+                            <span>Orden anterior: </span>
+                            <div class="previous-order-display">{{correct_answers.value}}</div>
+                        </div>
                         <div class="correct-answers-list">
                             {% for answer_list in correct_answers.value|split:"_[|]_" %}
                             <div class="correct-answers-group">
@@ -109,6 +113,10 @@
                             <span>Orden actual: </span>
                             <input type="hidden" id="current-disorder-value" value="{{disordered_order.value|join:'_'}}" />
                             <div class="order-display">{{disordered_order.value|join:"_"}}</div>
+                        </div>
+                        <div class="previous-order-label">
+                            <span>Orden anterior: </span>
+                            <div class="previous-order-display">{{disordered_order.value|join:"_"}}</div>
                         </div>
                         <div class="disordered-list">
                             {% for key in disordered_order.value %}

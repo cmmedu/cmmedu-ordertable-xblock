@@ -439,16 +439,22 @@
     transition: all 0.2s ease;
 }
 
-.order-label {
+.order-label,
+.previous-order-label {
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 10px;
     background-color: #f5f5f5;
     border-radius: 4px;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
-.order-label span {
+.order-label span,
+.previous-order-label span {
     font-weight: bold;
+    color: #2c3e50;
 }
 
 #current-order-value {
@@ -614,18 +620,6 @@
     background-color: #218838;
 }
 
-.order-label {
-    margin-bottom: 10px;
-    padding: 5px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.order-label span {
-    font-weight: bold;
-}
-
 .order-display {
     color: #0075b4;
     font-family: monospace;
@@ -773,8 +767,9 @@
 }
 
 /* Estilos para las etiquetas de orden */
-.order-label {
-    margin-bottom: 15px;
+.order-label,
+.previous-order-label {
+    margin-bottom: 10px;
     padding: 10px;
     background-color: #f5f5f5;
     border-radius: 4px;
@@ -784,13 +779,15 @@
     width: 100%;
 }
 
-.order-label span {
+.order-label span,
+.previous-order-label span {
     font-weight: bold;
     color: #2c3e50;
 }
 
 /* Estilos específicos para el order-display de la lista desordenada */
-.disorder-preview .order-display {
+.disorder-preview .order-display,
+.disorder-preview .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 5px 10px;
@@ -799,12 +796,28 @@
 }
 
 /* Estilos específicos para el order-display de las respuestas correctas */
-.correct-answers-container .order-display {
+.correct-answers-container .order-display,
+.correct-answers-container .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 5px 10px;
     background-color: #e9ecef;
     border-radius: 4px;
+}
+
+/* Estilos específicos para el label de orden anterior */
+.previous-order-label {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.previous-order-label span {
+    color: #6c757d;
+}
+
+.previous-order-display {
+    color: #6c757d;
+    background-color: #f8f9fa;
 }
 
 /* Asegurar que los estilos de eolorder.css no interfieran */

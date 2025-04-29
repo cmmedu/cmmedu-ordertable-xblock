@@ -11,6 +11,8 @@ function EolOrderXBlock(runtime, element) {
     var $addAnswerButton = $element.find('.add-answer-button');
     var currentOrder = [];
     var savedOrder = [];
+    var previousDisorderOrder = $('#current-disorder-value').val();
+    var previousCorrectAnswers = $('#current-answers-value').val();
 
     // Convertir string a array
     function stringToArray(orderString) {
@@ -136,6 +138,10 @@ function EolOrderXBlock(runtime, element) {
         // Actualizar el input oculto y el display con el orden actual
         $('#current-disorder-value').val(orderString);
         $('.disorder-preview .order-display').text(orderString);
+        
+        // Actualizar el display del orden anterior
+        var previousOrder = previousDisorderOrder || 'No definido';
+        $('.disorder-preview .previous-order-display').text(previousOrder);
     }
 
     function updateDisorderPreview() {
@@ -357,11 +363,10 @@ function EolOrderXBlock(runtime, element) {
             event.preventDefault();
         }
         console.log('Starting save process...');
-    
         
-        // Convertir a string para el input oculto
-        var answerString = $('#current-answers-value').val();
-        $('#current-answers-value').val(answerString);
+        // Guardar los valores actuales como valores anteriores
+        previousDisorderOrder = $('#current-disorder-value').val();
+        previousCorrectAnswers = $('#current-answers-value').val();
         
         var data = getFormData();
         console.log('Data to be sent:', data);
@@ -387,7 +392,11 @@ function EolOrderXBlock(runtime, element) {
                     console.log('Saved order:', savedOrder);
                     
                     // Actualizar el display del orden
-                    $('.order-display').text(answerString);
+                    $('.order-display').text(response.correct_answers);
+                    
+                    // Actualizar el display del orden anterior
+                    var previousAnswers = previousCorrectAnswers || 'No definido';
+                    $('.correct-answers-container .previous-order-display').text(previousAnswers);
                 } else {
                     console.error('Error saving order:', response.message);
                     showMessage('Error al guardar: ' + response.message, 'error');
@@ -608,6 +617,10 @@ function EolOrderXBlock(runtime, element) {
         console.log('Updating correct answers:', answerString);
         $('#current-answers-value').val(answerString);
         $('.correct-answers-container .order-display').text(answerString);
+        
+        // Actualizar el display del orden anterior
+        var previousAnswers = previousCorrectAnswers || 'No definido';
+        $('.correct-answers-container .previous-order-display').text(previousAnswers);
     }
 
     // Mover respuesta a la izquierda
