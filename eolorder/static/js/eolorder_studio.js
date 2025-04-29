@@ -32,11 +32,16 @@ function EolOrderXBlock(runtime, element) {
     // Convertir string a array para respuestas correctas
     function stringToAnswersArray(answerString) {
         if (!answerString) return [];
+        console.log('Converting string to array:', answerString);
+        
         // Separar las listas usando _[|]_
-        return answerString.split('_[|]_').map(function(listString) {
-            // Cada lista es un string de labels separados por _
-            return listString.split('_').map(function(item) {
-                return item.trim();
+        var lists = answerString.split('_[|]_');
+        console.log('Split lists:', lists);
+        
+        return lists.map(function(listString) {
+            // Limpiar espacios en blanco y separar por _
+            return listString.trim().split('_').filter(function(item) {
+                return item.trim() !== '';
             });
         });
     }
@@ -44,29 +49,46 @@ function EolOrderXBlock(runtime, element) {
     // Convertir array a string para respuestas correctas
     function answersArrayToString(answerArray) {
         if (!answerArray || !answerArray.length) return '';
+        console.log('Converting array to string:', answerArray);
+        
         // Convertir cada lista a string usando _ como separador
-        return answerArray.map(function(list) {
+        var result = answerArray.map(function(list) {
             return list.join('_');
         }).join('_[|]_');
+        
+        console.log('Result string:', result);
+        return result;
     }
 
     function getFormData() {
         // Obtener el valor directamente del input
         var orderString = $('#current-disorder-value').val();
-        console.log('Order string from input:', orderString);
+        console.log('Disorder order string from input:', orderString);
+        
+        // Validar que el valor no contenga el separador de respuestas correctas
+        if (orderString.includes('_[|]_')) {
+            console.warn('Warning: Disorder order contains answer separator!');
+            // Limpiar el valor si contiene el separador
+            orderString = orderString.split('_[|]_')[0];
+        }
         
         // Convertir a array y luego de vuelta a string para asegurar el formato correcto
         var normalizedOrder = arrayToString(stringToArray(orderString));
-        console.log('Normalized order:', normalizedOrder);
+        console.log('Normalized disorder order:', normalizedOrder);
+        
+        // Obtener las respuestas correctas directamente del input
+        var correctAnswersString = $('#current-answers-value').val();
+        console.log('Correct answers string:', correctAnswersString);
         
         var data = {
             table_name: $element.find('#table_name').val(),
             background_color: $element.find('#background_color').val(),
             numbering_type: $element.find('#numbering_type').val(),
             uppercase_letters: $element.find('#uppercase_letters').is(':checked'),
-            random_Fdisorder: $element.find('#random_disorder').is(':checked'),
+            random_disorder: $element.find('#random_disorder').is(':checked'),
             ordeingelements: getTableRowsData(),
-            disordered_order: normalizedOrder
+            disordered_order: normalizedOrder,
+            correct_answers: correctAnswersString
         };
         
         console.log('Form data to submit:', data);
@@ -101,10 +123,17 @@ function EolOrderXBlock(runtime, element) {
         $disorderPreview.find('.disorder-item').each(function() {
             currentOrder.push($(this).data('value'));
         });
-        console.log('Current order updated:', currentOrder);
+        console.log('Current disorder order updated:', currentOrder);
+        
+        // Validar que el orden no contenga el separador de respuestas correctas
+        var orderString = arrayToString(currentOrder);
+        if (orderString.includes('_[|]_')) {
+            console.warn('Warning: Disorder order contains answer separator!');
+            // Limpiar el valor si contiene el separador
+            orderString = orderString.split('_[|]_')[0];
+        }
         
         // Actualizar el input oculto y el display con el orden actual
-        var orderString = arrayToString(currentOrder);
         $('#current-disorder-value').val(orderString);
         $('.order-display').text(orderString);
     }
@@ -328,23 +357,10 @@ function EolOrderXBlock(runtime, element) {
             event.preventDefault();
         }
         console.log('Starting save process...');
-        
-        // Obtener el orden actual de las respuestas correctas
-        var allAnswers = [];
-        $('.correct-answers-list').each(function() {
-            var listAnswers = [];
-            $(this).find('.correct-answer-item').each(function() {
-                listAnswers.push($(this).find('.item-content').text());
-            });
-            if (listAnswers.length > 0) {
-                allAnswers.push(listAnswers);
-            }
-        });
-        
-        console.log('Respuestas correctas antes de guardar:', allAnswers);
+    
         
         // Convertir a string para el input oculto
-        var answerString = answersArrayToString(allAnswers);
+        var answerString = $('#current-answers-value').val();
         $('#current-answers-value').val(answerString);
         
         var data = getFormData();
@@ -369,7 +385,6 @@ function EolOrderXBlock(runtime, element) {
                     savedOrder = currentOrder;
                     console.log('Order saved successfully. Current order:', currentOrder);
                     console.log('Saved order:', savedOrder);
-                    console.log('Respuestas correctas guardadas:', allAnswers);
                     
                     // Actualizar el display del orden
                     $('.order-display').text(answerString);
@@ -410,9 +425,9 @@ function EolOrderXBlock(runtime, element) {
         
         orderedLabels.forEach(function(label) {
             var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
-                '<button class="move-left-button" title="Mover izquierda">⇦</button>' +
+                '<button class="move-left-button" title="Mover izquierda">></button>' +
                 '<span class="item-content">' + label + '</span>' +
-                '<button class="move-right-button" title="Mover derecha">⇨</button>' +
+                '<button class="move-right-button" title="Mover derecha"><</button>' +
                 '</div>');
             
             $newAnswerList.append($newAnswer);
@@ -437,14 +452,39 @@ function EolOrderXBlock(runtime, element) {
     // Resetear las respuestas correctas a una lista ordenada
     function resetCorrectAnswers() {
         // Limpiar todas las listas existentes
-        $('.correct-answers-list').remove();
+        $('.correct-answers-list').empty();
         
         // Crear y agregar una nueva lista ordenada
-        var $newAnswerList = createOrderedList();
-        $('.correct-answers-container').append($newAnswerList);
+        var $newAnswerGroup = $('<div class="correct-answers-group">');
+        var orderedLabels = getOrderedLabels();
+        
+        orderedLabels.forEach(function(label) {
+            var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
+                '<button class="move-left-button" title="Mover izquierda">⇦</button>' +
+                '<span class="item-content">' + label + '</span>' +
+                '<button class="move-right-button" title="Mover derecha">⇨</button>' +
+                '</div>');
+            
+            $newAnswerGroup.append($newAnswer);
+            
+            // Hacer el elemento arrastrable
+            $newAnswer.draggable({
+                revert: true,
+                cursor: 'move',
+                helper: 'clone',
+                start: function(event, ui) {
+                    $(this).addClass('dragging');
+                },
+                stop: function(event, ui) {
+                    $(this).removeClass('dragging');
+                }
+            });
+        });
+        
+        $('.correct-answers-list').append($newAnswerGroup);
         
         // Hacer la lista droppable
-        $newAnswerList.droppable({
+        $newAnswerGroup.droppable({
             accept: '.correct-answer-item',
             drop: function(event, ui) {
                 var $draggedItem = ui.draggable;
@@ -457,7 +497,7 @@ function EolOrderXBlock(runtime, element) {
                         $draggedItem.insertBefore($targetItem);
                     }
                 } else {
-                    $newAnswerList.append($draggedItem);
+                    $newAnswerGroup.append($draggedItem);
                 }
                 
                 updateAnswerMoveButtons();
@@ -471,13 +511,37 @@ function EolOrderXBlock(runtime, element) {
 
     // Agregar nueva respuesta (crea una nueva lista completa)
     function addAnswer() {
-        var $newAnswerList = createOrderedList();
+        var $newAnswerGroup = $('<div class="correct-answers-group">');
+        var orderedLabels = getOrderedLabels();
+        
+        orderedLabels.forEach(function(label) {
+            var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
+                '<button class="move-left-button" title="Mover izquierda">⇦</button>' +
+                '<span class="item-content">' + label + '</span>' +
+                '<button class="move-right-button" title="Mover derecha">⇨</button>' +
+                '</div>');
+            
+            $newAnswerGroup.append($newAnswer);
+            
+            // Hacer el elemento arrastrable
+            $newAnswer.draggable({
+                revert: true,
+                cursor: 'move',
+                helper: 'clone',
+                start: function(event, ui) {
+                    $(this).addClass('dragging');
+                },
+                stop: function(event, ui) {
+                    $(this).removeClass('dragging');
+                }
+            });
+        });
         
         // Agregar la nueva lista al contenedor
-        $('.correct-answers-container').append($newAnswerList);
+        $('.correct-answers-list').append($newAnswerGroup);
         
         // Hacer la nueva lista droppable
-        $newAnswerList.droppable({
+        $newAnswerGroup.droppable({
             accept: '.correct-answer-item',
             drop: function(event, ui) {
                 var $draggedItem = ui.draggable;
@@ -490,7 +554,7 @@ function EolOrderXBlock(runtime, element) {
                         $draggedItem.insertBefore($targetItem);
                     }
                 } else {
-                    $newAnswerList.append($draggedItem);
+                    $newAnswerGroup.append($draggedItem);
                 }
                 
                 updateAnswerMoveButtons();
@@ -505,18 +569,28 @@ function EolOrderXBlock(runtime, element) {
     // Actualizar el orden de todas las respuestas correctas
     function updateCorrectAnswersOrder() {
         var allAnswers = [];
-        $('.correct-answers-list').each(function() {
+        $('.correct-answers-group').each(function() {
             var listAnswers = [];
             $(this).find('.correct-answer-item').each(function() {
-                listAnswers.push($(this).find('.item-content').text());
+                var text = $(this).find('.item-content').text().trim();
+                if (text) {
+                    listAnswers.push(text);
+                }
             });
             if (listAnswers.length > 0) {
                 allAnswers.push(listAnswers);
             }
         });
         
-        // Convertir a string para el input oculto
-        var answerString = answersArrayToString(allAnswers);
+        // Convertir a string para el input oculto usando el formato correcto
+        var answerString = '';
+        if (allAnswers.length > 0) {
+            answerString = allAnswers.map(function(list) {
+                return list.join('_');
+            }).join('_[|]_');
+        }
+        
+        console.log('Updating correct answers:', answerString);
         $('#current-answers-value').val(answerString);
         $('.order-display').text(answerString);
     }
@@ -562,79 +636,94 @@ function EolOrderXBlock(runtime, element) {
         updateAnswerMoveButtons();
     }
 
+    // Eliminar grupo de respuestas
+    function removeGroup(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        var $group = $(event.target).closest('.correct-answers-group');
+        $group.remove();
+        updateCorrectAnswersOrder();
+    }
+
     // Inicializar eventos para respuestas correctas
     function initializeCorrectAnswers() {
-        $('.correct-answers-list').on('click', '.move-left-button', moveAnswerLeft);
-        $('.correct-answers-list').on('click', '.move-right-button', moveAnswerRight);
-        $addAnswerButton.on('click', addAnswer);
+        // Obtener el valor inicial del input oculto
+        var initialAnswers = $('#current-answers-value').val();
+        console.log('Initial correct answers:', initialAnswers);
         
-        // Hacer todas las listas droppable
-        $('.correct-answers-list').each(function() {
-            $(this).droppable({
-                accept: '.correct-answer-item',
-                drop: function(event, ui) {
-                    var $draggedItem = ui.draggable;
-                    var $targetItem = $(event.target).closest('.correct-answer-item');
+        if (initialAnswers) {
+            var answersArray = stringToAnswersArray(initialAnswers);
+            console.log('Parsed answers array:', answersArray);
+            
+            // Limpiar las respuestas existentes
+            $('.correct-answers-list').empty();
+            
+            // Crear grupos para cada lista de respuestas
+            answersArray.forEach(function(answerList) {
+                var $answerGroup = $('<div class="correct-answers-group">');
+                var $groupHeader = $('<div class="group-header">' +
+                    '<button class="remove-group-button">Eliminar grupo</button>' +
+                    '</div>');
+                $answerGroup.append($groupHeader);
+                
+                answerList.forEach(function(answer) {
+                    var $answerItem = $('<div class="correct-answer-item" draggable="true">' +
+                        '<button class="move-left-button" title="Mover izquierda">></button>' +
+                        '<span class="item-content">' + answer + '</span>' +
+                        '<button class="move-right-button" title="Mover derecha"><</button>' +
+                        '</div>');
                     
-                    if ($targetItem.length) {
-                        if ($draggedItem.index() < $targetItem.index()) {
-                            $draggedItem.insertAfter($targetItem);
-                        } else {
-                            $draggedItem.insertBefore($targetItem);
-                        }
-                    } else {
-                        $(this).append($draggedItem);
-                    }
+                    $answerGroup.append($answerItem);
                     
-                    updateAnswerMoveButtons();
-                    updateCorrectAnswersOrder();
-                    
-                    // Log del estado actual después de mover un elemento
-                    var currentAnswers = [];
-                    $('.correct-answers-list').each(function() {
-                        var listAnswers = [];
-                        $(this).find('.correct-answer-item').each(function() {
-                            listAnswers.push($(this).find('.item-content').text());
-                        });
-                        if (listAnswers.length > 0) {
-                            currentAnswers.push(listAnswers);
+                    // Hacer el elemento arrastrable
+                    $answerItem.draggable({
+                        revert: true,
+                        cursor: 'move',
+                        helper: 'clone',
+                        start: function(event, ui) {
+                            $(this).addClass('dragging');
+                        },
+                        stop: function(event, ui) {
+                            $(this).removeClass('dragging');
                         }
                     });
-                    console.log('Estado actual de respuestas correctas después de mover:', currentAnswers);
-                }
+                });
+                
+                $('.correct-answers-list').append($answerGroup);
+                
+                // Hacer el grupo droppable
+                $answerGroup.droppable({
+                    accept: '.correct-answer-item',
+                    drop: function(event, ui) {
+                        var $draggedItem = ui.draggable;
+                        var $targetItem = $(event.target).closest('.correct-answer-item');
+                        
+                        if ($targetItem.length) {
+                            if ($draggedItem.index() < $targetItem.index()) {
+                                $draggedItem.insertAfter($targetItem);
+                            } else {
+                                $draggedItem.insertBefore($targetItem);
+                            }
+                        } else {
+                            $(this).append($draggedItem);
+                        }
+                        
+                        updateAnswerMoveButtons();
+                        updateCorrectAnswersOrder();
+                    }
+                });
             });
-        });
-        
-        // Hacer todos los elementos arrastrables
-        $('.correct-answer-item').draggable({
-            revert: true,
-            cursor: 'move',
-            helper: 'clone',
-            start: function(event, ui) {
-                $(this).addClass('dragging');
-            },
-            stop: function(event, ui) {
-                $(this).removeClass('dragging');
-            }
-        });
-        
-        // Inicializar el orden inicial si no hay respuestas
-        if ($('.correct-answers-list').length === 0) {
-            resetCorrectAnswers(); // Crea la primera lista ordenada por defecto
+        } else {
+            // Si no hay respuestas iniciales, crear una lista por defecto
+            resetCorrectAnswers();
         }
         
-        // Log del estado inicial de las respuestas correctas
-        var initialAnswers = [];
-        $('.correct-answers-list').each(function() {
-            var listAnswers = [];
-            $(this).find('.correct-answer-item').each(function() {
-                listAnswers.push($(this).find('.item-content').text());
-            });
-            if (listAnswers.length > 0) {
-                initialAnswers.push(listAnswers);
-            }
-        });
-        console.log('Estado inicial de respuestas correctas:', initialAnswers);
+        // Inicializar los event listeners para los botones
+        $('.correct-answers-list').on('click', '.move-left-button', moveAnswerLeft);
+        $('.correct-answers-list').on('click', '.move-right-button', moveAnswerRight);
+        $('.correct-answers-list').on('click', '.remove-group-button', removeGroup);
+        $addAnswerButton.on('click', addAnswer);
         
         updateAnswerMoveButtons();
     }

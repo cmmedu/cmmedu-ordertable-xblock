@@ -15,6 +15,16 @@ from django.template.defaulttags import register
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def split(value, delimiter):
+    """
+    Split a string by the given delimiter.
+    Usage in template: {{ value|split:"delimiter" }}
+    """
+    if not value:
+        return []
+    return value.split(delimiter)
+
 loader = ResourceLoader(__name__)
 
 def number_to_letter(n, uppercase=True):
@@ -87,10 +97,10 @@ class EolOrderXBlock(XBlock):
         help="Lista de elementos a ordenar"
     )
 
-    correct_answers = List(
-        default=["1", "2"],
+    correct_answers = String(
+        default="1_2",
         scope=Scope.settings,
-        help="Lista respuestas correctas, se asume como respuesta correcta los elementos ordenados del primero al último tal como en la lista 'elementos a ordenar 1_2_..._n', considere agregar mas si existe mas de una respuesta correcta"
+        help="Lista respuestas correctas, se asume como respuesta correcta los elementos ordenados del primero al último tal como en la lista 'elementos a ordenar 1_2_..._n', considere agregar mas grupos de respuestas correctas solamente si existe mas de una respuesta correcta"
     )
 
     disordered_order = String(
@@ -191,6 +201,10 @@ class EolOrderXBlock(XBlock):
         disordered_order_list = []
         if self.disordered_order:
             disordered_order_list = self.disordered_order.split('_')
+        
+        # Asegurarse de que correct_answers sea un string válido
+        if not self.correct_answers:
+            self.correct_answers = '_'.join([str(key) for key in self.ordeingelements.keys()])
         
         context = {
             'table_name': {
@@ -299,14 +313,47 @@ class EolOrderXBlock(XBlock):
             print("Saving disordered order:", self.disordered_order)
             print("Type of saved disordered_order:", type(self.disordered_order))
             
+            # Guardar las respuestas correctas
+            correct_answers = data.get('correct_answers', '')
+            print("Received correct_answers:", correct_answers)
+            print("Type of correct_answers:", type(correct_answers))
+            
+            if isinstance(correct_answers, str):
+                # Limpiar el string si tiene guiones bajos al inicio o final
+                correct_answers = correct_answers.strip('_')
+                # Asegurarse de que el formato sea correcto
+                if correct_answers:
+                    # Verificar si ya tiene el formato correcto con _[|]_
+                    if '_[|]_' in correct_answers:
+                        self.correct_answers = correct_answers
+                    else:
+                        # Si no tiene el formato correcto, asumimos que es una sola lista
+                        # y la convertimos al formato correcto
+                        self.correct_answers = correct_answers
+                else:
+                    # Si está vacío, generar un orden por defecto
+                    default_order = '_'.join([str(key) for key in self.ordeingelements.keys()])
+                    self.correct_answers = default_order
+            else:
+                # Si no es string, generar un orden por defecto
+                default_order = '_'.join([str(key) for key in self.ordeingelements.keys()])
+                self.correct_answers = default_order
+            
+            print("Saving correct answers:", self.correct_answers)
+            
             # Actualizar el atributo de datos para el frontend
             self.runtime.publish(self, 'edx.xblock.studio_submit', {
-                'disordered_order': self.disordered_order
+                'disordered_order': self.disordered_order,
+                'correct_answers': self.correct_answers
             })
             
-            return {'result': 'success', 'disordered_order': self.disordered_order}
+            return {
+                'result': 'success',
+                'disordered_order': self.disordered_order,
+                'correct_answers': self.correct_answers
+            }
         except Exception as e:
-            print("Error saving disordered order:", str(e))
+            print("Error saving data:", str(e))
             print("Error type:", type(e))
             return {'result': 'error', 'message': str(e)}
 
@@ -353,4 +400,50 @@ class EolOrderXBlock(XBlock):
         """
         Get the JS initialization function.
         """
-        return "EolOrderXBlock" 
+        return "EolOrderXBlock"
+
+    def get_correct_answers_list(self):
+        """
+        Convierte el string de respuestas correctas en una lista de listas.
+        Ejemplo: "1_2_3_[|]_1_3_2" -> [["1", "2", "3"], ["1", "3", "2"]]
+        """
+        if not self.correct_answers:
+            return []
+        
+        print("Getting correct answers list from:", self.correct_answers)
+        
+        # Separar las listas usando _[|]_
+        lists = self.correct_answers.split('_[|]_')
+        print("Split lists:", lists)
+        
+        # Convertir cada lista en un array de elementos
+        result = []
+        for list_str in lists:
+            # Limpiar espacios en blanco y separar por _
+            elements = [elem.strip() for elem in list_str.split('_') if elem.strip()]
+            if elements:
+                result.append(elements)
+        
+        print("Result:", result)
+        return result
+
+    def set_correct_answers_list(self, answers_list):
+        """
+        Convierte una lista de listas en un string de respuestas correctas.
+        Ejemplo: [["1", "2", "3"], ["1", "3", "2"]] -> "1_2_3_[|]_1_3_2"
+        """
+        if not answers_list:
+            self.correct_answers = ""
+            return
+        
+        print("Setting correct answers list:", answers_list)
+        
+        # Convertir cada lista en un string separado por _
+        lists_str = []
+        for answer_list in answers_list:
+            if answer_list:
+                lists_str.append('_'.join(str(elem) for elem in answer_list))
+        
+        # Unir las listas con _[|]_
+        self.correct_answers = '_[|]_'.join(lists_str)
+        print("Result string:", self.correct_answers) 
