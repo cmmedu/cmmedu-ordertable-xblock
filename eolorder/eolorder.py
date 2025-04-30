@@ -10,6 +10,7 @@ from xblock.fragment import Fragment
 import json
 from django.template import Context, Template
 from django.template.defaulttags import register
+import random  # Agregamos la importación de random
 
 @register.filter
 def get_item(dictionary, key):
@@ -112,7 +113,7 @@ class EolOrderXBlock(XBlock):
 
     random_disorder = Boolean(
         display_name="Desordenar aleatoriamente",
-        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado)",
+        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado) Cada estudiante verá un desorden diferente y cambiara cada vez que se acceda al problema sin responder",
         scope=Scope.settings,
         default=False
     )
@@ -147,6 +148,12 @@ class EolOrderXBlock(XBlock):
     score = Float(
         default=0.0,
         scope=Scope.user_state,
+    )
+
+    user_answer = String(
+        default="",
+        scope=Scope.user_state,
+        help="Respuesta enviada por el usuario"
     )
 
     editable_fields = ('display_name', 'table_name', 'background_color', 'numbering_type', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts')
@@ -192,10 +199,59 @@ class EolOrderXBlock(XBlock):
                 'roman_lower': number_to_roman(i + 1, False)
             })
 
-        # Convertir el orden desordenado a lista para la vista del estudiante
-        disordered_order_list = []
-        if self.disordered_order:
-            disordered_order_list = self.disordered_order.split('_')
+        # Determinar el orden a mostrar para el contenido
+        content_order = []
+        
+        #!!!Aquí hay varios casos que se deben tener en cuenta para mostrar el orden de los elementos!!!
+        # Caso 1: No hay intentos - Mostrar orden desordenado
+        if self.attempts == 0:
+            if self.random_disorder:
+                # Generar un orden aleatorio
+                content_order = [str(key) for key in self.ordeingelements.keys()]
+                random.shuffle(content_order)
+            elif self.disordered_order:
+                content_order = self.disordered_order.split('_')
+            else:
+                content_order = [str(key) for key in self.ordeingelements.keys()]
+        # Caso 2: Hay intentos pero no es correcta - Mostrar respuesta guardada del usuario
+        elif self.attempts > 0 and self.score == 0:
+            if self.user_answer:
+                content_order = self.user_answer.split('_')
+            elif self.random_disorder: # Si por alguna razon se pierde la respuesta del usuario, se muestra el orden aleatorio (si esta marcada la casilla)
+                # Generar un orden aleatorio
+                content_order = [str(key) for key in self.ordeingelements.keys()]
+                random.shuffle(content_order)
+            elif self.disordered_order: # Si por alguna razon se pierde la respuesta del usuario, se muestra el orden desordenado
+                content_order = self.disordered_order.split('_')
+            else:
+                content_order = [str(key) for key in self.ordeingelements.keys()]
+        # Caso 3: Es correcta - Mostrar respuesta guardada del usuario
+        elif self.score > 0:
+            if self.user_answer:
+                content_order = self.user_answer.split('_')
+            elif self.correct_answers: # Si por alguna razon se pierde la respuesta del usuario, se muestra la primera respuesta correcta
+                content_order = self.correct_answers.split('_[|]_')[0].split('_')
+            else:
+                content_order = [str(key) for key in self.ordeingelements.keys()]
+
+        # Reordenar los elementos según el orden a mostrar
+        ordered_elements = []
+        for i, key in enumerate(content_order):
+            for element in elements:
+                if str(element['key']) == str(key):
+                    # Usar el índice de posición (i+1) para la numeración de la primera columna
+                    # y mantener el key original para la verificación de respuestas
+                    ordered_elements.append({
+                        'key': element['key'],  # Mantener el key original para verificación
+                        'content': element['content'],
+                        'position': i + 1,  # Índice de posición para la primera columna
+                        'zero_index': i,
+                        'letter_upper': number_to_letter(i + 1, True),
+                        'letter_lower': number_to_letter(i + 1, False),
+                        'roman_upper': number_to_roman(i + 1, True),
+                        'roman_lower': number_to_roman(i + 1, False)
+                    })
+                    break
 
         # Calcular el texto de intentos
         texto_intentos = ''
@@ -217,9 +273,7 @@ class EolOrderXBlock(XBlock):
             'uppercase_letters': self.uppercase_letters,
             'correct_answers': self.correct_answers,
             'random_disorder': self.random_disorder,
-            'elements': elements,
-            'correct_answers': self.correct_answers,
-            'disordered_order': disordered_order_list,
+            'elements': ordered_elements,  # Usar los elementos reordenados
             'texto_intentos': texto_intentos,
             'no_mas_intentos': no_mas_intentos,
             'attempts': self.attempts,
@@ -461,6 +515,9 @@ class EolOrderXBlock(XBlock):
                 'result': 'error',
                 'message': 'No se recibió un orden válido'
             }
+
+        # Guardar la respuesta del usuario
+        self.user_answer = submitted_order
 
         # Logs detallados
         print(f"[EOL-ORDER] Respuesta enviada: {submitted_order}")

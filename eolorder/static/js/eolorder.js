@@ -62,12 +62,19 @@ function EolOrderXBlockEdit(runtime, element) {
         }
         
         if ($targetRow.length) {
-            if (direction === 'up') {
-                $row.insertBefore($targetRow);
-            } else {
-                $row.insertAfter($targetRow);
-            }
-            updateOrderNumbers();
+            // Guardar el contenido de ambas filas
+            var currentContent = $row.find('.content-cell').html();
+            var targetContent = $targetRow.find('.content-cell').html();
+            
+            // Intercambiar solo el contenido, manteniendo los números de orden intactos
+            $row.find('.content-cell').html(targetContent);
+            $targetRow.find('.content-cell').html(currentContent);
+            
+            // Mantener los atributos data-index originales
+            var currentIndex = $row.attr('data-index');
+            var targetIndex = $targetRow.attr('data-index');
+            
+            // No actualizar los números de orden
             updateButtonStates();
         }
     }
@@ -155,9 +162,19 @@ function EolOrderXBlock(runtime, element) {
 
     // Inicializar el array de elementos
     $itemsContainer.find('.item-row').each(function() {
+        var $row = $(this);
+        var content = $row.find('.content-cell').html();
+        var originalIndex = $row.attr('data-index');
+        
         elements.push({
-            key: $(this).attr('data-index'),
-            content: $(this).find('.content-cell').html()
+            key: originalIndex,
+            content: content
+        });
+        
+        // Logs para depuración
+        console.log("[EOL-ORDER] Inicializando elemento:", {
+            key: originalIndex,
+            content: content
         });
     });
 
@@ -195,10 +212,15 @@ function EolOrderXBlock(runtime, element) {
             var currentContent = $row.find('.content-cell').html();
             var targetContent = $targetRow.find('.content-cell').html();
             
-            // Intercambiar solo el contenido
+            // Intercambiar solo el contenido, manteniendo los números de orden intactos
             $row.find('.content-cell').html(targetContent);
             $targetRow.find('.content-cell').html(currentContent);
             
+            // Mantener los atributos data-index originales
+            var currentIndex = $row.attr('data-index');
+            var targetIndex = $targetRow.attr('data-index');
+            
+            // No actualizar los números de orden
             updateButtonStates();
         }
     }
@@ -213,6 +235,7 @@ function EolOrderXBlock(runtime, element) {
             var originalIndex = -1;
             for (var i = 0; i < elements.length; i++) {
                 if (elements[i].content === content) {
+                    // Usar el índice original del elemento
                     originalIndex = elements[i].key;
                     break;
                 }
@@ -221,6 +244,17 @@ function EolOrderXBlock(runtime, element) {
                 order.push(originalIndex);
             }
         });
+        
+        // Logs para depuración
+        console.log("[EOL-ORDER] Orden actual:", order.join('_'));
+        console.log("[EOL-ORDER] Elementos en la tabla:");
+        $itemsContainer.find('.item-row').each(function(index) {
+            console.log(`[EOL-ORDER] Elemento ${index + 1}:`, {
+                content: $(this).find('.content-cell').html(),
+                key: $(this).attr('data-index')
+            });
+        });
+        
         return order.join('_');
     }
 

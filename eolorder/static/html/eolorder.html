@@ -29,7 +29,7 @@
                     <tr class="item-row" data-index="{{ item.key }}">
                         <td class="order-cell">
                             {% if numbering_type == 'numbers' %}
-                                {{ item.key }}
+                                {{ item.position }}
                             {% elif numbering_type == 'numbers_zero' %}
                                 {{ item.zero_index }}
                             {% elif numbering_type == 'letters' %}
