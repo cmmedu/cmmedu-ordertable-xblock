@@ -31,7 +31,7 @@
                     <label class="label setting-label" for="show_answer">{{show_answer.display_name}}</label>
                     <span class="tip setting-help">{{show_answer.help}}</span>
                     <select class="input setting-input" name="show_answer" id="show_answer">
-                        <option value="when_attempts_exhausted" {% if show_answer.value == 'when_attempts_exhausted' %}selected="selected"{% endif %}>Cuando se agotan los intentos</option>
+                        <option value="when_attempts_runs_out" {% if show_answer.value == 'when_attempts_runs_out' %}selected="selected"{% endif %}>Cuando se agotan los intentos</option>
                         <option value="never" {% if show_answer.value == 'never' %}selected="selected"{% endif %}>Nunca</option>
                     </select>
                 </div>

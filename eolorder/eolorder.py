@@ -113,7 +113,7 @@ class EolOrderXBlock(XBlock):
 
     random_disorder = Boolean(
         display_name="Desordenar aleatoriamente",
-        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado)",
+        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado) Cada estudiante verá un desorden diferente y cambiara cada vez que se acceda al problema sin responder",
         scope=Scope.settings,
         default=False
     )
@@ -122,9 +122,9 @@ class EolOrderXBlock(XBlock):
         display_name="Mostrar respuesta",
         help="Controla cuándo se muestra la respuesta correcta",
         scope=Scope.settings,
-        default="when_attempts_exhausted",
+        default="when_attempts_run_out",
         values=[
-            {"display_name": "Cuando se agotan los intentos", "value": "when_attempts_exhausted"},
+            {"display_name": "Cuando se agotan los intentos", "value": "when_attempts_run_out"},
             {"display_name": "Nunca", "value": "never"}
         ]
     )
