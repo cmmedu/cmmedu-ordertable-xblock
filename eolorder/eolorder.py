@@ -113,9 +113,20 @@ class EolOrderXBlock(XBlock):
 
     random_disorder = Boolean(
         display_name="Desordenar aleatoriamente",
-        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado) Cada estudiante verá un desorden diferente y cambiara cada vez que se acceda al problema sin responder",
+        help="Desordenar aleatoriamente los elementos (anulando el arreglo de orden desordenado)",
         scope=Scope.settings,
         default=False
+    )
+
+    show_answer = String(
+        display_name="Mostrar respuesta",
+        help="Controla cuándo se muestra la respuesta correcta",
+        scope=Scope.settings,
+        default="when_attempts_exhausted",
+        values=[
+            {"display_name": "Cuando se agotan los intentos", "value": "when_attempts_exhausted"},
+            {"display_name": "Nunca", "value": "never"}
+        ]
     )
 
     has_score = True
@@ -156,7 +167,7 @@ class EolOrderXBlock(XBlock):
         help="Respuesta enviada por el usuario"
     )
 
-    editable_fields = ('display_name', 'table_name', 'background_color', 'numbering_type', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts')
+    editable_fields = ('display_name', 'table_name', 'background_color', 'numbering_type', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -202,7 +213,6 @@ class EolOrderXBlock(XBlock):
         # Determinar el orden a mostrar para el contenido
         content_order = []
         
-        #!!!Aquí hay varios casos que se deben tener en cuenta para mostrar el orden de los elementos!!!
         # Caso 1: No hay intentos - Mostrar orden desordenado
         if self.attempts == 0:
             if self.random_disorder:
@@ -266,6 +276,35 @@ class EolOrderXBlock(XBlock):
         # Obtener la ruta de las imágenes
         image_path = self.runtime.local_resource_url(self, 'public/images/')
 
+        # Determinar si se debe mostrar la respuesta correcta
+        show_correctness = 'never'
+        if self.show_answer == 'when_attempts_exhausted' and no_mas_intentos:
+            show_correctness = 'always'
+        elif self.show_answer == 'never':
+            show_correctness = 'never'
+        else:
+            show_correctness = 'never'
+
+        # Si se debe mostrar la respuesta correcta, usar la primera respuesta correcta
+        if show_correctness == 'always' and self.correct_answers:
+            content_order = self.correct_answers.split('_[|]_')[0].split('_')
+            # Reordenar los elementos según la respuesta correcta
+            ordered_elements = []
+            for i, key in enumerate(content_order):
+                for element in elements:
+                    if str(element['key']) == str(key):
+                        ordered_elements.append({
+                            'key': element['key'],
+                            'content': element['content'],
+                            'position': i + 1,
+                            'zero_index': i,
+                            'letter_upper': number_to_letter(i + 1, True),
+                            'letter_lower': number_to_letter(i + 1, False),
+                            'roman_upper': number_to_roman(i + 1, True),
+                            'roman_lower': number_to_roman(i + 1, False)
+                        })
+                        break
+
         context = {
             'table_name': self.table_name,
             'background_color': self.background_color,
@@ -280,7 +319,7 @@ class EolOrderXBlock(XBlock):
             'max_attempts': self.max_attempts,
             'score': self.score,
             'image_path': image_path,
-            'show_correctness': 'always',
+            'show_correctness': show_correctness,
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
@@ -353,6 +392,11 @@ class EolOrderXBlock(XBlock):
                 'display_name': self.fields['random_disorder'].display_name,
                 'help': self.fields['random_disorder'].help
             },
+            'show_answer': {
+                'value': self.show_answer,
+                'display_name': self.fields['show_answer'].display_name,
+                'help': self.fields['show_answer'].help
+            },
             'weight': {
                 'value': self.weight,
                 'display_name': self.fields['weight'].display_name,
@@ -396,6 +440,7 @@ class EolOrderXBlock(XBlock):
             self.numbering_type = data.get('numbering_type', self.numbering_type)
             self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
             self.random_disorder = data.get('random_disorder', self.random_disorder)
+            self.show_answer = data.get('show_answer', self.show_answer)
             
             # Asegurarse de que ordeingelements sea un diccionario válido
             ordeingelements = data.get('ordeingelements', {})
@@ -470,7 +515,8 @@ class EolOrderXBlock(XBlock):
                 'disordered_order': self.disordered_order,
                 'correct_answers': self.correct_answers,
                 'weight': self.weight,
-                'max_attempts': self.max_attempts
+                'max_attempts': self.max_attempts,
+                'show_answer': self.show_answer
             })
             
             return {
@@ -478,7 +524,8 @@ class EolOrderXBlock(XBlock):
                 'disordered_order': self.disordered_order,
                 'correct_answers': self.correct_answers,
                 'weight': self.weight,
-                'max_attempts': self.max_attempts
+                'max_attempts': self.max_attempts,
+                'show_answer': self.show_answer
             }
         except Exception as e:
             print("Error saving data:", str(e))

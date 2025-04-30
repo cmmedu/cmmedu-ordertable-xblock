@@ -28,6 +28,16 @@
             </li>
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="show_answer">{{show_answer.display_name}}</label>
+                    <span class="tip setting-help">{{show_answer.help}}</span>
+                    <select class="input setting-input" name="show_answer" id="show_answer">
+                        <option value="when_attempts_exhausted" {% if show_answer.value == 'when_attempts_exhausted' %}selected="selected"{% endif %}>Cuando se agotan los intentos</option>
+                        <option value="never" {% if show_answer.value == 'never' %}selected="selected"{% endif %}>Nunca</option>
+                    </select>
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
                     <label class="label setting-label" for="background_color">{{background_color.display_name}}</label>
                     <span class="tip setting-help">{{background_color.help}}</span>
                     <input class="input setting-input" name="background_color" id="background_color"
@@ -39,16 +49,11 @@
                     <label class="label setting-label" for="numbering_type">{{numbering_type.display_name}}</label>
                     <span class="tip setting-help">{{numbering_type.help}}</span>
                     <select class="input setting-input" name="numbering_type" id="numbering_type">
-                        <option value="numbers" ${'selected' if numbering_type.value=='numbers' else '' }>1, 2, 3...
-                        </option>
-                        <option value="numbers_zero" ${'selected' if numbering_type.value=='numbers_zero' else '' }>0,
-                            1, 2...
-                        </option>
-                        <option value="letters" ${'selected' if numbering_type.value=='letters' else '' }>a, b, c...
-                        </option>
-                        <option value="roman" ${'selected' if numbering_type.value=='roman' else '' }>i, ii, iii...
-                        </option>
-                        <option value="none" ${'selected' if numbering_type.value=='none' else '' }>No crear</option>
+                        <option value="numbers" {% if numbering_type.value == 'numbers' %}selected{% endif %}>1, 2, 3...</option>
+                        <option value="numbers_zero" {% if numbering_type.value == 'numbers_zero' %}selected{% endif %}>0, 1, 2...</option>
+                        <option value="letters" {% if numbering_type.value == 'letters' %}selected{% endif %}>a, b, c...</option>
+                        <option value="roman" {% if numbering_type.value == 'roman' %}selected{% endif %}>i, ii, iii...</option>
+                        <option value="none" {% if numbering_type.value == 'none' %}selected{% endif %}>No crear</option>
                     </select>
                 </div>
             </li>
@@ -57,8 +62,9 @@
                     <label class="label setting-label"
                         for="uppercase_letters">{{uppercase_letters.display_name}}</label>
                     <span class="tip setting-help">{{uppercase_letters.help}}</span>
+                    <p>{{uppercase_letters.value}}</p>
                     <input class="input setting-input" name="uppercase_letters" id="uppercase_letters" type="checkbox"
-                        ${'checked' if uppercase_letters.value else '' } />
+                        {% if uppercase_letters.value %}checked{% endif %} />
                 </div>
             </li>
             <li>
@@ -153,8 +159,9 @@
                 <div class="wrapper-comp-setting">
                     <label class="label setting-label" for="random_disorder">{{random_disorder.display_name}}</label>
                     <span class="tip setting-help">{{random_disorder.help}}</span>
+                    <p>{{random_disorder.value}}</p>
                     <input class="input setting-input" name="random_disorder" id="random_disorder" type="checkbox"
-                        ${'checked' if random_disorder.value else '' } />
+                        {% if random_disorder.value %}checked{% endif %} />
                 </div>
             </li>
 
