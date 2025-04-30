@@ -1,6 +1,128 @@
-.eol-order-block {
+.problem.eol-order-block {
     margin: 20px 0;
     font-family: Arial, sans-serif;
+}
+
+.status {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.status.correct {
+    border: 2px solid #0f0;
+}
+
+.status.incorrect {
+    border: 2px solid #f00;
+}
+
+
+.status.unanswered {
+    border: 0px solid #ccc;
+}
+
+.submit-box {
+    margin-top: 20px;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.eol-order-submit {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.eol-order-submit:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+.submission-feedback {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.notificacion {
+    display: flex;
+    align-items: center;
+}
+
+.notificacion img {
+    width: 24px;
+    height: 24px;
+}
+
+.move-up-button, .move-down-button {
+    padding: 4px 8px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.move-up-button:disabled, .move-down-button:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.eol-order-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.eol-order-table-content {
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.order-header, .content-header, .actions-header {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.order-cell, .content-cell, .actions-cell {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.item-row {
+    background-color: #fff;
+}
+
+.item-row:hover {
+    background-color: #f9f9f9;
+}
+
+.weight-info {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weight-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.weight-value {
+    color: #0075b4;
+    font-weight: bold;
 }
 
 .table-title {
@@ -8,108 +130,17 @@
     color: #333;
 }
 
-.eol-order-table {
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.eol-order-table-content {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.eol-order-table-content th {
-    text-align: left;
+.attempts-info {
+    margin-bottom: 15px;
     padding: 10px;
-    background-color: rgba(255,255,255,0.2);
-    border-bottom: 2px solid rgba(0,0,0,0.1);
-}
-
-.eol-order-table-content td {
-    padding: 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.item-row {
-    transition: background-color 0.3s ease;
-}
-
-.item-row:hover {
-    background-color: rgba(255,255,255,0.3);
-}
-
-.order-cell {
-    width: 10%;
-    font-weight: bold;
-}
-
-.content-cell {
-    width: 70%;
-}
-
-.actions-cell {
-    position: relative;
-    z-index: 2;
-    padding: 5px;
-    text-align: center;
-    width: 20%;
-    min-width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.actions-cell button {
-    margin: 0;
-    padding: 3px 8px;
     background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 30px;
-}
-
-.move-up-button,
-.move-down-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 5px 10px;
-    margin: 0 2px;
-    color: #333;
-    transition: color 0.3s ease;
-}
-
-.move-up-button:hover,
-.move-down-button:hover {
-    color: #0075b4;
-}
-
-.move-up-button:disabled,
-.move-down-button:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-}
-
-.eol-order-submit {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #0075b4;
-    color: white;
-    border: none;
     border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.eol-order-submit:hover {
-    background-color: #005a8c;
+.attempts-text {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
 }
 
 /* Studio view styles */
@@ -220,5 +251,15 @@
     border: 1px solid #ddd;
     border-radius: 3px;
     cursor: pointer;
+}
+
+.response-icon {
+    margin-top: 10px;
+}
+
+.response-icon img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
 }
 

@@ -4,7 +4,7 @@
 
 import pkg_resources
 from xblock.core import XBlock
-from xblock.fields import String, Dict, Scope, Boolean, List
+from xblock.fields import String, Dict, Scope, Boolean, List, Integer, Float
 from xblockutils.resources import ResourceLoader
 from xblock.fragment import Fragment
 import json
@@ -117,8 +117,39 @@ class EolOrderXBlock(XBlock):
         default=False
     )
 
-    has_score = False
+    has_score = True
     icon_class = "problem"
+
+    weight = Integer(
+        display_name='Peso',
+        help='Entero que representa el peso del problema',
+        default=1,
+        values={'min': 0},
+        scope=Scope.settings,
+    )
+
+    max_attempts = Integer(
+        display_name='Nro. de Intentos',
+        help='Entero que representa cuantas veces se puede responder problema',
+        default=2,
+        values={'min': 0},
+        scope=Scope.settings,
+    )
+
+    attempts = Integer(
+        display_name='Intentos',
+        help='Cuantas veces el estudiante ha intentado responder',
+        default=0,
+        values={'min': 0},
+        scope=Scope.user_state,
+    )
+
+    score = Float(
+        default=0.0,
+        scope=Scope.user_state,
+    )
+
+    editable_fields = ('display_name', 'table_name', 'background_color', 'numbering_type', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -166,6 +197,19 @@ class EolOrderXBlock(XBlock):
         if self.disordered_order:
             disordered_order_list = self.disordered_order.split('_')
 
+        # Calcular el texto de intentos
+        texto_intentos = ''
+        no_mas_intentos = False
+        if self.max_attempts and self.max_attempts > 0:
+            texto_intentos = "Ha realizado "+str(self.attempts)+" de "+str(self.max_attempts)+" intentos"
+            if self.max_attempts == 1:
+                texto_intentos = "Ha realizado "+str(self.attempts)+" de "+str(self.max_attempts)+" intento"
+            if self.attempts >= self.max_attempts:
+                no_mas_intentos = True
+
+        # Obtener la ruta de las imágenes
+        image_path = self.runtime.local_resource_url(self, 'public/images/')
+
         context = {
             'table_name': self.table_name,
             'background_color': self.background_color,
@@ -175,7 +219,15 @@ class EolOrderXBlock(XBlock):
             'random_disorder': self.random_disorder,
             'elements': elements,
             'correct_answers': self.correct_answers,
-            'disordered_order': disordered_order_list
+            'disordered_order': disordered_order_list,
+            'texto_intentos': texto_intentos,
+            'no_mas_intentos': no_mas_intentos,
+            'attempts': self.attempts,
+            'max_attempts': self.max_attempts,
+            'score': self.score,
+            'image_path': image_path,
+            'show_correctness': 'always',
+            'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
         html = loader.render_template('static/html/eolorder.html', context)
@@ -246,6 +298,16 @@ class EolOrderXBlock(XBlock):
                 'value': self.random_disorder,
                 'display_name': self.fields['random_disorder'].display_name,
                 'help': self.fields['random_disorder'].help
+            },
+            'weight': {
+                'value': self.weight,
+                'display_name': self.fields['weight'].display_name,
+                'help': self.fields['weight'].help
+            },
+            'max_attempts': {
+                'value': self.max_attempts,
+                'display_name': self.fields['max_attempts'].display_name,
+                'help': self.fields['max_attempts'].help
             }
         }
         
@@ -341,16 +403,28 @@ class EolOrderXBlock(XBlock):
             
             print("Saving correct answers:", self.correct_answers)
             
+            # Guardar el peso
+            if data.get('weight') and int(data.get('weight')) >= 0:
+                self.weight = int(data.get('weight'))
+            
+            # Guardar el número de intentos
+            if data.get('max_attempts') and int(data.get('max_attempts')) >= 0:
+                self.max_attempts = int(data.get('max_attempts'))
+            
             # Actualizar el atributo de datos para el frontend
             self.runtime.publish(self, 'edx.xblock.studio_submit', {
                 'disordered_order': self.disordered_order,
-                'correct_answers': self.correct_answers
+                'correct_answers': self.correct_answers,
+                'weight': self.weight,
+                'max_attempts': self.max_attempts
             })
             
             return {
                 'result': 'success',
                 'disordered_order': self.disordered_order,
-                'correct_answers': self.correct_answers
+                'correct_answers': self.correct_answers,
+                'weight': self.weight,
+                'max_attempts': self.max_attempts
             }
         except Exception as e:
             print("Error saving data:", str(e))
@@ -371,30 +445,66 @@ class EolOrderXBlock(XBlock):
     @XBlock.json_handler
     def submit_answer(self, data, suffix=''):
         """
-        Handle student submissions.
+        Maneja la respuesta enviada por el estudiante
         """
-        try:
-            # Obtener el orden enviado por el estudiante
-            submitted_order = data.get('order', [])
-            
-            # Verificar que el orden sea válido
-            if not submitted_order:
-                return {'result': 'error', 'message': 'No se recibió ningún orden'}
-            
-            # Crear un nuevo diccionario con el orden y contenido actualizado
-            new_elements = {}
-            for item in submitted_order:
-                if item['key'] in self.ordeingelements:
-                    new_elements[item['key']] = {
-                        'content': item['content']
-                    }
-            
-            # Actualizar el orden de los elementos
-            self.ordeingelements = new_elements
-            
-            return {'result': 'success'}
-        except Exception as e:
-            return {'result': 'error', 'message': str(e)}
+        # Verificar si se puede realizar un nuevo intento
+        if self.max_attempts > 0 and self.attempts >= self.max_attempts:
+            return {
+                'result': 'error',
+                'message': 'No quedan intentos disponibles'
+            }
+
+        # Obtener el orden enviado por el estudiante
+        submitted_order = data.get('order', '')
+        if not submitted_order:
+            return {
+                'result': 'error',
+                'message': 'No se recibió un orden válido'
+            }
+
+        # Logs detallados
+        print(f"[EOL-ORDER] Respuesta enviada: {submitted_order}")
+        print(f"[EOL-ORDER] Respuesta correcta: {self.correct_answers}")
+        
+        # Obtener los subarreglos de respuestas correctas
+        correct_answers_lists = self.correct_answers.split('_[|]_')
+        print(f"[EOL-ORDER] Subarreglos de respuestas correctas: {correct_answers_lists}")
+        
+        # Verificar si el orden enviado coincide con alguno de los subarreglos
+        is_correct = False
+        for correct_answer in correct_answers_lists:
+            if submitted_order == correct_answer:
+                is_correct = True
+                print(f"[EOL-ORDER] Respuesta coincide con: {correct_answer}")
+                break
+        
+        print(f"[EOL-ORDER] ¿Es correcta la respuesta? {is_correct}")
+        
+        # Incrementar el contador de intentos
+        self.attempts += 1
+        print(f"[EOL-ORDER] Intento actual: {self.attempts} de {self.max_attempts}")
+        
+        # Actualizar el puntaje
+        if is_correct:
+            self.score = 1.0
+        else:
+            self.score = 0.0
+        print(f"[EOL-ORDER] Puntaje asignado: {self.score}")
+
+        # Determinar el mensaje de respuesta
+        if is_correct:
+            message = "¡Respuesta Correcta!"
+        else:
+            message = "Respuesta Incorrecta"
+
+        return {
+            'result': 'success',
+            'is_correct': is_correct,
+            'message': message,
+            'attempts': self.attempts,
+            'max_attempts': self.max_attempts,
+            'score': self.score
+        }
 
     def _get_js_init(self):
         """
@@ -446,4 +556,10 @@ class EolOrderXBlock(XBlock):
         
         # Unir las listas con _[|]_
         self.correct_answers = '_[|]_'.join(lists_str)
-        print("Result string:", self.correct_answers) 
+        print("Result string:", self.correct_answers)
+
+    def max_score(self):
+        """
+        Returns the maximum score for this XBlock.
+        """
+        return self.weight 
