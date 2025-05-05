@@ -263,3 +263,17 @@
     vertical-align: middle;
 }
 
+.ver_respuesta {
+    background-color: transparent !important;
+    color: #0075b4 !important;
+    font-size: 14px;
+    align-items: center;
+}
+.ver_respuesta:hover {
+    background-color: #005a8c;
+}
+
+.ver_respuesta i {
+    font-size: 14px;
+}
+

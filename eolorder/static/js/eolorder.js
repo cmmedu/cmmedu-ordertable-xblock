@@ -181,12 +181,19 @@ function EolOrderXBlock(runtime, element) {
     // Inicializar el ícono basado en el estado actual
     var $notification = $element.find('.notificacion');
     if (currentScore >= 1.0) {
-        $notification.html('<img src="' + imagePath + 'correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+        $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
         $submitButton.prop('disabled', true);
         $element.find('.move-up-button, .move-down-button').prop('disabled', true);
     } else if (currentScore === 0.0 && attempts > 0) {
-        $notification.html('<img src="' + imagePath + 'incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-    }
+        $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+        // Check if we should show the answer button
+        if (attempts >= maxAttempts) {
+            $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                '<span>Mostrar<br>Respuesta</span>' +
+                '</button>');
+        }
+    } 
 
     function updateButtonStates() {
         $itemsContainer.find('.item-row').each(function(index) {

@@ -57,6 +57,9 @@
             </table>
         </div>
     </div>
+    <solution style="display: none;">
+        <p>RESPUESTA</p>
+    </solution>
     <div class="submit-box">
         <div class="action">
             <button class="eol-order-submit Submit submit" {% if no_mas_intentos %}disabled{% else %} style="background-color: #dc0000 !important; color: white;" {% endif %}>Enviar</button>
@@ -69,9 +72,15 @@
                 {% if show_correctness != 'never' %}
                     {% if attempts > 0 %}
                         {% if score >= 1 %}
-                            <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/>
+                            <img src="/static/images/correct-icon.png" alt="Respuesta Correcta" class="status-icon"/>
                         {% else %}
-                            <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/>
+                            <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta" class="status-icon"/>
+                            {% if show_answer == "when_attempts_run_out" and no_mas_intentos %}
+                                <button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">
+                                    <span class="icon fa fa-info-circle" aria-hidden="true"></span><br>
+                                    <span>Mostrar<br>Respuesta</span>
+                                </button>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 {% endif %}

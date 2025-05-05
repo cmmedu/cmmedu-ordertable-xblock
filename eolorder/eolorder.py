@@ -274,11 +274,11 @@ class EolOrderXBlock(XBlock):
                 no_mas_intentos = True
 
         # Obtener la ruta de las imágenes
-        image_path = self.runtime.local_resource_url(self, 'public/images/')
+        image_path = '/static/images/'
 
         # Determinar si se debe mostrar la respuesta correcta
         show_correctness = 'never'
-        if self.show_answer == 'when_attempts_exhausted' and no_mas_intentos:
+        if self.show_answer == 'when_attempts_run_out' and no_mas_intentos:
             show_correctness = 'always'
         elif self.show_answer == 'never':
             show_correctness = 'never'
@@ -320,6 +320,7 @@ class EolOrderXBlock(XBlock):
             'score': self.score,
             'image_path': image_path,
             'show_correctness': show_correctness,
+            'show_answer': self.show_answer,  # Agregar show_answer al contexto
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
