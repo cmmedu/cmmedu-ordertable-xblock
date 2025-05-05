@@ -318,6 +318,13 @@ function EolOrderXBlock(runtime, element) {
                         $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
                     } else {
                         $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+                        if(response.max_attempts > 0 && response.attempts >= response.max_attempts) {
+                            $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                                '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                                '<span>Mostrar<br>Respuesta</span>' +
+                                '</button>');
+                        }
+                    
                     }
 
                     // Si la respuesta es correcta o no quedan intentos, deshabilitar el botón
