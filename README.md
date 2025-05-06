@@ -2,6 +2,8 @@
 
 EOL Order XBlock is an educational tool designed to integrate into [edX courses](https://www.edx.org/). This tool allows students to order elements in a specific sequence, which is useful for assessing their understanding of processes, steps, or concepts that must follow a particular order.
 
+Right now this Xblock is only aviable in spanish.
+
 ## Use Cases
 
 - Ordering the steps of a scientific process
@@ -50,7 +52,6 @@ The EOL Order XBlock allows you to configure:
 
 The EOL Order XBlock assigns scores based on:
 - Correct order of all elements
-- Partially correct (some elements in correct order)
 - Incorrect (wrong order)
 
 ## License

@@ -50,7 +50,6 @@ El EOL Order XBlock permite configurar:
 
 El EOL Order XBlock asigna puntuación basada en:
 - Orden correcto de todos los elementos
-- Parcialmente correcto (algunos elementos en orden correcto)
 - Incorrecto (orden incorrecto)
 
 ## Licencia
