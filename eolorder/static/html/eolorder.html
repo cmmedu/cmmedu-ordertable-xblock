@@ -52,7 +52,7 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-                        <td class="content-cell">{{ item.content }}</td>
+                        <td class="content-cell">{{ item.content|safe }}</td>
                         <td class="actions-cell" style="text-align: center;">
                             <button class="move-up-button">↑</button>
                             <button class="move-down-button">↓</button>

@@ -383,7 +383,7 @@ function EolOrderXBlock(runtime, element) {
             '<tr>'
         }
 
-        tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;">' + textcolumn_order + '</th>' +
+        tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center; width: 15%;">' + textcolumn_order + '</th>' +
             '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>' +
             '</tr>' +
             '</thead>' +

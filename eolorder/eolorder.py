@@ -131,7 +131,7 @@ class EolOrderXBlock(XBlock):
     ordeingelements = Dict(
         default={1: {'content':'paso 1'}, 2: {'content':'paso a'}},
         scope=Scope.settings,
-        help="Lista de elementos a ordenar"
+        help="Lista de elementos a ordenar. El contenido puede incluir HTML para formato (negritas, subrayado, imágenes, etc.)"
     )
 
     correct_answers = String(
