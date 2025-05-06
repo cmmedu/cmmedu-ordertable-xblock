@@ -225,7 +225,13 @@ class EolOrderXBlock(XBlock):
             fragment.add_css(self.resource_string(item))
         for item in additional_js:
             fragment.add_javascript(self.resource_string(item))
-        fragment.initialize_js(initialize_js_func)
+        settings = {
+            'image_path': self.runtime.local_resource_url(self, 'static/images/'),
+            'sublocation': str(self.location).split('@')[-1],
+        }
+
+        fragment.initialize_js(initialize_js_func, json_args=settings)
+
         return fragment
 
     def student_view(self, context=None):
@@ -335,6 +341,7 @@ class EolOrderXBlock(XBlock):
                         break
 
         context = {
+            'sublocation': str(self.location).split('@')[-1],
             'table_name': self.table_name,
             'background_color': self.background_color,
             'textcolumn_order': self.textcolumn_order,

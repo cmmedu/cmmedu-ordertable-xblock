@@ -139,7 +139,7 @@ function EolOrderXBlockEdit(runtime, element) {
     updateButtonStates();
 }
 
-function EolOrderXBlock(runtime, element) {
+function EolOrderXBlock(runtime, element, settings) {
     'use strict';
 
     var $element = $(element);
@@ -438,6 +438,8 @@ function EolOrderXBlock(runtime, element) {
         
         // Toggle between show/hide
         $(this).toggleClass('showing-answer');
+
+        renderMathForSpecificElements(settings.sublocation);
     });
 
     // Helper function to convert numbers to Roman numerals
@@ -481,6 +483,13 @@ function EolOrderXBlock(runtime, element) {
 
     // Initialize button states
     updateButtonStates();
+
+    console.log("---Mathjax Revision---")
+
+    var ordertableid = "order_" + settings.sublocation;
+    renderMathForSpecificElements(ordertableid);
+
+    
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -530,4 +539,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
     }
+
+
 }); 
+
+function renderMathForSpecificElements(id) {
+    console.log("Render mathjax in " + id)
+    if (typeof MathJax !== "undefined") {
+        var $ordtab = $('#' + id);
+        console.log("encontrado " )
+        console.log($ordtab)
+        if ($ordtab.length) {
+            console.log("encontrado "+ $ordtab )
+            $ordtab.find('.eol-order-table-content').each(function (index, ordtabelem) {
+                console.log("renderizar mathjax en "+ ordtabelem )
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
+            });
+        }
+    } else {
+        console.warn("MathJax no está cargado.");
+    }
+}
+

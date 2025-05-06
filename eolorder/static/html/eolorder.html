@@ -1,4 +1,4 @@
-<div class="problem eol-order-block" id="order_{{ location }}" data-image-path="{{ image_path }}">
+<div class="problem eol-order-block" id="order_{{ sublocation }}" data-image-path="{{ image_path }}">
     {% if is_team or is_studio %}
     <div class="weight-info">
         <span class="weight-label">Peso de la pregunta:</span>
@@ -6,9 +6,9 @@
     </div>
     {% endif %}
     {% if show_correctness != 'never' or indicator_class == 'unanswered' %}
-    <div class="status {{ indicator_class }}" id="status_{{ location }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
+    <div class="status {{ indicator_class }}" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
     {% else %}
-    <div class="status" id="status_{{ location }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
+    <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
     {% endif %}
         <div class="eol-order-table">
             <table class="eol-order-table-content">
@@ -20,13 +20,13 @@
                     {% endif %}
                     <tr>
                         <th class="order-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;" pretext="{{ pretext_num }}" postext="{{ postext_num }}" ordertype="{{ numbering_type }}">
-                            <span class="column-title">{{ textcolumn_order }}</span>
+                            {{ textcolumn_order }}
                         </th>
                         <th class="content-header" style="background-color: {{ background_color }}; text-align: center;">
-                            <span class="column-title">{{ textcolumn_content }}</span>
+                            {{ textcolumn_content }}
                         </th>
                         <th class="actions-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;">
-                            <span class="column-title">{{ textcolumn_actions }}</span>
+                            {{ textcolumn_actions }}
                         </th>
                     </tr>
                 </thead>
@@ -69,7 +69,7 @@
     <div class="submit-box">
         <div class="action">
             <button class="eol-order-submit Submit submit" {% if no_mas_intentos %}disabled{% else %} style="background-color: #dc0000 !important; color: white;" {% endif %}>Enviar</button>
-            <span id="submission_feedback_{{ location }}" class="submission-feedback">
+            <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}
                 {% endif %}
