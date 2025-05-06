@@ -70,6 +70,27 @@ class EolOrderXBlock(XBlock):
         default="Tabla Ordenada"
     )
 
+    textcolumn_order = String(
+        display_name="Texto de la columna de orden",
+        help="Texto que se mostrará en la columna de orden",
+        scope=Scope.settings,
+        default="Orden"
+    )
+
+    textcolumn_content = String(
+        display_name="Texto de la columna de contenido",
+        help="Texto que se mostrará en la columna de contenido",
+        scope=Scope.settings,
+        default="Elementos a ordenar"
+    )
+
+    textcolumn_actions = String(
+        display_name="Texto de la columna de acciones",
+        help="Texto que se mostrará en la columna de acciones",
+        scope=Scope.settings,
+        default="Acciones"
+    )
+    
     background_color = String(
         display_name="Color de fondo",
         help="Color de fondo de la tabla en formato hexadecimal",
@@ -84,6 +105,21 @@ class EolOrderXBlock(XBlock):
         default="numbers",
         values=["numbers", "numbers_zero", "letters", "roman", "none"]
     )
+
+    pretext_num = String(
+        display_name="Texto antes de la numeración",
+        help="Texto que se mostrará antes del simbolo de la numeración, vacio se asume no hay texto previo",
+        scope=Scope.settings,
+        default=""
+    )
+
+    postext_num = String(
+        display_name="Texto después de la numeración",
+        help="Texto que se mostrará después del simbolo de la numeración, vacio se asume no hay texto posterior",
+        scope=Scope.settings,
+        default=""
+    )
+
 
     uppercase_letters = Boolean(
         display_name="Letras mayúsculas",
@@ -167,7 +203,7 @@ class EolOrderXBlock(XBlock):
         help="Respuesta enviada por el usuario"
     )
 
-    editable_fields = ('display_name', 'table_name', 'background_color', 'numbering_type', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer')
+    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -301,7 +337,12 @@ class EolOrderXBlock(XBlock):
         context = {
             'table_name': self.table_name,
             'background_color': self.background_color,
+            'textcolumn_order': self.textcolumn_order,
+            'textcolumn_content': self.textcolumn_content,
+            'textcolumn_actions': self.textcolumn_actions,
             'numbering_type': self.numbering_type,
+            'pretext_num': self.pretext_num,
+            'postext_num': self.postext_num,
             'uppercase_letters': self.uppercase_letters,
             'correct_answers': self.correct_answers,
             'random_disorder': self.random_disorder,
@@ -362,6 +403,16 @@ class EolOrderXBlock(XBlock):
                 'display_name': self.fields['numbering_type'].display_name,
                 'help': self.fields['numbering_type'].help
             },
+            'pretext_num': {
+                'value': self.pretext_num,
+                'display_name': self.fields['pretext_num'].display_name,
+                'help': self.fields['pretext_num'].help
+            },
+            'postext_num': {
+                'value': self.postext_num,
+                'display_name': self.fields['postext_num'].display_name,
+                'help': self.fields['postext_num'].help
+            },
             'uppercase_letters': {
                 'value': self.uppercase_letters,
                 'display_name': self.fields['uppercase_letters'].display_name,
@@ -401,6 +452,21 @@ class EolOrderXBlock(XBlock):
                 'value': self.max_attempts,
                 'display_name': self.fields['max_attempts'].display_name,
                 'help': self.fields['max_attempts'].help
+            },
+            'textcolumn_order': {
+                'value': self.textcolumn_order,
+                'display_name': self.fields['textcolumn_order'].display_name,
+                'help': self.fields['textcolumn_order'].help
+            },
+            'textcolumn_content': {
+                'value': self.textcolumn_content,
+                'display_name': self.fields['textcolumn_content'].display_name,
+                'help': self.fields['textcolumn_content'].help
+            },
+            'textcolumn_actions': {
+                'value': self.textcolumn_actions,
+                'display_name': self.fields['textcolumn_actions'].display_name,
+                'help': self.fields['textcolumn_actions'].help
             }
         }
         
@@ -436,6 +502,11 @@ class EolOrderXBlock(XBlock):
             self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
             self.random_disorder = data.get('random_disorder', self.random_disorder)
             self.show_answer = data.get('show_answer', self.show_answer)
+            self.pretext_num = data.get('pretext_num', self.pretext_num)
+            self.postext_num = data.get('postext_num', self.postext_num)
+            self.textcolumn_order = data.get('textcolumn_order', self.textcolumn_order)
+            self.textcolumn_content = data.get('textcolumn_content', self.textcolumn_content)
+            self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
             
             # Asegurarse de que ordeingelements sea un diccionario válido
             ordeingelements = data.get('ordeingelements', {})

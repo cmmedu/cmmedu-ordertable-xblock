@@ -17,7 +17,8 @@ function EolOrderXBlockEdit(runtime, element) {
         }
         
         $itemsContainer.find('.item-row').each(function(index) {
-            $(this).find('.order-cell').text(currentOrderNumber + index);
+            var number = currentOrderNumber + index;
+            $(this).find('.order-cell').text(pretext_num + number + postext_num);
             $(this).attr('data-index', currentOrderNumber + index);
         });
     }
@@ -148,6 +149,17 @@ function EolOrderXBlock(runtime, element) {
     var handlerUrl = runtime.handlerUrl(element, 'submit_answer');
     var elements = [];
     var imagePath = $element.attr('data-image-path');
+    
+    // Obtener variables del backend
+    var table_name = $element.find('.eol-order-table-content .order-header').first().text();
+    var pretext_num = $element.find('.order-header').attr('pretext') || '';
+    var postext_num = $element.find('.order-header').attr('postext') || '';
+    
+    console.log("[EOL-ORDER] Variables del backend:", {
+        table_name: table_name,
+        pretext_num: pretext_num,
+        postext_num: postext_num
+    });
     
     // Obtener el estado actual
     var currentScore = parseFloat($element.find('.status').attr('data-score') || '0');
@@ -348,17 +360,31 @@ function EolOrderXBlock(runtime, element) {
         });
     });
 
+
     // Add click handler for "Mostrar Respuesta" button
     $element.on('click', '.ver_respuesta', function(e) {
         e.preventDefault();
         var $solution = $element.find('solution');
+        var blockId = $element.attr('id');
+
+        let table_name = $element.find('.eol-order-table-content .order-header').first().text();
+        let textcolumn_order = $element.find('.status').attr('data-textcolumn-order') || '';
+        let textcolumn_content = $element.find('.status').attr('data-textcolumn-content') || '';
+        //let textcolumn_actions = $element.find('.order-header').attr('actions') || '';
         
         // Create table structure for the correct answer
-        var tableHtml = '<table class="eol-order-table-content">' +
+        var tableHtml = '<p><b>Orden correcto:</b></p>' +
+            '<table class="eol-order-table-content">' +
             '<thead>' +
-            '<tr>' +
-            '<th class="order-header" style="background-color: #f5f5f5; text-align: center;">Orden</th>' +
-            '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">Contenido</th>' +
+            '<tr>'
+
+        if (table_name != "") {
+            tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;" colspan="2">' + table_name + '</th>'+
+            '<tr>'
+        }
+
+        tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;">' + textcolumn_order + '</th>' +
+            '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
@@ -368,10 +394,34 @@ function EolOrderXBlock(runtime, element) {
             return parseInt(a.key) - parseInt(b.key);
         });
         
+        // Get block-specific values
+        let orderType = $element.find('.status').attr('data-order-type');
+        let pretextNum = $element.find('.status').attr('data-pretext-num') || '';
+        let postextNum = $element.find('.status').attr('data-posttext-num') || '';
+        
         // Add rows for each element in correct order
         sortedElements.forEach(function(element, index) {
+            var orderValue = '';
+            
+            switch(orderType) {
+                case 'numbers':
+                    orderValue = (index + 1);
+                    break;
+                case 'numbers_zero':
+                    orderValue = index;
+                    break;
+                case 'letters':
+                    orderValue = String.fromCharCode(97 + index); // a, b, c, ...
+                    break;
+                case 'roman':
+                    orderValue = toRoman(index + 1);
+                    break;
+                default:
+                    orderValue = (index + 1);
+            }
+            
             tableHtml += '<tr>' +
-                '<td class="order-cell">' + (index + 1) + '</td>' +
+                '<td class="order-cell">' + pretextNum + orderValue + postextNum + '</td>' +
                 '<td class="content-cell">' + element.content + '</td>' +
                 '</tr>';
         });
@@ -389,6 +439,32 @@ function EolOrderXBlock(runtime, element) {
         // Toggle between show/hide
         $(this).toggleClass('showing-answer');
     });
+
+    // Helper function to convert numbers to Roman numerals
+    function toRoman(num) {
+        var roman = {
+            M: 1000,
+            CM: 900,
+            D: 500,
+            CD: 400,
+            C: 100,
+            XC: 90,
+            L: 50,
+            XL: 40,
+            X: 10,
+            IX: 9,
+            V: 5,
+            IV: 4,
+            I: 1
+        };
+        var str = '';
+        for (var i of Object.keys(roman)) {
+            var q = Math.floor(num / roman[i]);
+            num -= q * roman[i];
+            str += i.repeat(q);
+        }
+        return str;
+    }
 
     // Toggle answer visibility when clicking the button again
     $element.on('click', '.ver_respuesta.showing-answer', function(e) {

@@ -277,3 +277,36 @@
     font-size: 14px;
 }
 
+.column-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 8px;
+    display: block;
+    color: #333;
+}
+
+.order-header, .content-header, .actions-header {
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.eol-order-table-content {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.eol-order-table-content th {
+    position: relative;
+}
+
+.eol-order-table-content th:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ddd;
+}
+

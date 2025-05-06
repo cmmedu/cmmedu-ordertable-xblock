@@ -84,8 +84,13 @@ function EolOrderXBlock(runtime, element) {
         
         var data = {
             table_name: $element.find('#table_name').val(),
+            textcolumn_order: $element.find('#textcolumn_order').val(),
+            textcolumn_content: $element.find('#textcolumn_content').val(),
+            textcolumn_actions: $element.find('#textcolumn_actions').val(),
             background_color: $element.find('#background_color').val(),
             numbering_type: $element.find('#numbering_type').val(),
+            pretext_num: $element.find('#pretext_num').val(),
+            postext_num: $element.find('#postext_num').val(),
             show_answer: $element.find('#show_answer').val(),
             uppercase_letters: $element.find('#uppercase_letters').is(':checked'),
             random_disorder: $element.find('#random_disorder').is(':checked'),

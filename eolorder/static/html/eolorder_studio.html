@@ -12,6 +12,30 @@
             </li>
             <li class="field comp-setting-entry is-set">
                 <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="textcolumn_order">{{textcolumn_order.display_name}}</label>
+                    <span class="tip setting-help">{{textcolumn_order.help}}</span>
+                    <input class="input setting-input" name="textcolumn_order" id="textcolumn_order" value="{{textcolumn_order.value}}"
+                        type="text" />
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="textcolumn_content">{{textcolumn_content.display_name}}</label>
+                    <span class="tip setting-help">{{textcolumn_content.help}}</span>
+                    <input class="input setting-input" name="textcolumn_content" id="textcolumn_content" value="{{textcolumn_content.value}}"
+                        type="text" />
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="textcolumn_actions">{{textcolumn_actions.display_name}}</label>
+                    <span class="tip setting-help">{{textcolumn_actions.help}}</span>
+                    <input class="input setting-input" name="textcolumn_actions" id="textcolumn_actions" value="{{textcolumn_actions.value}}"
+                        type="text" />
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
                     <label class="label setting-label" for="weight">{{weight.display_name}}</label>
                     <span class="tip setting-help">{{weight.help}}</span>
                     <input class="input setting-input" name="weight" id="weight" type="number" min="0"
@@ -55,6 +79,22 @@
                         <option value="roman" {% if numbering_type.value == 'roman' %}selected{% endif %}>i, ii, iii...</option>
                         <option value="none" {% if numbering_type.value == 'none' %}selected{% endif %}>No crear</option>
                     </select>
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="pretext_num">{{pretext_num.display_name}}</label>
+                    <span class="tip setting-help">{{pretext_num.help}}</span>
+                    <input class="input setting-input" name="pretext_num" id="pretext_num"
+                        value="{{pretext_num.value}}" type="text" />
+                </div>
+            </li>
+            <li class="field comp-setting-entry is-set">
+                <div class="wrapper-comp-setting">
+                    <label class="label setting-label" for="postext_num">{{postext_num.display_name}}</label>
+                    <span class="tip setting-help">{{postext_num.help}}</span>
+                    <input class="input setting-input" name="postext_num" id="postext_num"
+                        value="{{postext_num.value}}" type="text" />
                 </div>
             </li>
             <li class="field comp-setting-entry is-set">

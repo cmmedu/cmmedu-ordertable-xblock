@@ -6,9 +6,9 @@
     </div>
     {% endif %}
     {% if show_correctness != 'never' or indicator_class == 'unanswered' %}
-    <div class="status {{ indicator_class }}" id="status_{{ location }}" data-score="{{ score }}">
+    <div class="status {{ indicator_class }}" id="status_{{ location }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
     {% else %}
-    <div class="status" id="status_{{ location }}" data-score="{{ score }}">
+    <div class="status" id="status_{{ location }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
     {% endif %}
         <div class="eol-order-table">
             <table class="eol-order-table-content">
@@ -19,9 +19,15 @@
                     </tr>
                     {% endif %}
                     <tr>
-                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center;">Orden</th>
-                        <th class="content-header" style="background-color: {{ background_color }}; text-align: center;">Contenido</th>
-                        <th class="actions-header" style="background-color: {{ background_color }}; text-align: center;">Acciones</th>
+                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;" pretext="{{ pretext_num }}" postext="{{ postext_num }}" ordertype="{{ numbering_type }}">
+                            <span class="column-title">{{ textcolumn_order }}</span>
+                        </th>
+                        <th class="content-header" style="background-color: {{ background_color }}; text-align: center;">
+                            <span class="column-title">{{ textcolumn_content }}</span>
+                        </th>
+                        <th class="actions-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;">
+                            <span class="column-title">{{ textcolumn_actions }}</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="items-container">
@@ -29,20 +35,20 @@
                     <tr class="item-row" data-index="{{ item.key }}">
                         <td class="order-cell">
                             {% if numbering_type == 'numbers' %}
-                                {{ item.position }}
+                                {{ pretext_num }}{{ item.position }}{{ postext_num }}
                             {% elif numbering_type == 'numbers_zero' %}
-                                {{ item.zero_index }}
+                                {{ pretext_num }}{{ item.zero_index }}{{ postext_num }}
                             {% elif numbering_type == 'letters' %}
                                 {% if uppercase_letters %}
-                                    {{ item.letter_upper }}
+                                    {{ pretext_num }}{{ item.letter_upper }}{{ postext_num }}
                                 {% else %}
-                                    {{ item.letter_lower }}
+                                    {{ pretext_num }}{{ item.letter_lower }}{{ postext_num }}
                                 {% endif %}
                             {% elif numbering_type == 'roman' %}
                                 {% if uppercase_letters %}
-                                    {{ item.roman_upper }}
+                                    {{ pretext_num }}{{ item.roman_upper }}{{ postext_num }}
                                 {% else %}
-                                    {{ item.roman_lower }}
+                                    {{ pretext_num }}{{ item.roman_lower }}{{ postext_num }}
                                 {% endif %}
                             {% endif %}
                         </td>
