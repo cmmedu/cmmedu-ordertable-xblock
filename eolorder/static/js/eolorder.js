@@ -348,6 +348,61 @@ function EolOrderXBlock(runtime, element) {
         });
     });
 
+    // Add click handler for "Mostrar Respuesta" button
+    $element.on('click', '.ver_respuesta', function(e) {
+        e.preventDefault();
+        var $solution = $element.find('solution');
+        
+        // Create table structure for the correct answer
+        var tableHtml = '<table class="eol-order-table-content">' +
+            '<thead>' +
+            '<tr>' +
+            '<th class="order-header" style="background-color: #f5f5f5; text-align: center;">Orden</th>' +
+            '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">Contenido</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+        
+        // Sort elements by their original key to show correct order
+        var sortedElements = elements.slice().sort(function(a, b) {
+            return parseInt(a.key) - parseInt(b.key);
+        });
+        
+        // Add rows for each element in correct order
+        sortedElements.forEach(function(element, index) {
+            tableHtml += '<tr>' +
+                '<td class="order-cell">' + (index + 1) + '</td>' +
+                '<td class="content-cell">' + element.content + '</td>' +
+                '</tr>';
+        });
+        
+        tableHtml += '</tbody></table>';
+        
+        // Update solution content and show it
+        $solution.html(tableHtml);
+        $solution.show();
+        
+        // Change button text to indicate answer is shown
+        $(this).html('<span class="icon fa fa-eye-slash" aria-hidden="true"></span><br>' +
+            '<span>Ocultar<br>Respuesta</span>');
+        
+        // Toggle between show/hide
+        $(this).toggleClass('showing-answer');
+    });
+
+    // Toggle answer visibility when clicking the button again
+    $element.on('click', '.ver_respuesta.showing-answer', function(e) {
+        e.preventDefault();
+        var $solution = $element.find('solution');
+        $solution.hide();
+        
+        // Change button text back to original
+        $(this).html('<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+            '<span>Mostrar<br>Respuesta</span>');
+        
+        $(this).removeClass('showing-answer');
+    });
+
     // Initialize button states
     updateButtonStates();
 }

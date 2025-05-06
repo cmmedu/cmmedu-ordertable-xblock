@@ -223,26 +223,17 @@ class EolOrderXBlock(XBlock):
                 content_order = self.disordered_order.split('_')
             else:
                 content_order = [str(key) for key in self.ordeingelements.keys()]
-        # Caso 2: Hay intentos pero no es correcta - Mostrar respuesta guardada del usuario
-        elif self.attempts > 0 and self.score == 0:
+        # Caso 2: Hay intentos Mostrar respuesta guardada del usuario
+        elif self.attempts > 0:
             if self.user_answer:
                 content_order = self.user_answer.split('_')
-            elif self.random_disorder: # Si por alguna razon se pierde la respuesta del usuario, se muestra el orden aleatorio (si esta marcada la casilla)
-                # Generar un orden aleatorio
-                content_order = [str(key) for key in self.ordeingelements.keys()]
-                random.shuffle(content_order)
-            elif self.disordered_order: # Si por alguna razon se pierde la respuesta del usuario, se muestra el orden desordenado
-                content_order = self.disordered_order.split('_')
             else:
+                # Si no hay respuesta guardada, mantener el último orden mostrado
                 content_order = [str(key) for key in self.ordeingelements.keys()]
-        # Caso 3: Es correcta - Mostrar respuesta guardada del usuario
-        elif self.score > 0:
-            if self.user_answer:
-                content_order = self.user_answer.split('_')
-            elif self.correct_answers: # Si por alguna razon se pierde la respuesta del usuario, se muestra la primera respuesta correcta
-                content_order = self.correct_answers.split('_[|]_')[0].split('_')
-            else:
-                content_order = [str(key) for key in self.ordeingelements.keys()]
+                # Si la respuesta es correcta y no hay respuesta guardada, se muestra la primera respuesta correcta
+                if self.score > 0:
+                    if self.correct_answers: # Si por alguna razon se pierde la respuesta del usuario, se muestra la primera respuesta correcta
+                        content_order = self.correct_answers.split('_[|]_')[0].split('_')
 
         # Reordenar los elementos según el orden a mostrar
         ordered_elements = []
@@ -285,15 +276,17 @@ class EolOrderXBlock(XBlock):
         else:
             show_correctness = 'never'
 
+        correct_order = []
+
         # Si se debe mostrar la respuesta correcta, usar la primera respuesta correcta
-        if show_correctness == 'always' and self.correct_answers:
-            content_order = self.correct_answers.split('_[|]_')[0].split('_')
+        if show_correctness == 'always' and  self.correct_answers:
             # Reordenar los elementos según la respuesta correcta
-            ordered_elements = []
-            for i, key in enumerate(content_order):
+            correct_answer0 = []
+            correct_answer0 = self.correct_answers.split('_[|]_')[0].split('_')
+            for i, key in enumerate(correct_answer0):
                 for element in elements:
                     if str(element['key']) == str(key):
-                        ordered_elements.append({
+                        correct_order.append({
                             'key': element['key'],
                             'content': element['content'],
                             'position': i + 1,
@@ -320,6 +313,7 @@ class EolOrderXBlock(XBlock):
             'score': self.score,
             'image_path': image_path,
             'show_correctness': show_correctness,
+            'correct_order': correct_order,
             'show_answer': self.show_answer,  # Agregar show_answer al contexto
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
