@@ -158,16 +158,34 @@ function EolOrderXBlock(runtime, element, settings) {
     var elements = [];
     var imagePath = $element.attr('data-image-path');
     
+    // Log settings at initialization
+    //console.log("[EOL-ORDER] Settings recibidos:", settings);
+    //console.log("[EOL-ORDER] Settings.ordeingelements:", settings.ordeingelements);
+    
+    // Add variables for state caching
+    var $xblocksContainer = $('#seq_content');
+    var xblockId = settings.location;
+    var cachedOrderId = xblockId + '_order_state';
+    var cachedIndicatorClassId = xblockId + '_order_indicator_class';
+    var cachedScoreId = xblockId + '_order_score';
+    var cachedAttemptsId = xblockId + '_order_attempts';
+    var cachedMaxAttemptsId = xblockId + '_order_max_attempts';
+    var cachedShowCorrectnessId = xblockId + '_order_show_correctness';
+    var cachedShowAnswerId = xblockId + '_order_show_answer';
+    var cachedStateId = xblockId + '_order_complete_state';
+    
     // Obtener variables del backend
     var table_name = $element.find('.eol-order-table-content .order-header').first().text();
     var pretext_num = $element.find('.order-header').attr('pretext') || '';
     var postext_num = $element.find('.order-header').attr('postext') || '';
     
+    /*
     console.log("[EOL-ORDER] Variables del backend:", {
         table_name: table_name,
         pretext_num: pretext_num,
         postext_num: postext_num
     });
+    */
     
     // Obtener el estado actual
     var currentScore = parseFloat($element.find('.status').attr('data-score') || '0');
@@ -192,10 +210,12 @@ function EolOrderXBlock(runtime, element, settings) {
         });
         
         // Logs para depuración
+        /*
         console.log("[EOL-ORDER] Inicializando elemento:", {
             key: originalIndex,
             content: content
         });
+        */
     });
 
     // Inicializar el ícono basado en el estado actual
@@ -250,12 +270,13 @@ function EolOrderXBlock(runtime, element, settings) {
             $targetRow.attr('data-index', currentIndex);
             
             // Logs para depuración
+            /*
             console.log("[EOL-ORDER] Moviendo elemento:", {
                 from: currentIndex,
                 to: targetIndex,
                 direction: direction
             });
-            
+            */
             updateButtonStates();
         }
     }
@@ -272,14 +293,14 @@ function EolOrderXBlock(runtime, element, settings) {
         });
         
         // Logs para depuración
-        console.log("[EOL-ORDER] Orden actual:", order.join('_'));
-        console.log("[EOL-ORDER] Elementos en la tabla:");
-        $itemsContainer.find('.item-row').each(function(index) {
+        //console.log("[EOL-ORDER] Orden actual:", order.join('_'));
+        //console.log("[EOL-ORDER] Elementos en la tabla:");
+        /*$itemsContainer.find('.item-row').each(function(index) {
             console.log(`[EOL-ORDER] Elemento ${index + 1}:`, {
                 content: $(this).find('.content-cell').html(),
                 key: $(this).attr('data-index')
             });
-        });
+        });*/
         
         return order.join('_');
     }
@@ -299,15 +320,15 @@ function EolOrderXBlock(runtime, element, settings) {
         var orderString = getCurrentOrder();
         
         // Logs detallados de lo que envía el usuario
-        console.log("[EOL-ORDER] Usuario enviando respuesta:");
-        console.log("[EOL-ORDER] Orden actual:", orderString);
-        console.log("[EOL-ORDER] Elementos en la tabla:");
-        $itemsContainer.find('.item-row').each(function(index) {
+        //console.log("[EOL-ORDER] Usuario enviando respuesta:");
+        //console.log("[EOL-ORDER] Orden actual:", orderString);
+        //console.log("[EOL-ORDER] Elementos en la tabla:");
+        /*$itemsContainer.find('.item-row').each(function(index) {
             console.log(`[EOL-ORDER] Elemento ${index + 1}:`, {
                 content: $(this).find('.content-cell').html(),
                 key: $(this).attr('data-index')
             });
-        });
+        });*/
         
         var data = {
             order: orderString
@@ -320,7 +341,27 @@ function EolOrderXBlock(runtime, element, settings) {
             success: function(response) {
                 if (response.result === 'success') {
                     // Logs de la respuesta del servidor
-                    console.log("[EOL-ORDER] Respuesta del servidor:", response);
+                    //console.log("[EOL-ORDER] Respuesta del servidor:", response);
+                    
+                    // Cache state for page navigation
+                    $xblocksContainer.data(cachedIndicatorClassId, response.indicator_class);
+                    $xblocksContainer.data(cachedScoreId, response.score);
+                    $xblocksContainer.data(cachedAttemptsId, response.attempts);
+                    $xblocksContainer.data(cachedMaxAttemptsId, response.max_attempts);
+                    $xblocksContainer.data(cachedShowCorrectnessId, response.show_correctness);
+                    $xblocksContainer.data(cachedShowAnswerId, response.show_answer);
+                    $xblocksContainer.data(cachedOrderId, orderString);
+                    
+                    // Save complete state object
+                    $xblocksContainer.data(cachedStateId, {
+                        indicator_class: response.indicator_class,
+                        score: response.score,
+                        attempts: response.attempts,
+                        max_attempts: response.max_attempts,
+                        show_correctness: response.show_correctness,
+                        show_answer: response.show_answer,
+                        order: orderString
+                    });
                     
                     // Actualizar el contador de intentos
                     if (response.attempts && response.max_attempts) {
@@ -343,7 +384,6 @@ function EolOrderXBlock(runtime, element, settings) {
                                 '<span>Mostrar<br>Respuesta</span>' +
                                 '</button>');
                         }
-                    
                     }
 
                     // Si la respuesta es correcta o no quedan intentos, deshabilitar el botón
@@ -366,7 +406,6 @@ function EolOrderXBlock(runtime, element, settings) {
             }
         });
     });
-
 
     // Add click handler for "Mostrar Respuesta" button
     $element.on('click', '.ver_respuesta', function(e) {
@@ -495,15 +534,138 @@ function EolOrderXBlock(runtime, element, settings) {
         $(this).removeClass('showing-answer');
     });
 
-    // Initialize button states
-    updateButtonStates();
+    // Initialize: Check for cached state and restore if found
+    $(function ($) {
+        console.log("[EOL-ORDER] XBlock initializing:", xblockId);
+        console.log("[EOL-ORDER] Settings completo:", settings);
+        console.log("[EOL-ORDER] Elementos en settings:", settings.ordeingelements);
+        console.log("[EOL-ORDER] Estado en caché:", $xblocksContainer.data(cachedStateId));
+        
+        // Check if we have cached state
+        if ($xblocksContainer.data(cachedStateId)) {
+            console.log("[EOL-ORDER] Found cached state for XBlock:", xblockId);
+            var state = $xblocksContainer.data(cachedStateId);
+            console.log("[EOL-ORDER] Cached state:", state);
+            
+            // Restore visual state based on cached data
+            var $statusDiv = $element.find('.status');
+            $statusDiv.removeClass('correct incorrect unanswered');
+            $statusDiv.addClass(state.indicator_class);
+            
+            // Restore attempts counter
+            if (state.max_attempts > 0) {
+                var attemptsText = "Ha realizado " + state.attempts + " de " + state.max_attempts + " intentos";
+                if (state.max_attempts === 1) {
+                    attemptsText = "Ha realizado " + state.attempts + " de " + state.max_attempts + " intento";
+                }
+                $element.find('.submission-feedback').text(attemptsText);
+            }
+            
+            // Restore notification area based on score
+            var $notification = $element.find('.notificacion');
+            if (state.score >= 1.0) {
+                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+                $submitButton.prop('disabled', true);
+                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+            } else if (state.score === 0.0 && state.attempts > 0) {
+                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+                
+                // Show answer button if needed
+                if (state.max_attempts > 0 && state.attempts >= state.max_attempts && !$element.find('.ver_respuesta').length) {
+                    $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                        '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                        '<span>Mostrar<br>Respuesta</span>' +
+                        '</button>');
+                }
+            }
+            
+            // Disable submit button if needed
+            if (state.score >= 1.0 || (state.max_attempts > 0 && state.attempts >= state.max_attempts)) {
+                $submitButton.prop('disabled', true);
+                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+            }
+        } else {
+            console.log("[EOL-ORDER] No cached state found for XBlock:", xblockId);
+        }
 
-    console.log("---Mathjax Revision---")
+        // Initialize button states
+        updateButtonStates();
+
+        // Render MathJax
+        var ordertableid = "order_" + settings.sublocation;
+
+
+
+        if ($xblocksContainer.data(cachedStateId) && settings.ordeingelements) {
+            var state = $xblocksContainer.data(cachedStateId);
+            //console.log("[EOL-ORDER] ===== INICIANDO REORDENAMIENTO =====");
+            //console.log("[EOL-ORDER] Orden a restaurar:", state.order);
+            var orderArray = state.order.split('_');
+            //console.log("[EOL-ORDER] Array de orden:", orderArray);
+            //console.log("[EOL-ORDER] Elementos disponibles:", settings.ordeingelements);
+            
+            // Verificar la estructura de la tabla
+            //console.log("[EOL-ORDER] Estructura de la tabla:");
+            var $table = $element.find('.eol-order-table-content');
+            var $tbody = $table.find('tbody');
+            
+            //console.log("[EOL-ORDER] - Tabla encontrada:", $table.length);
+            //console.log("[EOL-ORDER] - Tbody encontrado:", $tbody.length);
+            //console.log("[EOL-ORDER] Tabla antes de limpiar:", $tbody.html());
+            
+            // Limpiar el tbody existente
+            //console.log("[EOL-ORDER] Limpiando tabla actual");
+            $tbody.find('.item-row').remove();
+            //console.log("[EOL-ORDER] Tabla después de limpiar:", $tbody.html());
+            
+            // Rebuild the table in the correct order
+            //console.log("[EOL-ORDER] Comenzando reconstrucción de tabla");
+            orderArray.forEach(function(index, arrayIndex) {
+                //console.log("[EOL-ORDER] Procesando índice:", index, "posición en array:", arrayIndex);
+                var element = settings.ordeingelements[index].content; // Get content from the object
+                //console.log("[EOL-ORDER] Elemento encontrado:", element);
+                
+                if (element) {
+                    var $row = $('<tr class="item-row" data-index="' + index + '">' +
+                        '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
+                        '<td class="content-cell">' + element + '</td>' +
+                        '<td class="actions-cell">' +
+                        '<button class="move-up-button">↑</button>' +
+                        '<button class="move-down-button">↓</button>' +
+                        '</td>' +
+                        '</tr>');
+                    //console.log("[EOL-ORDER] Agregando fila:", $row.html());
+                    $tbody.append($row);
+                    //console.log("[EOL-ORDER] Estado de la tabla después de agregar fila:", $tbody.html());
+                } else {
+                    console.log("[EOL-ORDER] ¡ADVERTENCIA! No se encontró elemento para índice:", index);
+                }
+            });
+            
+            //console.log("[EOL-ORDER] Tabla reconstruida. Actualizando estados de botones");
+            // Update button states after rebuilding
+            updateButtonStates();
+            
+            // Re-render MathJax if needed
+            //console.log("[EOL-ORDER] Re-renderizando MathJax");
+            var ordertableid = "order_" + settings.sublocation;
+            renderMathForSpecificElements(ordertableid);
+            
+            //console.log("[EOL-ORDER] ===== REORDENAMIENTO COMPLETADO =====");
+            
+
+        } else {
+            //console.log("[EOL-ORDER] No se puede reordenar:");
+            //console.log("[EOL-ORDER] - state.order:", state ? state.order : 'No hay estado');
+            //console.log("[EOL-ORDER] - settings.ordeingelements:", settings.ordeingelements);
+            //console.log("[EOL-ORDER] - settings:", settings);
+        }
+    });
+
+    //console.log("---Mathjax Revision---")
 
     var ordertableid = "order_" + settings.sublocation;
     renderMathForSpecificElements(ordertableid);
-
-    
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -553,20 +715,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
     }
-
-
 }); 
 
 function renderMathForSpecificElements(id) {
     console.log("Render mathjax in " + id)
     if (typeof MathJax !== "undefined") {
         var $ordtab = $('#' + id);
-        console.log("encontrado " )
-        console.log($ordtab)
+        //console.log("encontrado " )
+        //console.log($ordtab)
         if ($ordtab.length) {
-            console.log("encontrado "+ $ordtab )
             $ordtab.find('.eol-order-table-content').each(function (index, ordtabelem) {
-                console.log("renderizar mathjax en "+ ordtabelem )
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
             });
         }

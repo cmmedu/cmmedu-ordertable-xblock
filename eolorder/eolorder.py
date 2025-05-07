@@ -228,6 +228,14 @@ class EolOrderXBlock(XBlock):
         settings = {
             'image_path': self.runtime.local_resource_url(self, 'static/images/'),
             'sublocation': str(self.location).split('@')[-1],
+            'ordeingelements': self.ordeingelements,
+            'pretext_num': self.pretext_num,
+            'postext_num': self.postext_num,
+            'uppercase_letters': self.uppercase_letters,
+            'correct_answers': self.correct_answers,
+            'disordered_order': self.disordered_order,
+            'random_disorder': self.random_disorder,
+            
         }
 
         fragment.initialize_js(initialize_js_func, json_args=settings)
