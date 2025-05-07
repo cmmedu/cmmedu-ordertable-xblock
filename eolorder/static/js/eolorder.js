@@ -377,7 +377,6 @@ function EolOrderXBlock(runtime, element, settings) {
         let table_name = $element.find('.eol-order-table-content .order-header').first().text();
         let textcolumn_order = $element.find('.status').attr('data-textcolumn-order') || '';
         let textcolumn_content = $element.find('.status').attr('data-textcolumn-content') || '';
-        //let textcolumn_actions = $element.find('.order-header').attr('actions') || '';
         
         // Create table structure for the correct answer
         var tableHtml = '<p><b>Orden correcto:</b></p>' +
@@ -446,7 +445,15 @@ function EolOrderXBlock(runtime, element, settings) {
         // Toggle between show/hide
         $(this).toggleClass('showing-answer');
 
-        renderMathForSpecificElements(settings.sublocation);
+        // Esperar a que el DOM se actualice antes de renderizar MathJax
+        setTimeout(function() {
+            if (typeof MathJax !== "undefined") {
+                console.log("[EOL-ORDER] Renderizando MathJax en la tabla de respuesta");
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, $solution[0]]);
+            } else {
+                console.warn("[EOL-ORDER] MathJax no está cargado");
+            }
+        }, 100);
     });
 
     // Helper function to convert numbers to Roman numerals

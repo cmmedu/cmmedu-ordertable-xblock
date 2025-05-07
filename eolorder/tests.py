@@ -94,7 +94,8 @@ class TestEolOrderXBlock(unittest.TestCase):
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
-        self.assertEqual(response.json_body['result'], 'incorrect')
+        self.assertEqual(response.json_body['result'], 'success')
+        self.assertEqual(response.json_body['is_correct'], False)
         self.assertEqual(response.json_body['score'], 0.0)
 
     def test_max_attempts(self):
@@ -119,7 +120,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Tercer intento (debería fallar)
         response = self.xblock.submit_answer(request)
         self.assertEqual(response.json_body['result'], 'error')
-        self.assertIn('max_attempts', response.json_body['message'])
+        self.assertEqual(response.json_body['message'], 'No quedan intentos disponibles')
 
     def test_add_row(self):
         """
