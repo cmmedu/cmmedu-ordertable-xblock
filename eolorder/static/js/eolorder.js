@@ -78,11 +78,13 @@ function EolOrderXBlockEdit(runtime, element) {
             $targetRow.attr('data-index', currentIndex);
             
             // Logs para depuración
+            /*
             console.log("[EOL-ORDER] Moviendo elemento:", {
                 from: currentIndex,
                 to: targetIndex,
                 direction: direction
             });
+            */
             
             updateButtonStates();
         }
