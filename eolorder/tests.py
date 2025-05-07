@@ -72,7 +72,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Simular respuesta correcta
         request = TestRequest()
         request.method = 'POST'
-        data = json.dumps({'answer': '1_2'})
+        data = json.dumps({'order': '1_2'})
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
@@ -90,7 +90,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Simular respuesta incorrecta
         request = TestRequest()
         request.method = 'POST'
-        data = json.dumps({'answer': '2_1'})
+        data = json.dumps({'order': '2_1'})
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
@@ -107,7 +107,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         request.method = 'POST'
         
         # Primer intento
-        data = json.dumps({'answer': '1_2'})
+        data = json.dumps({'order': '1_2'})
         request.body = data.encode('utf-8')
         response = self.xblock.submit_answer(request)
         self.assertEqual(self.xblock.attempts, 1)
