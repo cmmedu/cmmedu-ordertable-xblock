@@ -63,19 +63,27 @@ function EolOrderXBlockEdit(runtime, element) {
         }
         
         if ($targetRow.length) {
-            // Guardar el contenido de ambas filas
+            // Guardar el contenido y el índice de ambas filas
             var currentContent = $row.find('.content-cell').html();
             var targetContent = $targetRow.find('.content-cell').html();
-            
-            // Intercambiar solo el contenido, manteniendo los números de orden intactos
-            $row.find('.content-cell').html(targetContent);
-            $targetRow.find('.content-cell').html(currentContent);
-            
-            // Mantener los atributos data-index originales
             var currentIndex = $row.attr('data-index');
             var targetIndex = $targetRow.attr('data-index');
             
-            // No actualizar los números de orden
+            // Intercambiar el contenido
+            $row.find('.content-cell').html(targetContent);
+            $targetRow.find('.content-cell').html(currentContent);
+            
+            // Intercambiar los atributos data-index
+            $row.attr('data-index', targetIndex);
+            $targetRow.attr('data-index', currentIndex);
+            
+            // Logs para depuración
+            console.log("[EOL-ORDER] Moviendo elemento:", {
+                from: currentIndex,
+                to: targetIndex,
+                direction: direction
+            });
+            
             updateButtonStates();
         }
     }
@@ -227,19 +235,27 @@ function EolOrderXBlock(runtime, element, settings) {
         }
         
         if ($targetRow.length) {
-            // Guardar el contenido de ambas filas
+            // Guardar el contenido y el índice de ambas filas
             var currentContent = $row.find('.content-cell').html();
             var targetContent = $targetRow.find('.content-cell').html();
-            
-            // Intercambiar solo el contenido, manteniendo los números de orden intactos
-            $row.find('.content-cell').html(targetContent);
-            $targetRow.find('.content-cell').html(currentContent);
-            
-            // Mantener los atributos data-index originales
             var currentIndex = $row.attr('data-index');
             var targetIndex = $targetRow.attr('data-index');
             
-            // No actualizar los números de orden
+            // Intercambiar el contenido
+            $row.find('.content-cell').html(targetContent);
+            $targetRow.find('.content-cell').html(currentContent);
+            
+            // Intercambiar los atributos data-index
+            $row.attr('data-index', targetIndex);
+            $targetRow.attr('data-index', currentIndex);
+            
+            // Logs para depuración
+            console.log("[EOL-ORDER] Moviendo elemento:", {
+                from: currentIndex,
+                to: targetIndex,
+                direction: direction
+            });
+            
             updateButtonStates();
         }
     }
@@ -248,18 +264,9 @@ function EolOrderXBlock(runtime, element, settings) {
         var order = [];
         // Obtener los elementos en el orden actual de la tabla
         $itemsContainer.find('.item-row').each(function() {
-            // Obtener el contenido del elemento
-            var content = $(this).find('.content-cell').html();
-            // Buscar el índice original del elemento en el array de elementos
-            var originalIndex = -1;
-            for (var i = 0; i < elements.length; i++) {
-                if (elements[i].content === content) {
-                    // Usar el índice original del elemento
-                    originalIndex = elements[i].key;
-                    break;
-                }
-            }
-            if (originalIndex !== -1) {
+            // Obtener el índice original directamente del atributo data-index
+            var originalIndex = $(this).attr('data-index');
+            if (originalIndex) {
                 order.push(originalIndex);
             }
         });

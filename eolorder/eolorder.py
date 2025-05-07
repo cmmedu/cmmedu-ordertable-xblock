@@ -630,7 +630,11 @@ class EolOrderXBlock(XBlock):
 
         # Obtener el orden enviado por el estudiante
         submitted_order = data.get('order', '')
-        if not submitted_order:
+        print(f"[EOL-ORDER] Usuario enviando respuesta: {submitted_order}")
+        print(f"[EOL-ORDER] Orden actual: {submitted_order}")
+
+        # Validar que el orden sea una cadena no vacía y contenga solo números y guiones bajos
+        if not submitted_order or not all(c.isdigit() or c == '_' for c in submitted_order):
             return {
                 'result': 'error',
                 'message': 'No se recibió un orden válido'
