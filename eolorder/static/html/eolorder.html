@@ -6,9 +6,9 @@
     </div>
     {% endif %}
     {% if show_correctness != 'never' or indicator_class == 'unanswered' %}
-    <div class="status {{ indicator_class }}" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" >
+    <div class="status {{ indicator_class }}" id="status_{{ sublocation }}" data-score="{{ score }}">
     {% else %}
-    <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}">
+    <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" >
     {% endif %}
         <div class="eol-order-table">
             <table class="eol-order-table-content">
@@ -68,7 +68,7 @@
     </solution>
     <div class="submit-box">
         <div class="action">
-            <button class="eol-order-submit Submit submit" {% if no_mas_intentos %}disabled{% else %} style="background-color: #dc0000 !important; color: white;" {% endif %}>Enviar</button>
+            <button class="eol-order-submit submit Submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
             <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}

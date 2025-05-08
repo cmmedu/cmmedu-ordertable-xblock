@@ -679,21 +679,30 @@ class EolOrderXBlock(XBlock):
         print("[EOL-ORDER] Updated score:", self.score)
         print("[EOL-ORDER] Updated attempts:", self.attempts)
         
-        # Publish grade
-        self.runtime.publish(self, 'grade', {
-            'value': self.score,
-            'max_value': 1.0
-        })
-
-        # Calculate completion value (0.0 to 1.0)
-        completion = 1.0 if is_correct else 0.0
+        # Calculate weighted score
+        weighted_score = float(self.weight) * self.score
         
-        # Notify completion to any conditional XBlock watching this component
         try:
-            self.runtime.publish(self, 'completion', {'completion': completion})
+            # Publish grade event
+            self.runtime.publish(self, 'grade', {
+                'value': weighted_score,
+                'max_value': self.weight
+            })
+            
+            # Publish completion event
+            completion = 1.0 if is_correct else 0.0
+            self.runtime.publish(self, 'completion', {
+                'completion': completion,
+                'user_id': self.scope_ids.user_id,
+                'block_key': str(self.scope_ids.usage_id),
+                'earned': weighted_score,
+                'possible': self.weight,
+                'complete': is_correct
+            })
             print("[EOL-ORDER] Published completion:", completion)
+            
         except Exception as e:
-            print("[EOL-ORDER] Error publishing completion:", str(e))
+            print("[EOL-ORDER] Error publishing events:", str(e))
 
         return {
             'result': 'success',
@@ -703,7 +712,8 @@ class EolOrderXBlock(XBlock):
             'max_attempts': self.max_attempts,
             'show_correctness': getattr(self, 'show_correctness', 'always'),
             'show_answer': self.show_answer,
-            'user_answer': self.user_answer
+            'user_answer': self.user_answer,
+            'indicator_class': 'correct' if is_correct else 'incorrect'
         }
 
     @XBlock.json_handler
