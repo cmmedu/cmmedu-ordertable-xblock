@@ -3,7 +3,7 @@
     font-family: Arial, sans-serif;
 }
 
-.eol-order-submit {
+.problem.eol-order-block .eol-order-submit {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -12,14 +12,13 @@
     transition: background-color 0.3s;
 }
 
-.eol-order-submit:disabled {
+.problem.eol-order-block .eol-order-submit:disabled {
     background-color: #ccc !important;
     cursor: not-allowed;
 }
 
-
-
-.eol-order-table .move-up-button, .eol-order-table .move-down-button {
+.problem.eol-order-block .eol-order-table .move-up-button,
+.problem.eol-order-block .eol-order-table .move-down-button {
     padding: 4px 8px;
     margin: 0 2px;
     border: 1px solid #ddd;
@@ -28,43 +27,48 @@
     cursor: pointer;
 }
 
-.eol-order-table .move-up-button:disabled, .eol-order-table .move-down-button:disabled {
+.problem.eol-order-block .eol-order-table .move-up-button:disabled,
+.problem.eol-order-block .eol-order-table .move-down-button:disabled {
     background-color: #eee;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.eol-order-table {
+.problem.eol-order-block .eol-order-table {
     width: 100%;
     margin-bottom: 20px;
     border-collapse: collapse;
 }
 
-.eol-order-table-content {
+.problem.eol-order-block .eol-order-table-content {
     width: 100%;
     border: 1px solid #ddd;
 }
 
-.order-header, .content-header, .actions-header {
+.problem.eol-order-block .order-header,
+.problem.eol-order-block .content-header,
+.problem.eol-order-block .actions-header {
     padding: 10px;
     text-align: left;
     font-weight: bold;
 }
 
-.order-cell, .content-cell, .actions-cell {
+.problem.eol-order-block .order-cell,
+.problem.eol-order-block .content-cell,
+.problem.eol-order-block .actions-cell {
     padding: 10px;
     border-top: 1px solid #ddd;
 }
 
-.eol-order-table .item-row {
+.problem.eol-order-block .eol-order-table .item-row {
     background-color: #fff;
 }
 
-.eol-order-table .item-row:hover {
+.problem.eol-order-block .eol-order-table .item-row:hover {
     background-color: #f9f9f9;
 }
 
-.eol-order-table .weight-info {
+.problem.eol-order-block .eol-order-table .weight-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
@@ -74,29 +78,29 @@
     gap: 10px;
 }
 
-.eol-order-table .weight-label {
+.problem.eol-order-block .eol-order-table .weight-label {
     font-weight: bold;
     color: #333;
 }
 
-.eol-order-table .weight-value {
+.problem.eol-order-block .eol-order-table .weight-value {
     color: #0075b4;
     font-weight: bold;
 }
 
-.eol-order-table .table-title {
+.problem.eol-order-block .eol-order-table .table-title {
     margin-bottom: 15px;
     color: #333;
 }
 
-.eol-order-table .attempts-info {
+.problem.eol-order-block .eol-order-table .attempts-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
     border-radius: 4px;
 }
 
-.eol-order-table .attempts-text {
+.problem.eol-order-block .eol-order-table .attempts-text {
     margin: 0;
     color: #666;
     font-size: 14px;
@@ -148,95 +152,163 @@
 }
 
 /* Horizontal Drag and Drop Styles */
-.eol-order-disorder {
+.problem.eol-order-block .eol-order-disorder {
     margin: 20px 0;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #f8f9fa;
     border-radius: 10px;
+    border: 1px solid #e9ecef;
 }
 
-.disorder-preview {
+.problem.eol-order-block .disorder-preview {
     display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.problem.eol-order-block .disordered-list {
+    display: flex;
+    flex-direction: row;
     flex-wrap: nowrap;
-    overflow-x: auto;
     gap: 10px;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #f8f9fa;
     border-radius: 8px;
-    min-height: 100px;
+    min-height: 80px;
+    overflow-x: auto;
+    align-items: center;
 }
 
-.disorder-item {
-    position: relative;
-    z-index: 1;
-    margin: 5px 0;
-    padding: 5px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+.problem.eol-order-block .disorder-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    cursor: move;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
-.disorder-item:hover {
-    background: #e8f0ff;
-    transform: scale(1.03);
+.problem.eol-order-block .disorder-item:hover {
+    background: #fff;
+    border-color: #0075b4;
+    box-shadow: 0 2px 4px rgba(0, 117, 180, 0.1);
+    transform: translateY(-1px);
 }
 
-.disorder-item.dragging {
+.problem.eol-order-block .disorder-item.dragging {
     opacity: 0.7;
+    background: #e9ecef;
     transform: rotate(-2deg);
 }
 
-.disorder-item.over {
-    border: 2px dashed #ff8c42;
-    background: #fff3e0;
+.problem.eol-order-block .disorder-item.over {
+    border: 2px dashed #0075b4;
+    background: #f0f7ff;
 }
 
-.drag-handle {
-    margin-right: 10px;
-    cursor: grab;
-    color: #666;
-}
-
-.item-content {
+.problem.eol-order-block .disorder-item .item-content {
     flex-grow: 1;
-    color: #333;
-    font-weight: bold;
+    color: #2c3e50;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.disorder-item button {
-    margin: 0 2px;
-    padding: 3px 8px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+.problem.eol-order-block .disorder-item .move-left-button,
+.problem.eol-order-block .disorder-item .move-right-button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0075b4;
+    color: white;
     cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
 }
 
-.response-icon {
+.problem.eol-order-block .disorder-item .move-left-button:hover,
+.problem.eol-order-block .disorder-item .move-right-button:hover {
+    background-color: #005a8c;
+    transform: translateY(-1px);
+}
+
+.problem.eol-order-block .disorder-item .move-left-button:disabled,
+.problem.eol-order-block .disorder-item .move-right-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.problem.eol-order-block .order-label,
+.problem.eol-order-block .previous-order-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+}
+
+.problem.eol-order-block .order-label span,
+.problem.eol-order-block .previous-order-label span {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.problem.eol-order-block .order-display,
+.problem.eol-order-block .previous-order-display {
+    color: #0075b4;
+    font-family: monospace;
+    padding: 6px 12px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.problem.eol-order-block .response-icon {
     margin-top: 10px;
 }
 
-.response-icon img {
+.problem.eol-order-block .response-icon img {
     width: 24px;
     height: 24px;
     vertical-align: middle;
 }
 
-.ver_respuesta {
+.problem.eol-order-block .ver_respuesta {
     background-color: transparent !important;
     color: #0075b4 !important;
     font-size: 14px;
     align-items: center;
 }
-.ver_respuesta:hover {
+
+.problem.eol-order-block .ver_respuesta:hover {
     background-color: #005a8c;
 }
 
-.ver_respuesta i {
+.problem.eol-order-block .ver_respuesta i {
     font-size: 14px;
 }
 
-.column-title {
+.problem.eol-order-block .column-title {
     font-weight: bold;
     font-size: 1.1em;
     padding: 8px;
@@ -244,22 +316,24 @@
     color: #333;
 }
 
-.order-header, .content-header, .actions-header {
+.problem.eol-order-block .order-header,
+.problem.eol-order-block .content-header,
+.problem.eol-order-block .actions-header {
     padding: 10px;
     border-bottom: 2px solid #ddd;
 }
 
-.eol-order-table-content {
+.problem.eol-order-block .eol-order-table-content {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.eol-order-table-content th {
+.problem.eol-order-block .eol-order-table-content th {
     position: relative;
 }
 
-.eol-order-table-content th:after {
+.problem.eol-order-block .eol-order-table-content th:after {
     content: '';
     position: absolute;
     bottom: 0;

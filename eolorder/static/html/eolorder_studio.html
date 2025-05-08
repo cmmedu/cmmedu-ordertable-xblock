@@ -1,211 +1,234 @@
 {% load i18n %}
 <div class="editor-with-buttons">
     <div class="wrapper-comp-settings is-active editor-with-buttons" id="settings-tab">
-        <ul class="list-input settings-list">
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="table_name">{{table_name.display_name}}</label>
-                    <span class="tip setting-help">{{table_name.help}}</span>
-                    <input class="input setting-input" name="table_name" id="table_name" value="{{table_name.value}}"
-                        type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="textcolumn_order">{{textcolumn_order.display_name}}</label>
-                    <span class="tip setting-help">{{textcolumn_order.help}}</span>
-                    <input class="input setting-input" name="textcolumn_order" id="textcolumn_order" value="{{textcolumn_order.value}}"
-                        type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="textcolumn_content">{{textcolumn_content.display_name}}</label>
-                    <span class="tip setting-help">{{textcolumn_content.help}}</span>
-                    <input class="input setting-input" name="textcolumn_content" id="textcolumn_content" value="{{textcolumn_content.value}}"
-                        type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="textcolumn_actions">{{textcolumn_actions.display_name}}</label>
-                    <span class="tip setting-help">{{textcolumn_actions.help}}</span>
-                    <input class="input setting-input" name="textcolumn_actions" id="textcolumn_actions" value="{{textcolumn_actions.value}}"
-                        type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="weight">{{weight.display_name}}</label>
-                    <span class="tip setting-help">{{weight.help}}</span>
-                    <input class="input setting-input" name="weight" id="weight" type="number" min="0"
-                        value="{{weight.value}}" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="max_attempts">{{max_attempts.display_name}}</label>
-                    <span class="tip setting-help">{{max_attempts.help}}</span>
-                    <input class="input setting-input" name="max_attempts" id="max_attempts" type="number" min="0"
-                        value="{{max_attempts.value}}" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="show_answer">{{show_answer.display_name}}</label>
-                    <span class="tip setting-help">{{show_answer.help}}</span>
-                    <select class="input setting-input" name="show_answer" id="show_answer">
-                        <option value="when_attempts_runs_out" {% if show_answer.value == 'when_attempts_runs_out' %}selected="selected"{% endif %}>Cuando se agotan los intentos</option>
-                        <option value="never" {% if show_answer.value == 'never' %}selected="selected"{% endif %}>Nunca</option>
-                    </select>
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="background_color">{{background_color.display_name}}</label>
-                    <span class="tip setting-help">{{background_color.help}}</span>
-                    <input class="input setting-input" name="background_color" id="background_color"
-                        value="{{background_color.value}}" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="numbering_type">{{numbering_type.display_name}}</label>
-                    <span class="tip setting-help">{{numbering_type.help}}</span>
-                    <select class="input setting-input" name="numbering_type" id="numbering_type">
-                        <option value="numbers" {% if numbering_type.value == 'numbers' %}selected{% endif %}>1, 2, 3...</option>
-                        <option value="numbers_zero" {% if numbering_type.value == 'numbers_zero' %}selected{% endif %}>0, 1, 2...</option>
-                        <option value="letters" {% if numbering_type.value == 'letters' %}selected{% endif %}>a, b, c...</option>
-                        <option value="roman" {% if numbering_type.value == 'roman' %}selected{% endif %}>i, ii, iii...</option>
-                        <option value="none" {% if numbering_type.value == 'none' %}selected{% endif %}>No crear</option>
-                    </select>
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="pretext_num">{{pretext_num.display_name}}</label>
-                    <span class="tip setting-help">{{pretext_num.help}}</span>
-                    <input class="input setting-input" name="pretext_num" id="pretext_num"
-                        value="{{pretext_num.value}}" type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="postext_num">{{postext_num.display_name}}</label>
-                    <span class="tip setting-help">{{postext_num.help}}</span>
-                    <input class="input setting-input" name="postext_num" id="postext_num"
-                        value="{{postext_num.value}}" type="text" />
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label"
-                        for="uppercase_letters">{{uppercase_letters.display_name}}</label>
-                    <span class="tip setting-help">{{uppercase_letters.help}}</span>
-                    <p>{{uppercase_letters.value}}</p>
-                    <input class="input setting-input" name="uppercase_letters" id="uppercase_letters" type="checkbox"
-                        {% if uppercase_letters.value %}checked{% endif %} />
-                </div>
-            </li>
-            <li>
-                <div class="table-rows-container">
-                    <h3>{{ordeingelements.display_name}}</h3>
-                    <span class="tip setting-help">{{ordeingelements.help}}</span>
-                    <div class="table-rows">
-                        {% for key, value in ordeingelements.value.items %}
-                        <div class="table-row" data-row-id="{{key}}">
-                            <div class="row-content">
-                                <p>Label: {{key}}</divp>
-                            </div>
-                            <div class="row-content">
-                                <textarea class="row-content-input" placeholder="Contenido de la fila (HTML permitido)"
-                                    name="content">{{value.content}}</textarea>
-                            </div>
-                            <div class="row-actions">
-                                <button class="remove-row">Eliminar</button>
-                            </div>
-                        </div>
-                        {% endfor %}
+        <div class="eol-order-studio">
+            <ul class="list-input settings-list">
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="table_name">{{table_name.display_name}}</label>
+                        <span class="tip setting-help">{{table_name.help}}</span>
+                        <input class="input setting-input" name="table_name" id="table_name"
+                            value="{{table_name.value}}" type="text" />
                     </div>
-                    <button class="add-row-button">Agregar</button>
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="correct_answers">{{correct_answers.display_name}}</label>
-                    <span class="tip setting-help">{{correct_answers.help}}</span>
-                    <div class="correct-answers-container">
-                        <div class="order-label">
-                            <span>Orden actual: </span>
-                            <input type="hidden" id="current-answers-value" value="{{correct_answers.value}}" />
-                            <div class="order-display">{{correct_answers.value}}</div>
-                        </div>
-                        <div class="previous-order-label">
-                            <span>Orden anterior: </span>
-                            <div class="previous-order-display">{{correct_answers.value}}</div>
-                        </div>
-                        <div class="correct-answers-list">
-                            {% for answer_list in correct_answers.value|split:"_[|]_" %}
-                            <div class="correct-answers-group">
-                                <div class="group-header">
-                                    <button class="remove-group-button">Eliminar grupo</button>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="textcolumn_order">{{textcolumn_order.display_name}}</label>
+                        <span class="tip setting-help">{{textcolumn_order.help}}</span>
+                        <input class="input setting-input" name="textcolumn_order" id="textcolumn_order"
+                            value="{{textcolumn_order.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="textcolumn_content">{{textcolumn_content.display_name}}</label>
+                        <span class="tip setting-help">{{textcolumn_content.help}}</span>
+                        <input class="input setting-input" name="textcolumn_content" id="textcolumn_content"
+                            value="{{textcolumn_content.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="textcolumn_actions">{{textcolumn_actions.display_name}}</label>
+                        <span class="tip setting-help">{{textcolumn_actions.help}}</span>
+                        <input class="input setting-input" name="textcolumn_actions" id="textcolumn_actions"
+                            value="{{textcolumn_actions.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="weight">{{weight.display_name}}</label>
+                        <span class="tip setting-help">{{weight.help}}</span>
+                        <input class="input setting-input" name="weight" id="weight" type="number" min="0"
+                            value="{{weight.value}}" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="max_attempts">{{max_attempts.display_name}}</label>
+                        <span class="tip setting-help">{{max_attempts.help}}</span>
+                        <input class="input setting-input" name="max_attempts" id="max_attempts" type="number" min="0"
+                            value="{{max_attempts.value}}" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="show_answer">{{show_answer.display_name}}</label>
+                        <span class="tip setting-help">{{show_answer.help}}</span>
+                        <select class="input setting-input" name="show_answer" id="show_answer">
+                            <option value="when_attempts_runs_out" {% if show_answer.value == 'when_attempts_runs_out' %} selected="selected" {% endif %}>
+                                Cuando se agotan los intentos
+                            </option>
+                            <option value="never" {% if show_answer.value == 'never' %} selected="selected" {% endif %}>
+                                Nunca
+                            </option>
+                        </select>
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="background_color">{{background_color.display_name}}</label>
+                        <span class="tip setting-help">{{background_color.help}}</span>
+                        <input class="input setting-input" name="background_color" id="background_color"
+                            value="{{background_color.value}}" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="numbering_type">{{numbering_type.display_name}}</label>
+                        <span class="tip setting-help">{{numbering_type.help}}</span>
+                        <select class="input setting-input" name="numbering_type" id="numbering_type">
+                            <option value="numbers" {% if numbering_type.value == 'numbers' %}selected{% endif %}>
+                                1, 2, 3...
+                            </option>
+                            <option value="numbers_zero" {% if numbering_type.value == 'numbers_zero' %}selected{% endif %}>
+                                0, 1, 2...
+                            </option>
+                            <option value="letters" {% if numbering_type.value == 'letters' %} selected{% endif %}>
+                                a, b, c...
+                            </option>
+                            <option value="roman" {% if numbering_type.value == 'roman' %} selected{% endif %}>
+                                i, ii, iii...
+                            </option>
+                            <option value="none" {% if numbering_type.value == 'none' %} selected{% endif %}>
+                                No crear
+                            </option>
+                        </select>
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="pretext_num">{{pretext_num.display_name}}</label>
+                        <span class="tip setting-help">{{pretext_num.help}}</span>
+                        <input class="input setting-input" name="pretext_num" id="pretext_num"
+                            value="{{pretext_num.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="postext_num">{{postext_num.display_name}}</label>
+                        <span class="tip setting-help">{{postext_num.help}}</span>
+                        <input class="input setting-input" name="postext_num" id="postext_num"
+                            value="{{postext_num.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="uppercase_letters">{{uppercase_letters.display_name}}</label>
+                        <span class="tip setting-help">{{uppercase_letters.help}}</span>
+                        <input class="input setting-input" name="uppercase_letters" id="uppercase_letters"
+                            type="checkbox" {% if uppercase_letters.value %}checked{% endif %} />
+                    </div>
+                </li>
+                <li>
+                    <div class="table-rows-container">
+                        <h3>{{ordeingelements.display_name}}</h3>
+                        <span class="tip setting-help">{{ordeingelements.help}}</span>
+                        <div class="table-rows">
+                            {% for key, value in ordeingelements.value.items %}
+                            <div class="table-row" data-row-id="{{key}}">
+                                <div class="row-content">
+                                    <p>Label: {{key}}</divp>
                                 </div>
-                                <div class="group-content">
-                                    {% for answer in answer_list|split:"_" %}
-                                    <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
-                                        <button class="move-left-button" title="Mover izquierda">
-                                            << /button>
-                                                <span class="item-content">{{answer}}</span>
-                                                <button class="move-right-button" title="Mover derecha">></button>
+                                <div class="row-content">
+                                    <textarea class="row-content-input"
+                                        placeholder="Contenido de la fila (HTML permitido)"
+                                        name="content">{{value.content}}</textarea>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="remove-row">Eliminar</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button class="add-row-button">Agregar</button>
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <h3 class="label setting-label" for="correct_answers">{{correct_answers.display_name}}</h3>
+                        <span class="tip setting-help">{{correct_answers.help}}</span>
+                        <div class="correct-answers-container">
+                            <div class="order-label">
+                                <span>Orden actual: </span>
+                                <input type="hidden" id="current-answers-value" value="{{correct_answers.value}}" />
+                                <div class="order-display">{{correct_answers.value}}</div>
+                            </div>
+                            <div class="previous-order-label">
+                                <span>Orden anterior: </span>
+                                <div class="previous-order-display">{{correct_answers.value}}</div>
+                            </div>
+                            <div class="correct-answers-list">
+                                {% for answer_list in correct_answers.value|split:"_[|]_" %}
+                                <div class="correct-answers-group">
+                                    <div class="group-header">
+                                        <button class="remove-group-button">Eliminar grupo</button>
+                                    </div>
+                                    <div class="group-content">
+                                        {% for answer in answer_list|split:"_" %}
+                                        <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
+                                            <button class="move-left-button" title="Mover izquierda">
+                                                << /button>
+                                                    <span class="item-content">{{answer}}</span>
+                                                    <button class="move-right-button" title="Mover derecha">></button>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button class="add-answer-button">Agregar respuesta</button>
+                        </div>
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <h3>{{disordered_order.display_name}}</h3>
+                        <span class="tip setting-help">{{disordered_order.help}}</span>
+                        <div class="eol-order-disorder">
+
+                            <div class="disorder-preview" id="disorder-container">
+                                <div class="order-label">
+                                    <span>Orden actual: </span>
+                                    <input type="hidden" id="current-disorder-value"
+                                        value="{{disordered_order.value|join:'_'}}" />
+                                    <div class="order-display">{{disordered_order.value|join:"_"}}</div>
+                                </div>
+                                <div class="previous-order-label">
+                                    <span>Orden anterior: </span>
+                                    <div class="previous-order-display">{{disordered_order.value|join:"_"}}</div>
+                                </div>
+                                <div class="disordered-list">
+                                    {% for key in disordered_order.value %}
+                                    <div class="disorder-item" draggable="true" data-value="{{ key }}">
+                                        <button class="move-left-button" title="Mover izquierda">&lt;</button>
+                                        <span class="item-content">{{ key }}</span>
+                                        <button class="move-right-button" title="Mover derecha">&gt;</button>
                                     </div>
                                     {% endfor %}
                                 </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <button class="add-answer-button">Agregar respuesta</button>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="eol-order-disorder">
-                    <h3>{{disordered_order.display_name}}</h3>
-                    <span class="tip setting-help">{{disordered_order.help}}</span>
-                    <div class="disorder-preview" id="disorder-container">
-                        <div class="order-label">
-                            <span>Orden actual: </span>
-                            <input type="hidden" id="current-disorder-value"
-                                value="{{disordered_order.value|join:'_'}}" />
-                            <div class="order-display">{{disordered_order.value|join:"_"}}</div>
-                        </div>
-                        <div class="previous-order-label">
-                            <span>Orden anterior: </span>
-                            <div class="previous-order-display">{{disordered_order.value|join:"_"}}</div>
-                        </div>
-                        <div class="disordered-list">
-                            {% for key in disordered_order.value %}
-                            <div class="disorder-item" draggable="true" data-value="{{ key }}">
-                                <button class="move-left-button" title="Mover izquierda">&lt;</button>
-                                <span class="item-content">{{ key }}</span>
-                                <button class="move-right-button" title="Mover derecha">&gt;</button>
-                            </div>
-                            {% endfor %}
-                        </div>
 
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="field comp-setting-entry is-set">
-                <div class="wrapper-comp-setting">
-                    <label class="label setting-label" for="random_disorder">{{random_disorder.display_name}}</label>
-                    <span class="tip setting-help">{{random_disorder.help}}</span>
-                    <p>{{random_disorder.value}}</p>
-                    <input class="input setting-input" name="random_disorder" id="random_disorder" type="checkbox"
-                        {% if random_disorder.value %}checked{% endif %} />
-                </div>
-            </li>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="random_disorder">{{random_disorder.display_name}}</label>
+                        <span class="tip setting-help">{{random_disorder.help}}</span>
+                        <input class="input setting-input" name="random_disorder" id="random_disorder" type="checkbox"
+                            {% if random_disorder.value %}checked{% endif %} />
+                    </div>
+                </li>
 
-        </ul>
+            </ul>
+        </div>
     </div>
     <div class="xblock-actions">
         <span class="xblock-editor-error-message"></span>
