@@ -3,34 +3,6 @@
     font-family: Arial, sans-serif;
 }
 
-.status {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.status.correct {
-    border: 2px solid #0f0;
-}
-
-.status.incorrect {
-    border: 2px solid #f00;
-}
-
-
-.status.unanswered {
-    border: 0px solid #ccc;
-}
-
-.submit-box {
-    margin-top: 20px;
-}
-
-.action {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
 .eol-order-submit {
     padding: 8px 16px;
     border: none;
@@ -45,22 +17,9 @@
     cursor: not-allowed;
 }
 
-.submission-feedback {
-    color: #666;
-    font-size: 0.9em;
-}
 
-.notificacion {
-    display: flex;
-    align-items: center;
-}
 
-.notificacion img {
-    width: 24px;
-    height: 24px;
-}
-
-.move-up-button, .move-down-button {
+.eol-order-table .move-up-button, .eol-order-table .move-down-button {
     padding: 4px 8px;
     margin: 0 2px;
     border: 1px solid #ddd;
@@ -69,7 +28,7 @@
     cursor: pointer;
 }
 
-.move-up-button:disabled, .move-down-button:disabled {
+.eol-order-table .move-up-button:disabled, .eol-order-table .move-down-button:disabled {
     background-color: #eee;
     cursor: not-allowed;
     opacity: 0.6;
@@ -97,15 +56,15 @@
     border-top: 1px solid #ddd;
 }
 
-.item-row {
+.eol-order-table .item-row {
     background-color: #fff;
 }
 
-.item-row:hover {
+.eol-order-table .item-row:hover {
     background-color: #f9f9f9;
 }
 
-.weight-info {
+.eol-order-table .weight-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
@@ -115,29 +74,29 @@
     gap: 10px;
 }
 
-.weight-label {
+.eol-order-table .weight-label {
     font-weight: bold;
     color: #333;
 }
 
-.weight-value {
+.eol-order-table .weight-value {
     color: #0075b4;
     font-weight: bold;
 }
 
-.table-title {
+.eol-order-table .table-title {
     margin-bottom: 15px;
     color: #333;
 }
 
-.attempts-info {
+.eol-order-table .attempts-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
     border-radius: 4px;
 }
 
-.attempts-text {
+.eol-order-table .attempts-text {
     margin: 0;
     color: #666;
     font-size: 14px;

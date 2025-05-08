@@ -32,7 +32,7 @@
                 </thead>
                 <tbody class="items-container">
                     {% for item in elements %}
-                    <tr class="item-row" data-index="{{ item.key }}">
+                    <tr class="item-row" data-key="{{ item.key }}">
                         <td class="order-cell">
                             {% if numbering_type == 'numbers' %}
                                 {{ pretext_num }}{{ item.position }}{{ postext_num }}

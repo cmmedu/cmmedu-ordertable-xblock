@@ -63,28 +63,27 @@ function EolOrderXBlockEdit(runtime, element) {
         }
         
         if ($targetRow.length) {
-            // Guardar el contenido y el índice de ambas filas
+            // Intercambiar los data-key
+            var currentKey = $row.attr('data-key');
+            var targetKey = $targetRow.attr('data-key');
+            
+            // Guardar el contenido
             var currentContent = $row.find('.content-cell').html();
             var targetContent = $targetRow.find('.content-cell').html();
-            var currentIndex = $row.attr('data-index');
-            var targetIndex = $targetRow.attr('data-index');
             
             // Intercambiar el contenido
             $row.find('.content-cell').html(targetContent);
             $targetRow.find('.content-cell').html(currentContent);
             
-            // Intercambiar los atributos data-index
-            $row.attr('data-index', targetIndex);
-            $targetRow.attr('data-index', currentIndex);
+            // Intercambiar los data-key
+            $row.attr('data-key', targetKey);
+            $targetRow.attr('data-key', currentKey);
             
-            // Logs para depuración
-            /*
-            console.log("[EOL-ORDER] Moviendo elemento:", {
-                from: currentIndex,
-                to: targetIndex,
-                direction: direction
+            console.log("[EOL-ORDER] Movimiento realizado:", {
+                direction: direction,
+                currentKey: currentKey,
+                targetKey: targetKey
             });
-            */
             
             updateButtonStates();
         }
@@ -160,41 +159,32 @@ function EolOrderXBlock(runtime, element, settings) {
     var elements = [];
     var imagePath = $element.attr('data-image-path');
     
-    // Log settings at initialization
-    //console.log("[EOL-ORDER] Settings recibidos:", settings);
-    //console.log("[EOL-ORDER] Settings.ordeingelements:", settings.ordeingelements);
-    
-    // Add variables for state caching
+    // Add variables for state caching with unique sublocation identifier
     var $xblocksContainer = $('#seq_content');
     var xblockId = settings.location;
-    var cachedOrderId = xblockId + '_order_state';
-    var cachedIndicatorClassId = xblockId + '_order_indicator_class';
-    var cachedScoreId = xblockId + '_order_score';
-    var cachedAttemptsId = xblockId + '_order_attempts';
-    var cachedMaxAttemptsId = xblockId + '_order_max_attempts';
-    var cachedShowCorrectnessId = xblockId + '_order_show_correctness';
-    var cachedShowAnswerId = xblockId + '_order_show_answer';
-    var cachedStateId = xblockId + '_order_complete_state';
+    var sublocation = settings.sublocation;
+    var cachedStateId = 'order_state_' + sublocation;
+    
+    console.log("[EOL-ORDER] Inicializando XBlock:", {
+        xblockId: xblockId,
+        sublocation: sublocation,
+        cachedStateId: cachedStateId
+    });
     
     // Obtener variables del backend
-    var table_name = $element.find('.eol-order-table-content .order-header').first().text();
-    var pretext_num = $element.find('.order-header').attr('pretext') || '';
-    var postext_num = $element.find('.order-header').attr('postext') || '';
-    
-    /*
-    console.log("[EOL-ORDER] Variables del backend:", {
-        table_name: table_name,
-        pretext_num: pretext_num,
-        postext_num: postext_num
-    });
-    */
+    var table_name = settings.table_name;
+    var textcolumn_order = settings.textcolumn_order;   
+    var textcolumn_content = settings.textcolumn_content;
+    var textcolumn_actions = settings.textcolumn_actions;
+    var pretext_num = settings.pretext_num;
+    var postext_num = settings.postext_num;
     
     // Obtener el estado actual
     var currentScore = parseFloat($element.find('.status').attr('data-score') || '0');
     var attempts = parseInt($element.find('.submission-feedback').text().match(/\d+/)[0] || '0');
     var maxAttempts = parseInt($element.find('.submission-feedback').text().match(/\d+/g)[1] || '0');
     
-    console.log("[EOL-ORDER] Estado inicial:", {
+    console.log("[EOL-ORDER] Estado inicial para XBlock " + xblockId + ":", {
         score: currentScore,
         attempts: attempts,
         maxAttempts: maxAttempts
@@ -257,54 +247,52 @@ function EolOrderXBlock(runtime, element, settings) {
         }
         
         if ($targetRow.length) {
-            // Guardar el contenido y el índice de ambas filas
+            // Intercambiar los data-key
+            var currentKey = $row.attr('data-key');
+            var targetKey = $targetRow.attr('data-key');
+            
+            // Guardar el contenido
             var currentContent = $row.find('.content-cell').html();
             var targetContent = $targetRow.find('.content-cell').html();
-            var currentIndex = $row.attr('data-index');
-            var targetIndex = $targetRow.attr('data-index');
             
             // Intercambiar el contenido
             $row.find('.content-cell').html(targetContent);
             $targetRow.find('.content-cell').html(currentContent);
             
-            // Intercambiar los atributos data-index
-            $row.attr('data-index', targetIndex);
-            $targetRow.attr('data-index', currentIndex);
+            // Intercambiar los data-key
+            $row.attr('data-key', targetKey);
+            $targetRow.attr('data-key', currentKey);
             
-            // Logs para depuración
-            /*
-            console.log("[EOL-ORDER] Moviendo elemento:", {
-                from: currentIndex,
-                to: targetIndex,
-                direction: direction
+            console.log("[EOL-ORDER] Movimiento realizado:", {
+                direction: direction,
+                currentKey: currentKey,
+                targetKey: targetKey
             });
-            */
+            
             updateButtonStates();
         }
     }
 
     function getCurrentOrder() {
         var order = [];
-        // Obtener los elementos en el orden actual de la tabla
-        $itemsContainer.find('.item-row').each(function() {
-            // Obtener el índice original directamente del atributo data-index
-            var originalIndex = $(this).attr('data-index');
-            if (originalIndex) {
-                order.push(originalIndex);
+        // Usar la tabla correcta
+        var $tbody = $element.find('.eol-order-table-content tbody');
+        
+        console.log("[EOL-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
+        
+        $tbody.find('.item-row').each(function() {
+            var key = $(this).attr('data-key');
+            console.log("[EOL-ORDER] Fila encontrada, data-key:", key);
+            if (key) {
+                order.push(key);
             }
         });
         
-        // Logs para depuración
-        //console.log("[EOL-ORDER] Orden actual:", order.join('_'));
-        //console.log("[EOL-ORDER] Elementos en la tabla:");
-        /*$itemsContainer.find('.item-row').each(function(index) {
-            console.log(`[EOL-ORDER] Elemento ${index + 1}:`, {
-                content: $(this).find('.content-cell').html(),
-                key: $(this).attr('data-index')
-            });
-        });*/
+        var orderString = order.join('_');
+        console.log("[EOL-ORDER] Orden actual obtenido:", orderString);
+        console.log("[EOL-ORDER] Estado actual de la tabla:", $tbody.html());
         
-        return order.join('_');
+        return orderString;
     }
 
     $itemsContainer.on('click', '.move-up-button', function(e) {
@@ -319,93 +307,31 @@ function EolOrderXBlock(runtime, element, settings) {
 
     $submitButton.on('click', function(e) {
         e.preventDefault();
+        
+        // Get current order
         var orderString = getCurrentOrder();
+        console.log("[EOL-ORDER] Enviando orden:", orderString);
         
-        // Logs detallados de lo que envía el usuario
-        //console.log("[EOL-ORDER] Usuario enviando respuesta:");
-        //console.log("[EOL-ORDER] Orden actual:", orderString);
-        //console.log("[EOL-ORDER] Elementos en la tabla:");
-        /*$itemsContainer.find('.item-row').each(function(index) {
-            console.log(`[EOL-ORDER] Elemento ${index + 1}:`, {
-                content: $(this).find('.content-cell').html(),
-                key: $(this).attr('data-index')
-            });
-        });*/
-        
+        // Send both 'order' and 'answer' for compatibility
         var data = {
-            order: orderString
+            order: orderString,
+            answer: orderString
         };
         
-        $.ajax({
-            type: 'POST',
-            url: handlerUrl,
-            data: JSON.stringify(data),
-            success: function(response) {
+        $.post(handlerUrl, JSON.stringify(data))
+            .done(function(response) {
+                console.log("[EOL-ORDER] Respuesta recibida:", response);
                 if (response.result === 'success') {
-                    // Logs de la respuesta del servidor
-                    //console.log("[EOL-ORDER] Respuesta del servidor:", response);
-                    
-                    // Cache state for page navigation
-                    $xblocksContainer.data(cachedIndicatorClassId, response.indicator_class);
-                    $xblocksContainer.data(cachedScoreId, response.score);
-                    $xblocksContainer.data(cachedAttemptsId, response.attempts);
-                    $xblocksContainer.data(cachedMaxAttemptsId, response.max_attempts);
-                    $xblocksContainer.data(cachedShowCorrectnessId, response.show_correctness);
-                    $xblocksContainer.data(cachedShowAnswerId, response.show_answer);
-                    $xblocksContainer.data(cachedOrderId, orderString);
-                    
-                    // Save complete state object
-                    $xblocksContainer.data(cachedStateId, {
-                        indicator_class: response.indicator_class,
-                        score: response.score,
-                        attempts: response.attempts,
-                        max_attempts: response.max_attempts,
-                        show_correctness: response.show_correctness,
-                        show_answer: response.show_answer,
-                        order: orderString
-                    });
-                    
-                    // Actualizar el contador de intentos
-                    if (response.attempts && response.max_attempts) {
-                        var attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intentos";
-                        if (response.max_attempts === 1) {
-                            attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intento";
-                        }
-                        $element.find('.submission-feedback').text(attemptsText);
-                    }
-
-                    // Actualizar el ícono de correcto/incorrecto
-                    var $notification = $element.find('.notificacion');
-                    if (response.is_correct) {
-                        $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
-                    } else {
-                        $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-                        if(response.max_attempts > 0 && response.attempts >= response.max_attempts) {
-                            $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                                '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                                '<span>Mostrar<br>Respuesta</span>' +
-                                '</button>');
-                        }
-                    }
-
-                    // Si la respuesta es correcta o no quedan intentos, deshabilitar el botón
-                    if (response.is_correct || (response.max_attempts > 0 && response.attempts >= response.max_attempts)) {
-                        $submitButton.prop('disabled', true);
-                        $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-                    }
+                    // Update UI with response
+                    updateUIWithResponse(response);
                 } else {
-                    console.error("[EOL-ORDER] Error en la respuesta:", response);
-                    alert('Error: ' + response.message);
+                    // Show error message
+                    showMessage(response.message || 'Error al enviar la respuesta', 'error');
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error("[EOL-ORDER] Error al enviar la respuesta:", {
-                    status: status,
-                    error: error,
-                    response: xhr.responseText
-                });
-                alert('Error al guardar el orden. Por favor, intente nuevamente.');
-            }
+            })
+            .fail(function() {
+                console.log("[EOL-ORDER] Error en la petición");
+                showMessage('Error al enviar la respuesta', 'error');
         });
     });
 
@@ -414,10 +340,6 @@ function EolOrderXBlock(runtime, element, settings) {
         e.preventDefault();
         var $solution = $element.find('solution');
         var blockId = $element.attr('id');
-
-        let table_name = $element.find('.eol-order-table-content .order-header').first().text();
-        let textcolumn_order = $element.find('.status').attr('data-textcolumn-order') || '';
-        let textcolumn_content = $element.find('.status').attr('data-textcolumn-content') || '';
         
         // Create table structure for the correct answer
         var tableHtml = '<p><b>Orden correcto:</b></p>' +
@@ -536,138 +458,228 @@ function EolOrderXBlock(runtime, element, settings) {
         $(this).removeClass('showing-answer');
     });
 
-    // Initialize: Check for cached state and restore if found
-    $(function ($) {
-        console.log("[EOL-ORDER] XBlock initializing:", xblockId);
-        console.log("[EOL-ORDER] Settings completo:", settings);
-        console.log("[EOL-ORDER] Elementos en settings:", settings.ordeingelements);
-        console.log("[EOL-ORDER] Estado en caché:", $xblocksContainer.data(cachedStateId));
-        
-        // Check if we have cached state
-        if ($xblocksContainer.data(cachedStateId)) {
-            console.log("[EOL-ORDER] Found cached state for XBlock:", xblockId);
-            var state = $xblocksContainer.data(cachedStateId);
-            console.log("[EOL-ORDER] Cached state:", state);
-            
-            // Restore visual state based on cached data
-            var $statusDiv = $element.find('.status');
-            $statusDiv.removeClass('correct incorrect unanswered');
-            $statusDiv.addClass(state.indicator_class);
-            
-            // Restore attempts counter
-            if (state.max_attempts > 0) {
-                var attemptsText = "Ha realizado " + state.attempts + " de " + state.max_attempts + " intentos";
-                if (state.max_attempts === 1) {
-                    attemptsText = "Ha realizado " + state.attempts + " de " + state.max_attempts + " intento";
-                }
-                $element.find('.submission-feedback').text(attemptsText);
+    function updateUIWithResponse(response) {
+        // Update attempts counter
+        if (response.attempts && response.max_attempts) {
+            var attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intentos";
+            if (response.max_attempts === 1) {
+                attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intento";
             }
-            
-            // Restore notification area based on score
-            var $notification = $element.find('.notificacion');
-            if (state.score >= 1.0) {
-                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
-                $submitButton.prop('disabled', true);
-                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-            } else if (state.score === 0.0 && state.attempts > 0) {
-                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-                
-                // Show answer button if needed
-                if (state.max_attempts > 0 && state.attempts >= state.max_attempts && !$element.find('.ver_respuesta').length) {
-                    $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                        '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                        '<span>Mostrar<br>Respuesta</span>' +
-                        '</button>');
-                }
-            }
-            
-            // Disable submit button if needed
-            if (state.score >= 1.0 || (state.max_attempts > 0 && state.attempts >= state.max_attempts)) {
-                $submitButton.prop('disabled', true);
-                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-            }
-        } else {
-            console.log("[EOL-ORDER] No cached state found for XBlock:", xblockId);
+            $element.find('.submission-feedback').text(attemptsText);
         }
 
-        // Initialize button states
-        updateButtonStates();
-
-        // Render MathJax
-        var ordertableid = "order_" + settings.sublocation;
-
-
-
-        if ($xblocksContainer.data(cachedStateId) && settings.ordeingelements) {
-            var state = $xblocksContainer.data(cachedStateId);
-            //console.log("[EOL-ORDER] ===== INICIANDO REORDENAMIENTO =====");
-            //console.log("[EOL-ORDER] Orden a restaurar:", state.order);
-            var orderArray = state.order.split('_');
-            //console.log("[EOL-ORDER] Array de orden:", orderArray);
-            //console.log("[EOL-ORDER] Elementos disponibles:", settings.ordeingelements);
-            
-            // Verificar la estructura de la tabla
-            //console.log("[EOL-ORDER] Estructura de la tabla:");
-            var $table = $element.find('.eol-order-table-content');
-            var $tbody = $table.find('tbody');
-            
-            //console.log("[EOL-ORDER] - Tabla encontrada:", $table.length);
-            //console.log("[EOL-ORDER] - Tbody encontrado:", $tbody.length);
-            //console.log("[EOL-ORDER] Tabla antes de limpiar:", $tbody.html());
-            
-            // Limpiar el tbody existente
-            //console.log("[EOL-ORDER] Limpiando tabla actual");
-            $tbody.find('.item-row').remove();
-            //console.log("[EOL-ORDER] Tabla después de limpiar:", $tbody.html());
-            
-            // Rebuild the table in the correct order
-            //console.log("[EOL-ORDER] Comenzando reconstrucción de tabla");
-            orderArray.forEach(function(index, arrayIndex) {
-                //console.log("[EOL-ORDER] Procesando índice:", index, "posición en array:", arrayIndex);
-                var element = settings.ordeingelements[index].content; // Get content from the object
-                //console.log("[EOL-ORDER] Elemento encontrado:", element);
-                
-                if (element) {
-                    var $row = $('<tr class="item-row" data-index="' + index + '">' +
-                        '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
-                        '<td class="content-cell">' + element + '</td>' +
-                        '<td class="actions-cell">' +
-                        '<button class="move-up-button">↑</button>' +
-                        '<button class="move-down-button">↓</button>' +
-                        '</td>' +
-                        '</tr>');
-                    //console.log("[EOL-ORDER] Agregando fila:", $row.html());
-                    $tbody.append($row);
-                    //console.log("[EOL-ORDER] Estado de la tabla después de agregar fila:", $tbody.html());
-                } else {
-                    console.log("[EOL-ORDER] ¡ADVERTENCIA! No se encontró elemento para índice:", index);
-                }
-            });
-            
-            //console.log("[EOL-ORDER] Tabla reconstruida. Actualizando estados de botones");
-            // Update button states after rebuilding
-            updateButtonStates();
-            
-            // Re-render MathJax if needed
-            //console.log("[EOL-ORDER] Re-renderizando MathJax");
-            var ordertableid = "order_" + settings.sublocation;
-            renderMathForSpecificElements(ordertableid);
-            
-            //console.log("[EOL-ORDER] ===== REORDENAMIENTO COMPLETADO =====");
-            
-
+        // Update notification area
+        var $notification = $element.find('.notificacion');
+        if (response.is_correct) {
+            $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+            $submitButton.prop('disabled', true);
+            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
         } else {
-            //console.log("[EOL-ORDER] No se puede reordenar:");
-            //console.log("[EOL-ORDER] - state.order:", state ? state.order : 'No hay estado');
-            //console.log("[EOL-ORDER] - settings.ordeingelements:", settings.ordeingelements);
-            //console.log("[EOL-ORDER] - settings:", settings);
+            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+            // Show answer button if no more attempts
+            if (response.max_attempts > 0 && response.attempts >= response.max_attempts && !$element.find('.ver_respuesta').length) {
+                $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                    '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                    '<span>Mostrar<br>Respuesta</span>' +
+                    '</button>');
+            }
+        }
+
+        // Update status class
+        var $statusDiv = $element.find('.status');
+        $statusDiv.removeClass('correct incorrect unanswered');
+        $statusDiv.addClass(response.is_correct ? 'correct' : 'incorrect');
+
+        // Disable submit button if needed
+        if (response.is_correct || (response.max_attempts > 0 && response.attempts >= response.max_attempts)) {
+            $submitButton.prop('disabled', true);
+            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+        }
+
+        // Save complete state object with sublocation identifier
+        var currentOrder = getCurrentOrder();
+        var state = {
+            sublocation: sublocation,
+            indicator_class: response.is_correct ? 'correct' : 'incorrect',
+            score: response.score,
+            attempts: response.attempts,
+            max_attempts: response.max_attempts,
+            show_correctness: response.show_correctness,
+            show_answer: response.show_answer,
+            order: currentOrder
+        };
+        
+        // Store state both in element and shared container
+        $element.data('state', state);
+        $xblocksContainer.data(cachedStateId, state);
+        
+        console.log("[EOL-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
+    }
+
+    function showMessage(message, type) {
+        var $notification = $element.find('.notificacion');
+        if (type === 'error') {
+            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Error"/> &nbsp; ' + message);
+        } else {
+            $notification.html(message);
+        }
+    }
+
+    // Initialize: Check for cached state and restore if found
+    $(function() {
+        var cachedState = $xblocksContainer.data(cachedStateId);
+        if (cachedState && cachedState.sublocation === sublocation) {
+            console.log("[EOL-ORDER] Restaurando estado en caché para XBlock " + sublocation);
+            updateUIWithState(cachedState);
+            
+            // Restore table order
+            if (settings.ordeingelements) {
+                restoreTableOrder(cachedState.order);
+            }
+        } else {
+            console.log("[EOL-ORDER] No se encontró estado en caché para XBlock " + sublocation);
         }
     });
 
-    //console.log("---Mathjax Revision---")
+    function restoreTableOrder(order) {
+        if (!order || !settings.ordeingelements) return;
+        
+        console.log("[EOL-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
+        var orderArray = order.split('_');
+        var $table = $element.find('.eol-order-table-content');
+        var $tbody = $table.find('tbody');
+        
+        // Limpiar el tbody existente
+        $tbody.find('.item-row').remove();
+        
+        // Rebuild the table in the correct order
+        orderArray.forEach(function(index, arrayIndex) {
+            var element = settings.ordeingelements[index].content;
+            if (element) {
+                var $row = $('<tr class="item-row" data-key="' + index + '">' +
+                    '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
+                    '<td class="content-cell">' + element + '</td>' +
+                    '<td class="actions-cell" style="text-align: center;">' +
+                    '<button class="move-up-button">↑</button>' +
+                    '<button class="move-down-button">↓</button>' +
+                    '</td>' +
+                    '</tr>');
+                $tbody.append($row);
+            }
+        });
+        
+        // Update button states after rebuilding
+        updateButtonStates();
+        
+        // Re-render MathJax if needed
+        var ordertableid = "order_" + settings.sublocation;
+        renderMathForSpecificElements(ordertableid);
+    }
+
+    // Add visibility change handler
+    var visibilityHandler = function() {
+        if (!document.hidden) {
+            // When returning to the tab, refresh the state from the server
+            $.ajax({
+                type: 'POST',
+                url: runtime.handlerUrl(element, 'get_state'),
+                data: JSON.stringify({}),
+                success: function(response) {
+                    console.log("[EOL-ORDER] Estado recibido del servidor para XBlock " + sublocation + ":", response);
+                    if (response) {
+                        // Update UI with the fresh state from server
+                        var state = {
+                            sublocation: sublocation,
+                            ...response
+                        };
+                        updateUIWithState(state);
+                        // Restore table order if needed
+                        if (response.user_answer) {
+                            restoreTableOrder(response.user_answer);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("[EOL-ORDER] Error al actualizar estado para XBlock " + sublocation + ":", error);
+                }
+            });
+        }
+    };
+
+    // Remove any existing handler and add the new one
+    document.removeEventListener('visibilitychange', visibilityHandler);
+    document.addEventListener('visibilitychange', visibilityHandler);
+
+    function updateUIWithState(state) {
+        if (!state || state.sublocation !== sublocation) {
+            console.log("[EOL-ORDER] Estado ignorado para XBlock " + sublocation + " (estado no coincide)");
+            return;
+        }
+        
+        console.log("[EOL-ORDER] Actualizando UI para XBlock " + sublocation + " con estado:", state);
+        
+        // Update score and attempts
+        if (state.score !== undefined) {
+            currentScore = parseFloat(state.score);
+            $element.find('.status').attr('data-score', currentScore);
+        }
+        
+        if (state.attempts !== undefined && state.max_attempts !== undefined) {
+            attempts = parseInt(state.attempts);
+            maxAttempts = parseInt(state.max_attempts);
+            
+            var attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intentos";
+            if (maxAttempts === 1) {
+                attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intento";
+            }
+            $element.find('.submission-feedback').text(attemptsText);
+        }
+
+        // Update notification area based on score
+        var $notification = $element.find('.notificacion');
+        if (currentScore >= 1.0) {
+            $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+            $submitButton.prop('disabled', true);
+            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+        } else if (currentScore === 0.0 && attempts > 0) {
+            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+            
+            // Show answer button if no more attempts
+            if (attempts >= maxAttempts && !$element.find('.ver_respuesta').length) {
+                $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                    '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                    '<span>Mostrar<br>Respuesta</span>' +
+                    '</button>');
+            }
+        } else {
+            $notification.empty();
+            $submitButton.prop('disabled', false);
+            $element.find('.move-up-button, .move-down-button').prop('disabled', false);
+        }
+
+        // Store the updated state in both places
+        $element.data('state', state);
+        $xblocksContainer.data(cachedStateId, state);
+    }
 
     var ordertableid = "order_" + settings.sublocation;
     renderMathForSpecificElements(ordertableid);
+
+    function renderMathForSpecificElements(id) {
+        console.log("Render mathjax in " + id)
+        if (typeof MathJax !== "undefined") {
+            var $ordtab = $('#' + id);
+            //console.log("encontrado " )
+            //console.log($ordtab)
+            if ($ordtab.length) {
+                $ordtab.find('.eol-order-table-content').each(function (index, ordtabelem) {
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
+                });
+            }
+        } else {
+            console.warn("MathJax no está cargado.");
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -718,20 +730,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 }); 
-
-function renderMathForSpecificElements(id) {
-    console.log("Render mathjax in " + id)
-    if (typeof MathJax !== "undefined") {
-        var $ordtab = $('#' + id);
-        //console.log("encontrado " )
-        //console.log($ordtab)
-        if ($ordtab.length) {
-            $ordtab.find('.eol-order-table-content').each(function (index, ordtabelem) {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
-            });
-        }
-    } else {
-        console.warn("MathJax no está cargado.");
-    }
-}
 

@@ -60,6 +60,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         self.assertEqual(self.xblock.numbering_type, "numbers")
         self.assertEqual(self.xblock.attempts, 0)
         self.assertEqual(self.xblock.score, 0.0)
+        self.assertEqual(self.xblock.user_answer, "")
 
     def test_submit_answer_correct(self):
         """
@@ -72,12 +73,18 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Simular respuesta correcta
         request = TestRequest()
         request.method = 'POST'
-        data = json.dumps({'order': '1_2'})
+        data = json.dumps({'order': '1_2', 'answer': '1_2'})
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
-        self.assertEqual(response.json_body['result'], 'success')
-        self.assertEqual(response.json_body['score'], 1.0)
+        response_data = response.json_body
+        
+        self.assertEqual(response_data['result'], 'success')
+        self.assertEqual(response_data['is_correct'], True)
+        self.assertEqual(response_data['score'], 1.0)
+        self.assertEqual(response_data['attempts'], 1)
+        self.assertEqual(response_data['max_attempts'], self.xblock.max_attempts)
+        self.assertEqual(self.xblock.user_answer, '1_2')
 
     def test_submit_answer_incorrect(self):
         """
@@ -90,13 +97,49 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Simular respuesta incorrecta
         request = TestRequest()
         request.method = 'POST'
-        data = json.dumps({'order': '2_1'})
+        data = json.dumps({'order': '2_1', 'answer': '2_1'})
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
-        self.assertEqual(response.json_body['result'], 'success')
-        self.assertEqual(response.json_body['is_correct'], False)
-        self.assertEqual(response.json_body['score'], 0.0)
+        response_data = response.json_body
+        
+        self.assertEqual(response_data['result'], 'success')
+        self.assertEqual(response_data['is_correct'], False)
+        self.assertEqual(response_data['score'], 0.0)
+        self.assertEqual(response_data['attempts'], 1)
+        self.assertEqual(response_data['max_attempts'], self.xblock.max_attempts)
+        self.assertEqual(self.xblock.user_answer, '2_1')
+
+    def test_submit_answer_multiple_correct_answers(self):
+        """
+        Prueba el envío de una respuesta cuando hay múltiples respuestas correctas
+        """
+        # Configurar múltiples respuestas correctas
+        self.xblock.correct_answers = "1_2_[|]_2_1"
+        self.xblock.ordeingelements = {1: {'content': 'paso 1'}, 2: {'content': 'paso 2'}}
+        
+        # Probar primera respuesta correcta
+        request = TestRequest()
+        request.method = 'POST'
+        data = json.dumps({'order': '1_2', 'answer': '1_2'})
+        request.body = data.encode('utf-8')
+        
+        response = self.xblock.submit_answer(request)
+        self.assertEqual(response.json_body['is_correct'], True)
+        self.assertEqual(response.json_body['score'], 1.0)
+        
+        # Resetear el XBlock
+        self.xblock.attempts = 0
+        self.xblock.score = 0.0
+        self.xblock.user_answer = ""
+        
+        # Probar segunda respuesta correcta
+        data = json.dumps({'order': '2_1', 'answer': '2_1'})
+        request.body = data.encode('utf-8')
+        
+        response = self.xblock.submit_answer(request)
+        self.assertEqual(response.json_body['is_correct'], True)
+        self.assertEqual(response.json_body['score'], 1.0)
 
     def test_max_attempts(self):
         """
@@ -108,7 +151,7 @@ class TestEolOrderXBlock(unittest.TestCase):
         request.method = 'POST'
         
         # Primer intento
-        data = json.dumps({'order': '1_2'})
+        data = json.dumps({'order': '1_2', 'answer': '1_2'})
         request.body = data.encode('utf-8')
         response = self.xblock.submit_answer(request)
         self.assertEqual(self.xblock.attempts, 1)
@@ -120,7 +163,31 @@ class TestEolOrderXBlock(unittest.TestCase):
         # Tercer intento (debería fallar)
         response = self.xblock.submit_answer(request)
         self.assertEqual(response.json_body['result'], 'error')
-        self.assertEqual(response.json_body['message'], 'No quedan intentos disponibles')
+        self.assertEqual(response.json_body['message'], 'No hay más intentos disponibles')
+
+    def test_get_state(self):
+        """
+        Prueba la obtención del estado actual del XBlock
+        """
+        # Configurar un estado
+        self.xblock.score = 0.5
+        self.xblock.attempts = 2
+        self.xblock.max_attempts = 3
+        self.xblock.user_answer = "1_2"
+        self.xblock.show_answer = "when_attempts_run_out"
+        
+        request = TestRequest()
+        request.method = 'POST'
+        request.body = b'{}'
+        
+        response = self.xblock.get_state(request)
+        response_data = response.json_body
+        
+        self.assertEqual(response_data['score'], 0.5)
+        self.assertEqual(response_data['attempts'], 2)
+        self.assertEqual(response_data['max_attempts'], 3)
+        self.assertEqual(response_data['user_answer'], "1_2")
+        self.assertEqual(response_data['show_answer'], "when_attempts_run_out")
 
     def test_add_row(self):
         """

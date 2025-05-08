@@ -229,6 +229,11 @@ class EolOrderXBlock(XBlock):
             'image_path': self.runtime.local_resource_url(self, 'static/images/'),
             'sublocation': str(self.location).split('@')[-1],
             'ordeingelements': self.ordeingelements,
+            'max_attempts': self.max_attempts,
+            'table_name': self.table_name,
+            'textcolumn_order': self.textcolumn_order,
+            'textcolumn_content': self.textcolumn_content,
+            'textcolumn_actions': self.textcolumn_actions,
             'pretext_num': self.pretext_num,
             'postext_num': self.postext_num,
             'uppercase_letters': self.uppercase_letters,
@@ -627,72 +632,82 @@ class EolOrderXBlock(XBlock):
     @XBlock.json_handler
     def submit_answer(self, data, suffix=''):
         """
-        Maneja la respuesta enviada por el estudiante
+        Save the answer submitted by the student.
         """
-        # Verificar si se puede realizar un nuevo intento
-        if self.max_attempts > 0 and self.attempts >= self.max_attempts:
+        if self.attempts >= self.max_attempts:
             return {
                 'result': 'error',
-                'message': 'No quedan intentos disponibles'
+                'message': 'No hay más intentos disponibles'
             }
 
-        # Obtener el orden enviado por el estudiante
-        submitted_order = data.get('order', '')
-        print(f"[EOL-ORDER] Usuario enviando respuesta: {submitted_order}")
-        print(f"[EOL-ORDER] Orden actual: {submitted_order}")
-
-        # Validar que el orden sea una cadena no vacía y contenga solo números y guiones bajos
-        if not submitted_order or not all(c.isdigit() or c == '_' for c in submitted_order):
+        # Get the answer - accept both 'order' and 'answer' parameters
+        answer = data.get('order', data.get('answer', None))
+        print("[EOL-ORDER] Received answer:", answer)
+        print("[EOL-ORDER] Data received:", data)
+        
+        if not answer:
             return {
                 'result': 'error',
-                'message': 'No se recibió un orden válido'
+                'message': 'No se ha enviado una respuesta'
             }
 
-        # Guardar la respuesta del usuario
-        self.user_answer = submitted_order
+        # Save the answer
+        self.user_answer = answer
+        print("[EOL-ORDER] Saved user answer:", self.user_answer)
 
-        # Logs detallados
-        print(f"[EOL-ORDER] Respuesta enviada: {submitted_order}")
-        print(f"[EOL-ORDER] Respuesta correcta: {self.correct_answers}")
+        # Check if the answer is correct
+        correct_answers = self.get_correct_answers_list()
+        print("[EOL-ORDER] Correct answers list:", correct_answers)
+        print("[EOL-ORDER] Current correct_answers string:", self.correct_answers)
         
-        # Obtener los subarreglos de respuestas correctas
-        correct_answers_lists = self.correct_answers.split('_[|]_')
-        print(f"[EOL-ORDER] Subarreglos de respuestas correctas: {correct_answers_lists}")
+        # Convert answer to list format for comparison
+        answer_list = answer.split('_')
+        print("[EOL-ORDER] Answer as list:", answer_list)
         
-        # Verificar si el orden enviado coincide con alguno de los subarreglos
-        is_correct = False
-        for correct_answer in correct_answers_lists:
-            if submitted_order == correct_answer:
-                is_correct = True
-                print(f"[EOL-ORDER] Respuesta coincide con: {correct_answer}")
-                break
+        # Check if answer matches any of the correct answers
+        is_correct = answer_list in correct_answers
+        print("[EOL-ORDER] Is correct?", is_correct)
+        print("[EOL-ORDER] Comparison result:", {
+            'user_answer': answer_list,
+            'correct_answers': correct_answers,
+            'is_match': is_correct
+        })
         
-        print(f"[EOL-ORDER] ¿Es correcta la respuesta? {is_correct}")
-        
-        # Incrementar el contador de intentos
+        # Update the score
+        self.score = 1.0 if is_correct else 0.0
         self.attempts += 1
-        print(f"[EOL-ORDER] Intento actual: {self.attempts} de {self.max_attempts}")
+        print("[EOL-ORDER] Updated score:", self.score)
+        print("[EOL-ORDER] Updated attempts:", self.attempts)
         
-        # Actualizar el puntaje
-        if is_correct:
-            self.score = 1.0
-        else:
-            self.score = 0.0
-        print(f"[EOL-ORDER] Puntaje asignado: {self.score}")
+        # Publish grade
+        self.runtime.publish(self, 'grade', {
+            'value': self.score,
+            'max_value': 1.0
+        })
 
-        # Determinar el mensaje de respuesta
-        if is_correct:
-            message = "¡Respuesta Correcta!"
-        else:
-            message = "Respuesta Incorrecta"
+        # Notify completion to any conditional XBlock watching this component
+        completion = 1.0 if is_correct else 0.0
+        self.runtime.publish(self, 'completion', {'completion': completion})
 
         return {
             'result': 'success',
             'is_correct': is_correct,
-            'message': message,
+            'score': self.score,
+            'attempts': self.attempts,
+            'max_attempts': self.max_attempts
+        }
+
+    @XBlock.json_handler
+    def get_state(self, data, suffix=''):
+        """
+        Return the current state of the XBlock.
+        """
+        return {
+            'score': self.score,
             'attempts': self.attempts,
             'max_attempts': self.max_attempts,
-            'score': self.score
+            'user_answer': self.user_answer,
+            'show_answer': self.show_answer
         }
 
     def _get_js_init(self):
