@@ -6,9 +6,9 @@
     </div>
     {% endif %}
     {% if show_correctness != 'never' or indicator_class == 'unanswered' %}
-    <div class="status {{ indicator_class }}" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
+    <div class="status {{ indicator_class }}" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" >
     {% else %}
-    <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}" data-pretext-num="{{ pretext_num }}" data-posttext-num="{{ postext_num }}" data-textcolumn-order="{{ textcolumn_order }}" data-textcolumn-content="{{ textcolumn_content }}" data-textcolumn-actions="{{ textcolumn_actions }}">
+    <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" data-order-type="{{ numbering_type }}">
     {% endif %}
         <div class="eol-order-table">
             <table class="eol-order-table-content">

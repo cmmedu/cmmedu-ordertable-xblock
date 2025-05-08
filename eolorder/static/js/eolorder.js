@@ -176,6 +176,7 @@ function EolOrderXBlock(runtime, element, settings) {
     var textcolumn_order = settings.textcolumn_order;   
     var textcolumn_content = settings.textcolumn_content;
     var textcolumn_actions = settings.textcolumn_actions;
+    var numbering_type = settings.numbering_type
     var pretext_num = settings.pretext_num;
     var postext_num = settings.postext_num;
     
@@ -363,16 +364,13 @@ function EolOrderXBlock(runtime, element, settings) {
             return parseInt(a.key) - parseInt(b.key);
         });
         
-        // Get block-specific values
-        let orderType = $element.find('.status').attr('data-order-type');
-        let pretextNum = $element.find('.status').attr('data-pretext-num') || '';
-        let postextNum = $element.find('.status').attr('data-posttext-num') || '';
+
         
         // Add rows for each element in correct order
         sortedElements.forEach(function(element, index) {
             var orderValue = '';
             
-            switch(orderType) {
+            switch(numbering_type) {
                 case 'numbers':
                     orderValue = (index + 1);
                     break;
@@ -390,7 +388,7 @@ function EolOrderXBlock(runtime, element, settings) {
             }
             
             tableHtml += '<tr>' +
-                '<td class="order-cell">' + pretextNum + orderValue + postextNum + '</td>' +
+                '<td class="order-cell">' + pretext_num + orderValue + postext_num + '</td>' +
                 '<td class="content-cell">' + element.content + '</td>' +
                 '</tr>';
         });
@@ -464,37 +462,37 @@ function EolOrderXBlock(runtime, element, settings) {
             var attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intentos";
             if (response.max_attempts === 1) {
                 attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intento";
+                }
+                $element.find('.submission-feedback').text(attemptsText);
             }
-            $element.find('.submission-feedback').text(attemptsText);
-        }
-
+            
         // Update notification area
-        var $notification = $element.find('.notificacion');
+            var $notification = $element.find('.notificacion');
         if (response.is_correct) {
-            $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
-            $submitButton.prop('disabled', true);
-            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+                $submitButton.prop('disabled', true);
+                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
         } else {
-            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
             // Show answer button if no more attempts
             if (response.max_attempts > 0 && response.attempts >= response.max_attempts && !$element.find('.ver_respuesta').length) {
-                $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                    '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                    '<span>Mostrar<br>Respuesta</span>' +
-                    '</button>');
+                    $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+                        '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+                        '<span>Mostrar<br>Respuesta</span>' +
+                        '</button>');
+                }
             }
-        }
 
         // Update status class
         var $statusDiv = $element.find('.status');
         $statusDiv.removeClass('correct incorrect unanswered');
         $statusDiv.addClass(response.is_correct ? 'correct' : 'incorrect');
-
-        // Disable submit button if needed
+            
+            // Disable submit button if needed
         if (response.is_correct || (response.max_attempts > 0 && response.attempts >= response.max_attempts)) {
-            $submitButton.prop('disabled', true);
-            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-        }
+                $submitButton.prop('disabled', true);
+                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
+            }
 
         // Save complete state object with sublocation identifier
         var currentOrder = getCurrentOrder();
@@ -546,34 +544,34 @@ function EolOrderXBlock(runtime, element, settings) {
         
         console.log("[EOL-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
         var orderArray = order.split('_');
-        var $table = $element.find('.eol-order-table-content');
-        var $tbody = $table.find('tbody');
-        
-        // Limpiar el tbody existente
-        $tbody.find('.item-row').remove();
-        
-        // Rebuild the table in the correct order
-        orderArray.forEach(function(index, arrayIndex) {
+            var $table = $element.find('.eol-order-table-content');
+            var $tbody = $table.find('tbody');
+            
+            // Limpiar el tbody existente
+            $tbody.find('.item-row').remove();
+            
+            // Rebuild the table in the correct order
+            orderArray.forEach(function(index, arrayIndex) {
             var element = settings.ordeingelements[index].content;
-            if (element) {
+                if (element) {
                 var $row = $('<tr class="item-row" data-key="' + index + '">' +
-                    '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
-                    '<td class="content-cell">' + element + '</td>' +
+                        '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
+                        '<td class="content-cell">' + element + '</td>' +
                     '<td class="actions-cell" style="text-align: center;">' +
-                    '<button class="move-up-button">↑</button>' +
-                    '<button class="move-down-button">↓</button>' +
-                    '</td>' +
-                    '</tr>');
-                $tbody.append($row);
-            }
-        });
-        
-        // Update button states after rebuilding
-        updateButtonStates();
-        
-        // Re-render MathJax if needed
-        var ordertableid = "order_" + settings.sublocation;
-        renderMathForSpecificElements(ordertableid);
+                        '<button class="move-up-button">↑</button>' +
+                        '<button class="move-down-button">↓</button>' +
+                        '</td>' +
+                        '</tr>');
+                    $tbody.append($row);
+                }
+            });
+            
+            // Update button states after rebuilding
+            updateButtonStates();
+            
+            // Re-render MathJax if needed
+            var ordertableid = "order_" + settings.sublocation;
+            renderMathForSpecificElements(ordertableid);
     }
 
     // Add visibility change handler

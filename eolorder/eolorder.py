@@ -685,16 +685,25 @@ class EolOrderXBlock(XBlock):
             'max_value': 1.0
         })
 
-        # Notify completion to any conditional XBlock watching this component
+        # Calculate completion value (0.0 to 1.0)
         completion = 1.0 if is_correct else 0.0
-        self.runtime.publish(self, 'completion', {'completion': completion})
+        
+        # Notify completion to any conditional XBlock watching this component
+        try:
+            self.runtime.publish(self, 'completion', {'completion': completion})
+            print("[EOL-ORDER] Published completion:", completion)
+        except Exception as e:
+            print("[EOL-ORDER] Error publishing completion:", str(e))
 
         return {
             'result': 'success',
             'is_correct': is_correct,
             'score': self.score,
             'attempts': self.attempts,
-            'max_attempts': self.max_attempts
+            'max_attempts': self.max_attempts,
+            'show_correctness': getattr(self, 'show_correctness', 'always'),
+            'show_answer': self.show_answer,
+            'user_answer': self.user_answer
         }
 
     @XBlock.json_handler
