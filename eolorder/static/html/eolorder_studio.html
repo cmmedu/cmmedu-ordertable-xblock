@@ -125,28 +125,30 @@
                             type="checkbox" {% if uppercase_letters.value %}checked{% endif %} />
                     </div>
                 </li>
-                <li>
+                <li class="field comp-setting-entry is-set">
                     <div class="table-rows-container">
-                        <h3>{{ordeingelements.display_name}}</h3>
-                        <span class="tip setting-help">{{ordeingelements.help}}</span>
-                        <div class="table-rows">
-                            {% for key, value in ordeingelements.value.items %}
-                            <div class="table-row" data-row-id="{{key}}">
-                                <div class="row-content">
-                                    <p>Label: {{key}}</divp>
+                        <div class="wrapper-comp-setting">
+                            <h3>{{ordeingelements.display_name}}</h3>
+                            <span class="tip setting-help">{{ordeingelements.help}}</span>
+                            <div class="table-rows">
+                                {% for key, value in ordeingelements.value.items %}
+                                <div class="table-row" data-row-id="{{key}}">
+                                    <div class="row-content">
+                                        <p>Label: {{key}}</divp>
+                                    </div>
+                                    <div class="row-content">
+                                        <textarea class="row-content-input"
+                                            placeholder="Contenido de la fila (HTML permitido)"
+                                            name="content">{{value.content}}</textarea>
+                                    </div>
+                                    <div class="row-actions">
+                                        <button class="remove-row">Eliminar</button>
+                                    </div>
                                 </div>
-                                <div class="row-content">
-                                    <textarea class="row-content-input"
-                                        placeholder="Contenido de la fila (HTML permitido)"
-                                        name="content">{{value.content}}</textarea>
-                                </div>
-                                <div class="row-actions">
-                                    <button class="remove-row">Eliminar</button>
-                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
+                            <button class="add-row-button">Agregar</button>
                         </div>
-                        <button class="add-row-button">Agregar</button>
                     </div>
                 </li>
                 <li class="field comp-setting-entry is-set">

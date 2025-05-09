@@ -1085,9 +1085,6 @@
 .eol-order-studio .table-rows-container {
     margin: 20px 0;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
 }
 
 .eol-order-studio .table-rows-container h3 {
@@ -1116,7 +1113,7 @@
 .eol-order-studio .table-row {
     display: inline;
     padding: 15px;
-    background-color: #fff;
+    background-color: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
