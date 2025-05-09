@@ -324,6 +324,7 @@
     background-color: #f8f9fa;
     border-radius: 8px;
     border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .eol-order-xblock-studio .eol-order-disorder h3 {
@@ -334,187 +335,126 @@
 }
 
 .eol-order-xblock-studio .disorder-preview {
-    min-height: 100px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
+    min-height: 150px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.eol-order-xblock-studio .disordered-list {
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+    min-height: 100px;
 }
 
 .eol-order-xblock-studio .disorder-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px;
-    margin: 4px 0;
-    background-color: #f5f5f5;
-    border-radius: 4px;
+    padding: 12px 15px;
+    background-color: #fff;
+    border: 2px solid #0075b4;
+    border-radius: 6px;
     cursor: move;
-    min-width: 120px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    max-width: 200px;
 }
 
-.eol-order-xblock-studio .move-up-button,
-.eol-order-xblock-studio .move-down-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-    font-size: 16px;
-    color: #666;
-    transition: color 0.2s;
-    position: relative;
-    width: 20px;
-    height: 20px;
+.eol-order-xblock-studio .disorder-item:hover {
+    background-color: #f0f7ff;
+    border-color: #005a8c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.eol-order-xblock-studio .item-content {
+.eol-order-xblock-studio .disorder-item.dragging {
+    opacity: 0.7;
+    background-color: #e9ecef;
+    border: 2px dashed #0075b4;
+}
+
+.eol-order-xblock-studio .disorder-item .item-content {
     flex-grow: 1;
+    font-weight: 500;
+    color: #2c3e50;
     text-align: center;
+    padding: 4px 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
 }
 
-.eol-order-xblock-studio .generate-disorder-button {
-    padding: 8px 16px;
-    background-color: #28a745;
-    color: white;
+.eol-order-xblock-studio .disorder-item .move-left-button,
+.eol-order-xblock-studio .disorder-item .move-right-button {
+    padding: 6px 12px;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
-}
-
-.eol-order-xblock-studio .generate-disorder-button:hover {
-    background-color: #218838;
-}
-
-.eol-order-xblock-studio .eol-order-actions {
-    margin-top: 20px;
-    text-align: right;
-}
-
-.eol-order-xblock-studio .save-button,
-.eol-order-xblock-studio .cancel-button {
-    padding: 8px 16px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.eol-order-xblock-studio .save-button {
     background-color: #0075b4;
     color: white;
-}
-
-.eol-order-xblock-studio .save-button:hover {
-    background-color: #005a8c;
-}
-
-.eol-order-xblock-studio .cancel-button {
-    background-color: #6c757d;
-    color: white;
-}
-
-.eol-order-xblock-studio .cancel-button:hover {
-    background-color: #5a6268;
-}
-
-.eol-order-xblock-studio .wrapper-comp-setting {
-    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 36px;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.eol-order-xblock-studio .label.setting-label {
-    display: block;
-    margin-bottom: 0;
-    font-weight: bold;
-    color: #2c3e50;
-    font-size: 1.1em;
-}
-
-.eol-order-xblock-studio .tip.setting-help {
-    display: block;
-    margin: 0;
-    color: #666;
-    font-size: 0.9em;
-    font-style: italic;
-}
-
-.eol-order-xblock-studio .input.setting-input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 8px;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-weight: bold;
 }
 
-.eol-order-xblock-studio .input.setting-input:focus {
-    border-color: #0075b4;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 117, 180, 0.2);
+.eol-order-xblock-studio .disorder-item .move-left-button:hover,
+.eol-order-xblock-studio .disorder-item .move-right-button:hover {
+    background-color: #005a8c;
+    transform: translateY(-1px);
 }
 
-.eol-order-xblock-studio .input.setting-input[type="checkbox"] {
-    width: auto;
-    margin-top: 8px;
-}
-
-.eol-order-xblock-studio .input.setting-input[type="color"] {
-    width: 50px;
-    height: 30px;
-    padding: 0;
-    border: 1px solid #ccc;
-}
-
-.eol-order-xblock-studio .field.comp-setting-entry {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-    transition: all 0.2s ease;
-}
-
-.eol-order-xblock-studio .field.comp-setting-entry:hover {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.eol-order-xblock-studio .placeholder {
-    background-color: #edf2f7;
-    border: 2px dashed #cbd5e0;
-    min-width: 100px;
-    height: 40px;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-    transition: all 0.2s ease;
+.eol-order-xblock-studio .disorder-item .move-left-button:disabled,
+.eol-order-xblock-studio .disorder-item .move-right-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .eol-order-xblock-studio .order-label,
 .eol-order-xblock-studio .previous-order-label {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .eol-order-xblock-studio .order-label span,
 .eol-order-xblock-studio .previous-order-label span {
-    font-weight: bold;
+    font-weight: 600;
     color: #2c3e50;
+    min-width: 120px;
+}
+
+.eol-order-xblock-studio .order-display,
+.eol-order-xblock-studio .previous-order-display {
+    color: #0075b4;
+    font-family: monospace;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 0.9em;
+    flex-grow: 1;
 }
 
 .eol-order-xblock-studio #current-order-value {
@@ -1262,7 +1202,7 @@
 /* Estilos para cada grupo de respuestas */
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answers-group {
     width: 100%;
-    background-color: #fff;
+    background-color: #e9ecef;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -1301,49 +1241,56 @@
 
 /* Estilos para el contenido del grupo */
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .group-content {
-    padding: 15px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 10px;
-    min-height: 60px;
+    gap: 12px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+    min-height: 100px;
 }
 
 /* Estilos para cada elemento de respuesta */
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
+    gap: 8px;
+    padding: 12px 15px;
+    background-color: #fff;
+    border: 2px solid #0075b4;
     border-radius: 6px;
     cursor: move;
     transition: all 0.2s ease;
-    flex: 1;
-    min-width: 85px;
-    max-width: 130px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    max-width: 200px;
 }
 
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item:hover {
-    background-color: #fff;
-    border-color: #0075b4;
-    box-shadow: 0 2px 4px rgba(0, 117, 180, 0.1);
+    background-color: #f0f7ff;
+    border-color: #005a8c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
+    border: 2px dashed #0075b4;
 }
 
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .item-content {
     flex-grow: 1;
     font-weight: 500;
     color: #2c3e50;
-    padding: 4px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: center;
+    padding: 4px 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
 }
 
 /* Estilos para los botones de movimiento */
@@ -1361,7 +1308,7 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    flex-shrink: 0;
+    font-weight: bold;
 }
 
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button:hover,
@@ -1407,4 +1354,136 @@
 
 .eol-order-studio .wrapper-comp-setting .correct-answers-container .add-answer-button:active {
     transform: translateY(0);
+}
+
+.eol-order-studio .wrapper-comp-setting .eol-order-disorder {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-preview {
+    min-height: 150px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.eol-order-studio .wrapper-comp-setting .disordered-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+    min-height: 100px;
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 15px;
+    background-color: #fff;
+    border: 2px solid #0075b4;
+    border-radius: 6px;
+    cursor: move;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item:hover {
+    background-color: #f0f7ff;
+    border-color: #005a8c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item.dragging {
+    opacity: 0.7;
+    background-color: #e9ecef;
+    border: 2px dashed #0075b4;
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item .item-content {
+    flex-grow: 1;
+    font-weight: 500;
+    color: #2c3e50;
+    text-align: center;
+    padding: 4px 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-left-button,
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-right-button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0075b4;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-left-button:hover,
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-right-button:hover {
+    background-color: #005a8c;
+    transform: translateY(-1px);
+}
+
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-left-button:disabled,
+.eol-order-studio .wrapper-comp-setting .disorder-item .move-right-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.eol-order-studio .wrapper-comp-setting .order-label,
+.eol-order-studio .wrapper-comp-setting .previous-order-label {
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.eol-order-studio .wrapper-comp-setting .order-label span,
+.eol-order-studio .wrapper-comp-setting .previous-order-label span {
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 120px;
+}
+
+.eol-order-studio .wrapper-comp-setting .order-display,
+.eol-order-studio .wrapper-comp-setting .previous-order-display {
+    color: #0075b4;
+    font-family: monospace;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 0.9em;
+    flex-grow: 1;
 }

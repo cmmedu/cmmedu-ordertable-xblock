@@ -153,7 +153,7 @@
                 </li>
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
-                        <h3 class="label setting-label" for="correct_answers">{{correct_answers.display_name}}</h3>
+                        <label class="label setting-label" for="correct_answers">{{correct_answers.display_name}}</label>
                         <span class="tip setting-help">{{correct_answers.help}}</span>
                         <div class="correct-answers-container">
                             <div class="order-label">
@@ -174,10 +174,9 @@
                                     <div class="group-content">
                                         {% for answer in answer_list|split:"_" %}
                                         <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
-                                            <button class="move-left-button" title="Mover izquierda">
-                                                << /button>
-                                                    <span class="item-content">{{answer}}</span>
-                                                    <button class="move-right-button" title="Mover derecha">></button>
+                                            <button class="move-left-button" title="Mover izquierda">&lt;</button>
+                                            <span class="item-content">{{answer}}</span>
+                                            <button class="move-right-button" title="Mover derecha">&gt;</button>
                                         </div>
                                         {% endfor %}
                                     </div>
@@ -190,7 +189,7 @@
                 </li>
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
-                        <h3>{{disordered_order.display_name}}</h3>
+                        <label class="label setting-label" for="disordered_order">{{disordered_order.display_name}}</label>
                         <span class="tip setting-help">{{disordered_order.help}}</span>
                         <div class="eol-order-disorder">
 
@@ -221,8 +220,7 @@
                 </li>
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
-                        <label class="label setting-label"
-                            for="random_disorder">{{random_disorder.display_name}}</label>
+                        <label class="label setting-label" for="random_disorder">{{random_disorder.display_name}}</label>
                         <span class="tip setting-help">{{random_disorder.help}}</span>
                         <input class="input setting-input" name="random_disorder" id="random_disorder" type="checkbox"
                             {% if random_disorder.value %}checked{% endif %} />
