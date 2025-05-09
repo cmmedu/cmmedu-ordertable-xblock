@@ -236,6 +236,7 @@ class EolOrderXBlock(XBlock):
             'textcolumn_actions': self.textcolumn_actions,
             'pretext_num': self.pretext_num,
             'postext_num': self.postext_num,
+            'numbering_type': self.numbering_type,
             'uppercase_letters': self.uppercase_letters,
             'correct_answers': self.correct_answers,
             'disordered_order': self.disordered_order,

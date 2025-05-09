@@ -3,18 +3,46 @@
     font-family: Arial, sans-serif;
 }
 
-.problem.eol-order-block .eol-order-submit {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+/* Add submit button styles with maximum specificity */
+div.problem.eol-order-block div.submit-box div.action button.eol-order-submit {
+    background-color: #dc0000 !important;
+    background-image: none !important;
+    border-color: white !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    padding: 8px 20px !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    border-width: 1px !important;
+    font-weight: normal !important;
+    text-transform: capitalize !important;
+    height: auto !important;
+    width: auto !important;
+    min-width: 100px !important;
+    font-size: 16px;
 }
 
-.problem.eol-order-block .eol-order-submit:disabled {
-    background-color: #ccc !important;
-    cursor: not-allowed;
+div.problem.eol-order-block div.submit-box div.action button.eol-order-submit:hover {
+    background-color: #750101 !important;
+    box-shadow: none !important;
+    border-width: 1px !important;
+}
+
+div.problem.eol-order-block div.submit-box div.action button.eol-order-submit:focus {
+    background-color: #b30000 !important;
+    box-shadow: none !important;
+    border-width: 1px !important;
+}
+
+div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[disabled=disabled] {
+    border-color: #d2d0d0 !important;
+    background: #f2f3f3 !important;
+    color: #676666 !important;
+    cursor: auto !important;
+    border-style: solid !important;
 }
 
 .problem.eol-order-block .eol-order-table .move-up-button,
@@ -42,7 +70,45 @@
 
 .problem.eol-order-block .eol-order-table-content {
     width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 2px solid #bbb;
+}
+
+.problem.eol-order-block .eol-order-table-content th,
+.problem.eol-order-block .eol-order-table-content td {
+    padding: 10px;
     border: 1px solid #ddd;
+    border-right: 2px solid #bbb;
+    border-left: 2px solid #bbb;
+}
+
+.problem.eol-order-block .eol-order-table-content th:first-child,
+.problem.eol-order-block .eol-order-table-content td:first-child {
+    border-left: 2px solid #bbb;
+}
+
+.problem.eol-order-block .eol-order-table-content th:last-child,
+.problem.eol-order-block .eol-order-table-content td:last-child {
+    border-right: 2px solid #bbb;
+}
+
+.problem.eol-order-block .eol-order-table-content thead tr:first-child th {
+    border-top: 2px solid #bbb;
+    background-color: #f5f5f5;
+}
+
+.problem.eol-order-block .eol-order-table-content tbody tr:first-child td {
+    border-top: 2px solid #bbb;
+}
+
+.problem.eol-order-block .eol-order-table-content tbody tr:last-child td {
+    border-bottom: 2px solid #bbb;
+}
+
+/* Estilos específicos para cuando hay título */
+.problem.eol-order-block .eol-order-table-content thead tr:first-child th.order-header {
+    border: 2px solid #bbb;
 }
 
 .problem.eol-order-block .order-header,
@@ -293,19 +359,37 @@
     vertical-align: middle;
 }
 
-.problem.eol-order-block .ver_respuesta {
+.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta {
     background-color: transparent !important;
+    background-image: none !important;
     color: #0075b4 !important;
-    font-size: 14px;
-    align-items: center;
+    font-size: 14px !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    transition: all 0.2s ease !important;
 }
 
-.problem.eol-order-block .ver_respuesta:hover {
-    background-color: #005a8c;
+.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta:hover {
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #005a8c !important;
+    border: 1px solid #005a8c !important;
+    border-radius: 4px !important;
 }
 
-.problem.eol-order-block .ver_respuesta i {
-    font-size: 14px;
+.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta .icon {
+    margin-right: 5px !important;
+    font-size: 16px !important;
+}
+
+.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta span {
+    display: block !important;
+    line-height: 1.2 !important;
 }
 
 .problem.eol-order-block .column-title {
@@ -321,25 +405,5 @@
 .problem.eol-order-block .actions-header {
     padding: 10px;
     border-bottom: 2px solid #ddd;
-}
-
-.problem.eol-order-block .eol-order-table-content {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.problem.eol-order-block .eol-order-table-content th {
-    position: relative;
-}
-
-.problem.eol-order-block .eol-order-table-content th:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #ddd;
 }
 

@@ -15,13 +15,15 @@
                 <thead>
                     {% if table_name != "" %}
                     <tr>
-                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center;" colspan="3">{{ table_name }}</th>
+                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center;" {% if numbering_type == 'none' %} colspan="2" {% else %}colspan="3"{% endif %}>{{ table_name }}</th>
                     </tr>
                     {% endif %}
                     <tr>
+                        {% if numbering_type != 'none' %}
                         <th class="order-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;" pretext="{{ pretext_num }}" postext="{{ postext_num }}" ordertype="{{ numbering_type }}">
                             {{ textcolumn_order }}
                         </th>
+                        {% endif %}
                         <th class="content-header" style="background-color: {{ background_color }}; text-align: center;">
                             {{ textcolumn_content }}
                         </th>
@@ -33,6 +35,7 @@
                 <tbody class="items-container">
                     {% for item in elements %}
                     <tr class="item-row" data-key="{{ item.key }}">
+                        {% if numbering_type != 'none' %}
                         <td class="order-cell">
                             {% if numbering_type == 'numbers' %}
                                 {{ pretext_num }}{{ item.position }}{{ postext_num }}
@@ -52,6 +55,7 @@
                                 {% endif %}
                             {% endif %}
                         </td>
+                        {% endif %}
                         <td class="content-cell">{{ item.content|safe }}</td>
                         <td class="actions-cell" style="text-align: center;">
                             <button class="move-up-button">↑</button>
@@ -68,7 +72,7 @@
     </solution>
     <div class="submit-box">
         <div class="action">
-            <button class="eol-order-submit submit Submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
+            <button class="eol-order-submit Submit submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
             <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}

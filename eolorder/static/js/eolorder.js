@@ -211,22 +211,31 @@ function EolOrderXBlock(runtime, element, settings) {
         */
     });
 
+    function createVerRespuestaButton() {
+        return '<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+            '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
+            '<span>Mostrar<br>Respuesta</span>' +
+            '</button>';
+    }
+
+    function showVerRespuestaButton($container) {
+        if (!$container.find('.ver_respuesta').length) {
+            $container.append(createVerRespuestaButton());
+        }
+    }
+
     // Inicializar el ícono basado en el estado actual
     var $notification = $element.find('.notificacion');
     if (currentScore >= 1.0) {
-        $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+        $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
         $submitButton.prop('disabled', true);
         $element.find('.move-up-button, .move-down-button').prop('disabled', true);
     } else if (currentScore === 0.0 && attempts > 0) {
-        $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-        // Check if we should show the answer button
+        $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
         if (attempts >= maxAttempts) {
-            $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                '<span>Mostrar<br>Respuesta</span>' +
-                '</button>');
+            showVerRespuestaButton($notification);
         }
-    } 
+    }
 
     function updateButtonStates() {
         $itemsContainer.find('.item-row').each(function(index) {
@@ -338,6 +347,7 @@ function EolOrderXBlock(runtime, element, settings) {
 
     // Add click handler for "Mostrar Respuesta" button
     $element.on('click', '.ver_respuesta', function(e) {
+        //console.log("[EOL-ORDER] Click en Mostrar Respuesta");
         e.preventDefault();
         var $solution = $element.find('solution');
         var blockId = $element.attr('id');
@@ -349,13 +359,21 @@ function EolOrderXBlock(runtime, element, settings) {
             '<tr>'
 
         if (table_name != "") {
-            tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;" colspan="2">' + table_name + '</th>'+
-            '<tr>'
+            if (numbering_type == 'none') {
+                tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;" colspan="1">' + table_name + '</th>'
+            } else {
+                tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center;" colspan="2">' + table_name + '</th>'
+            }
+            tableHtml += '</tr>'
         }
 
-        tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center; width: 15%;">' + textcolumn_order + '</th>' +
-            '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>' +
-            '</tr>' +
+        if (numbering_type == 'none') {
+            tableHtml += '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>'
+        } else {
+            tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center; width: 15%;">' + textcolumn_order + '</th>' +
+                '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>'
+        }
+        tableHtml += '</tr>' +
             '</thead>' +
             '<tbody>';
         
@@ -372,25 +390,37 @@ function EolOrderXBlock(runtime, element, settings) {
             
             switch(numbering_type) {
                 case 'numbers':
-                    orderValue = (index + 1);
+                    orderValue = pretext_num + (index + 1) + postext_num;
                     break;
                 case 'numbers_zero':
-                    orderValue = index;
+                    orderValue = pretext_num + index + postext_num;
                     break;
                 case 'letters':
-                    orderValue = String.fromCharCode(97 + index); // a, b, c, ...
+                    if (settings.uppercase_letters) {
+                        orderValue = pretext_num + String.fromCharCode(65 + index) + postext_num; // A, B, C, ...
+                    } else {
+                        orderValue = pretext_num + String.fromCharCode(97 + index) + postext_num; // a, b, c, ...
+                    }
                     break;
                 case 'roman':
-                    orderValue = toRoman(index + 1);
+                    if (settings.uppercase_letters) {
+                        orderValue = pretext_num + toRoman(index + 1).toUpperCase() + postext_num;
+                    } else {
+                        orderValue = pretext_num + toRoman(index + 1).toLowerCase() + postext_num;
+                    }
                     break;
                 default:
-                    orderValue = (index + 1);
+                    orderValue = pretext_num + (index + 1) + postext_num;
             }
             
-            tableHtml += '<tr>' +
-                '<td class="order-cell">' + pretext_num + orderValue + postext_num + '</td>' +
-                '<td class="content-cell">' + element.content + '</td>' +
-                '</tr>';
+            tableHtml += '<tr>'
+            if (numbering_type == 'none') {
+                tableHtml += '<td class="content-cell">' + element.content + '</td>'
+            } else {
+                tableHtml += '<td class="order-cell">' + orderValue + '</td>' +
+                '<td class="content-cell">' + element.content + '</td>'
+            }
+            tableHtml += '</tr>'
         });
         
         tableHtml += '</tbody></table>';
@@ -474,14 +504,10 @@ function EolOrderXBlock(runtime, element, settings) {
                 $element.find('.move-up-button, .move-down-button').prop('disabled', true);
         } else {
                 $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-            // Show answer button if no more attempts
-            if (response.max_attempts > 0 && response.attempts >= response.max_attempts && !$element.find('.ver_respuesta').length) {
-                    $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                        '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                        '<span>Mostrar<br>Respuesta</span>' +
-                        '</button>');
-                }
+            if (response.max_attempts > 0 && response.attempts >= response.max_attempts) {
+                showVerRespuestaButton($notification);
             }
+        }
 
         // Update status class
         var $statusDiv = $element.find('.status');
@@ -641,13 +667,8 @@ function EolOrderXBlock(runtime, element, settings) {
             $element.find('.move-up-button, .move-down-button').prop('disabled', true);
         } else if (currentScore === 0.0 && attempts > 0) {
             $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-            
-            // Show answer button if no more attempts
-            if (attempts >= maxAttempts && !$element.find('.ver_respuesta').length) {
-                $element.append('<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
-                    '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-                    '<span>Mostrar<br>Respuesta</span>' +
-                    '</button>');
+            if (attempts >= maxAttempts) {
+                showVerRespuestaButton($notification);
             }
         } else {
             $notification.empty();
