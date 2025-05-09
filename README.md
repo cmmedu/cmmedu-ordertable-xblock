@@ -4,14 +4,8 @@ EOL Order XBlock is an educational tool designed to integrate into [edX courses]
 
 Right now this Xblock is only aviable in spanish.
 
-## Use Cases
 
-- Ordering the steps of a scientific process
-- Sequencing historical events in chronological order
-- Organizing system components in the correct order
-- Ordering the steps of an algorithm or procedure
-
-![EOL Order XBlock Usage Example](public/images/example.png)
+![EOL Order XBlock Usage Example](eolorder/static/images/example.png)
 
 ## Installation
 
@@ -21,13 +15,9 @@ To activate EOL Order XBlock in a course, it needs to be added to the list of ad
 
 ## How to Use
 
-To incorporate an EOL Order XBlock into your course:
-
-1. Go to a specific unit in Studio
-2. Select "Advanced" from the options
-3. Choose "EOL Order XBlock"
-
-This will add an empty XBlock to the unit. Note that this XBlock will not appear in the LMS until it has been properly configured.
+- Create a list on studio
+- Define the corrects orders
+- Create the disordered list that student will see
 
 ### Content Configuration
 
@@ -37,22 +27,22 @@ The EOL Order XBlock allows you to configure:
 - **Description**: Provides instructions or context for the activity
 - **Elements to Order**: List of elements that students must order
 - **Correct Order**: Defines the correct order of elements
-- **Feedback**: Custom messages for correct and incorrect answers
+- **Feedback**: show the ordered table
 
-![XBlock Configuration](docs/images/configuration.png)
+![XBlock Configuration](eolorder/static/images/example-studio.png)
 
-### Additional Options
+## Use Cases
 
-- **Allow Retries**: Maximum number of attempts allowed
-- **Show Feedback**: Option to display feedback after each attempt
-- **Scoring**: Configuration of points for correct answers
-- **Time Limit**: Set a time limit to complete the activity
+- Ordering the steps of a scientific process
+- Sequencing historical events in chronological order
+- Organizing system components in the correct order
+- Ordering the steps of an algorithm or procedure
 
 ## Scoring
 
 The EOL Order XBlock assigns scores based on:
-- Correct order of all elements
-- Incorrect (wrong order)
+- Correct order of all elements (allow more than one correct answer)
+- Incorrect, wrong order of at least one element
 
 ## License
 
