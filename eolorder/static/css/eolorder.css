@@ -81,6 +81,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border: 1px solid #ddd;
     border-right: 2px solid #bbb;
     border-left: 2px solid #bbb;
+    vertical-align: middle;
 }
 
 .problem.eol-order-block .eol-order-table-content th:first-child,
@@ -183,6 +184,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
 .eol-order-xblock-studio .order-table td {
     padding: 8px;
     border: 1px solid #ddd;
+
 }
 
 .eol-order-xblock-studio .item-content {

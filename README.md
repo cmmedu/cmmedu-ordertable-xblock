@@ -11,7 +11,7 @@ Right now this Xblock is only aviable in spanish.
 - Organizing system components in the correct order
 - Ordering the steps of an algorithm or procedure
 
-![EOL Order XBlock Usage Example](docs/images/example.png)
+![EOL Order XBlock Usage Example](public/images/example.png)
 
 ## Installation
 

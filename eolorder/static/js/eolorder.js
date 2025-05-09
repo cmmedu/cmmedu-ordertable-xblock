@@ -584,20 +584,28 @@ function EolOrderXBlock(runtime, element, settings) {
             // Limpiar el tbody existente
             $tbody.find('.item-row').remove();
             
+            let tablecontentHtml = ''
+
             // Rebuild the table in the correct order
             orderArray.forEach(function(index, arrayIndex) {
-            var element = settings.ordeingelements[index].content;
+                var element = settings.ordeingelements[index].content;
+                tablecontentHtml = ''
                 if (element) {
-                var $row = $('<tr class="item-row" data-key="' + index + '">' +
-                        '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
-                        '<td class="content-cell">' + element + '</td>' +
-                    '<td class="actions-cell" style="text-align: center;">' +
-                        '<button class="move-up-button">↑</button>' +
-                        '<button class="move-down-button">↓</button>' +
-                        '</td>' +
-                        '</tr>');
-                    $tbody.append($row);
-                }
+                        tablecontentHtml += '<tr class="item-row" data-key="' + index + '">' 
+                        if (settings.numbering_type == 'none') {
+                            tablecontentHtml += '<td class="content-cell">' + element + '</td>'
+                        } else {
+                            tablecontentHtml += '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
+                            '<td class="content-cell">' + element + '</td>'
+                        }
+                        tablecontentHtml += '<td class="actions-cell" style="text-align: center;">' +
+                            '<button class="move-up-button">↑</button>' +
+                            '<button class="move-down-button">↓</button>' +
+                            '</td>' +
+                            '</tr>'
+                    var $row = $(tablecontentHtml);
+                        $tbody.append($row);
+                    }
             });
             
             // Update button states after rebuilding
@@ -617,7 +625,6 @@ function EolOrderXBlock(runtime, element, settings) {
                 url: runtime.handlerUrl(element, 'get_state'),
                 data: JSON.stringify({}),
                 success: function(response) {
-                    //console.log("[EOL-ORDER] Estado recibido del servidor para XBlock " + sublocation + ":", response);
                     if (response) {
                         // Update UI with the fresh state from server
                         var state = {
@@ -625,8 +632,8 @@ function EolOrderXBlock(runtime, element, settings) {
                             ...response
                         };
                         updateUIWithState(state);
-                        // Restore table order if needed
-                        if (response.user_answer) {
+                        // Solo restaurar el orden de la tabla si no estamos mostrando la respuesta
+                        if (response.user_answer && !$element.find('solution').is(':visible')) {
                             restoreTableOrder(response.user_answer);
                         }
                     }
