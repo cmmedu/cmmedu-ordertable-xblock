@@ -79,12 +79,14 @@ function EolOrderXBlockEdit(runtime, element) {
             $row.attr('data-key', targetKey);
             $targetRow.attr('data-key', currentKey);
             
+            /*
             console.log("[EOL-ORDER] Movimiento realizado:", {
                 direction: direction,
                 currentKey: currentKey,
                 targetKey: targetKey
             });
-            
+            */
+           
             updateButtonStates();
         }
     }
@@ -165,11 +167,13 @@ function EolOrderXBlock(runtime, element, settings) {
     var sublocation = settings.sublocation;
     var cachedStateId = 'order_state_' + sublocation;
     
+    /*
     console.log("[EOL-ORDER] Inicializando XBlock:", {
         xblockId: xblockId,
         sublocation: sublocation,
         cachedStateId: cachedStateId
     });
+    */
     
     // Obtener variables del backend
     var table_name = settings.table_name;
@@ -185,11 +189,13 @@ function EolOrderXBlock(runtime, element, settings) {
     var attempts = parseInt($element.find('.submission-feedback').text().match(/\d+/)[0] || '0');
     var maxAttempts = parseInt($element.find('.submission-feedback').text().match(/\d+/g)[1] || '0');
     
+    /*
     console.log("[EOL-ORDER] Estado inicial para XBlock " + xblockId + ":", {
         score: currentScore,
         attempts: attempts,
         maxAttempts: maxAttempts
     });
+    */
 
     // Inicializar el array de elementos
     $itemsContainer.find('.item-row').each(function() {
@@ -227,11 +233,11 @@ function EolOrderXBlock(runtime, element, settings) {
     // Inicializar el ícono basado en el estado actual
     var $notification = $element.find('.notificacion');
     if (currentScore >= 1.0) {
-        $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+        $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
         $submitButton.prop('disabled', true);
         $element.find('.move-up-button, .move-down-button').prop('disabled', true);
     } else if (currentScore === 0.0 && attempts > 0) {
-        $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+        $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
         if (attempts >= maxAttempts) {
             showVerRespuestaButton($notification);
         }
@@ -273,12 +279,14 @@ function EolOrderXBlock(runtime, element, settings) {
             $row.attr('data-key', targetKey);
             $targetRow.attr('data-key', currentKey);
             
+            /*
             console.log("[EOL-ORDER] Movimiento realizado:", {
                 direction: direction,
                 currentKey: currentKey,
                 targetKey: targetKey
             });
-            
+            */
+
             updateButtonStates();
         }
     }
@@ -288,19 +296,19 @@ function EolOrderXBlock(runtime, element, settings) {
         // Usar la tabla correcta
         var $tbody = $element.find('.eol-order-table-content tbody');
         
-        console.log("[EOL-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
+        //console.log("[EOL-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
         
         $tbody.find('.item-row').each(function() {
             var key = $(this).attr('data-key');
-            console.log("[EOL-ORDER] Fila encontrada, data-key:", key);
+            //console.log("[EOL-ORDER] Fila encontrada, data-key:", key);
             if (key) {
                 order.push(key);
             }
         });
         
         var orderString = order.join('_');
-        console.log("[EOL-ORDER] Orden actual obtenido:", orderString);
-        console.log("[EOL-ORDER] Estado actual de la tabla:", $tbody.html());
+        //console.log("[EOL-ORDER] Orden actual obtenido:", orderString);
+        //console.log("[EOL-ORDER] Estado actual de la tabla:", $tbody.html());
         
         return orderString;
     }
@@ -320,7 +328,7 @@ function EolOrderXBlock(runtime, element, settings) {
         
         // Get current order
         var orderString = getCurrentOrder();
-        console.log("[EOL-ORDER] Enviando orden:", orderString);
+        //console.log("[EOL-ORDER] Enviando orden:", orderString);
         
         // Send both 'order' and 'answer' for compatibility
         var data = {
@@ -330,7 +338,7 @@ function EolOrderXBlock(runtime, element, settings) {
         
         $.post(handlerUrl, JSON.stringify(data))
             .done(function(response) {
-                console.log("[EOL-ORDER] Respuesta recibida:", response);
+                //console.log("[EOL-ORDER] Respuesta recibida:", response);
                 if (response.result === 'success') {
                     // Update UI with response
                     updateUIWithResponse(response);
@@ -340,7 +348,7 @@ function EolOrderXBlock(runtime, element, settings) {
                 }
             })
             .fail(function() {
-                console.log("[EOL-ORDER] Error en la petición");
+                //console.log("[EOL-ORDER] Error en la petición");
                 showMessage('Error al enviar la respuesta', 'error');
         });
     });
@@ -439,7 +447,7 @@ function EolOrderXBlock(runtime, element, settings) {
         // Esperar a que el DOM se actualice antes de renderizar MathJax
         setTimeout(function() {
             if (typeof MathJax !== "undefined") {
-                console.log("[EOL-ORDER] Renderizando MathJax en la tabla de respuesta");
+                //console.log("[EOL-ORDER] Renderizando MathJax en la tabla de respuesta");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, $solution[0]]);
             } else {
                 console.warn("[EOL-ORDER] MathJax no está cargado");
@@ -499,11 +507,11 @@ function EolOrderXBlock(runtime, element, settings) {
         // Update notification area
             var $notification = $element.find('.notificacion');
         if (response.is_correct) {
-                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
+                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
                 $submitButton.prop('disabled', true);
                 $element.find('.move-up-button, .move-down-button').prop('disabled', true);
         } else {
-                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
+                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
             if (response.max_attempts > 0 && response.attempts >= response.max_attempts) {
                 showVerRespuestaButton($notification);
             }
@@ -537,7 +545,7 @@ function EolOrderXBlock(runtime, element, settings) {
         $element.data('state', state);
         $xblocksContainer.data(cachedStateId, state);
         
-        console.log("[EOL-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
+        //console.log("[EOL-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
     }
 
     function showMessage(message, type) {
@@ -609,7 +617,7 @@ function EolOrderXBlock(runtime, element, settings) {
                 url: runtime.handlerUrl(element, 'get_state'),
                 data: JSON.stringify({}),
                 success: function(response) {
-                    console.log("[EOL-ORDER] Estado recibido del servidor para XBlock " + sublocation + ":", response);
+                    //console.log("[EOL-ORDER] Estado recibido del servidor para XBlock " + sublocation + ":", response);
                     if (response) {
                         // Update UI with the fresh state from server
                         var state = {
@@ -636,11 +644,11 @@ function EolOrderXBlock(runtime, element, settings) {
 
     function updateUIWithState(state) {
         if (!state || state.sublocation !== sublocation) {
-            console.log("[EOL-ORDER] Estado ignorado para XBlock " + sublocation + " (estado no coincide)");
+            //console.log("[EOL-ORDER] Estado ignorado para XBlock " + sublocation + " (estado no coincide)");
             return;
         }
         
-        console.log("[EOL-ORDER] Actualizando UI para XBlock " + sublocation + " con estado:", state);
+        //console.log("[EOL-ORDER] Actualizando UI para XBlock " + sublocation + " con estado:", state);
         
         // Update score and attempts
         if (state.score !== undefined) {
