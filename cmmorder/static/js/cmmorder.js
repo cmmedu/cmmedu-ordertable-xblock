@@ -1,4 +1,4 @@
-function EolOrderXBlockEdit(runtime, element) {
+function CmmOrderXBlockEdit(runtime, element) {
     'use strict';
 
     var $element = $(element);
@@ -80,7 +80,7 @@ function EolOrderXBlockEdit(runtime, element) {
             $targetRow.attr('data-key', currentKey);
             
             /*
-            console.log("[EOL-ORDER] Movimiento realizado:", {
+            console.log("[CMM-ORDER] Movimiento realizado:", {
                 direction: direction,
                 currentKey: currentKey,
                 targetKey: targetKey
@@ -150,13 +150,13 @@ function EolOrderXBlockEdit(runtime, element) {
     updateButtonStates();
 }
 
-function EolOrderXBlock(runtime, element, settings) {
+function CmmOrderXBlock(runtime, element, settings) {
     'use strict';
 
     var $element = $(element);
     var blockId = $element.attr('id');
     var $itemsContainer = $element.find('.items-container');
-    var $submitButton = $element.find('.eol-order-submit');
+    var $submitButton = $element.find('.cmm-order-submit');
     var handlerUrl = runtime.handlerUrl(element, 'submit_answer');
     var elements = [];
     var imagePath = $element.attr('data-image-path');
@@ -168,7 +168,7 @@ function EolOrderXBlock(runtime, element, settings) {
     var cachedStateId = 'order_state_' + sublocation;
     
     /*
-    console.log("[EOL-ORDER] Inicializando XBlock:", {
+    console.log("[CMM-ORDER] Inicializando XBlock:", {
         xblockId: xblockId,
         sublocation: sublocation,
         cachedStateId: cachedStateId
@@ -190,7 +190,7 @@ function EolOrderXBlock(runtime, element, settings) {
     var maxAttempts = parseInt($element.find('.submission-feedback').text().match(/\d+/g)[1] || '0');
     
     /*
-    console.log("[EOL-ORDER] Estado inicial para XBlock " + xblockId + ":", {
+    console.log("[CMM-ORDER] Estado inicial para XBlock " + xblockId + ":", {
         score: currentScore,
         attempts: attempts,
         maxAttempts: maxAttempts
@@ -210,7 +210,7 @@ function EolOrderXBlock(runtime, element, settings) {
         
         // Logs para depuración
         /*
-        console.log("[EOL-ORDER] Inicializando elemento:", {
+        console.log("[CMM-ORDER] Inicializando elemento:", {
             key: originalIndex,
             content: content
         });
@@ -280,7 +280,7 @@ function EolOrderXBlock(runtime, element, settings) {
             $targetRow.attr('data-key', currentKey);
             
             /*
-            console.log("[EOL-ORDER] Movimiento realizado:", {
+            console.log("[CMM-ORDER] Movimiento realizado:", {
                 direction: direction,
                 currentKey: currentKey,
                 targetKey: targetKey
@@ -294,21 +294,21 @@ function EolOrderXBlock(runtime, element, settings) {
     function getCurrentOrder() {
         var order = [];
         // Usar la tabla correcta
-        var $tbody = $element.find('.eol-order-table-content tbody');
+        var $tbody = $element.find('.cmm-order-table-content tbody');
         
-        //console.log("[EOL-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
+        //console.log("[CMM-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
         
         $tbody.find('.item-row').each(function() {
             var key = $(this).attr('data-key');
-            //console.log("[EOL-ORDER] Fila encontrada, data-key:", key);
+            //console.log("[CMM-ORDER] Fila encontrada, data-key:", key);
             if (key) {
                 order.push(key);
             }
         });
         
         var orderString = order.join('_');
-        //console.log("[EOL-ORDER] Orden actual obtenido:", orderString);
-        //console.log("[EOL-ORDER] Estado actual de la tabla:", $tbody.html());
+        //console.log("[CMM-ORDER] Orden actual obtenido:", orderString);
+        //console.log("[CMM-ORDER] Estado actual de la tabla:", $tbody.html());
         
         return orderString;
     }
@@ -328,7 +328,7 @@ function EolOrderXBlock(runtime, element, settings) {
         
         // Get current order
         var orderString = getCurrentOrder();
-        //console.log("[EOL-ORDER] Enviando orden:", orderString);
+        //console.log("[CMM-ORDER] Enviando orden:", orderString);
         
         // Send both 'order' and 'answer' for compatibility
         var data = {
@@ -338,7 +338,7 @@ function EolOrderXBlock(runtime, element, settings) {
         
         $.post(handlerUrl, JSON.stringify(data))
             .done(function(response) {
-                //console.log("[EOL-ORDER] Respuesta recibida:", response);
+                //console.log("[CMM-ORDER] Respuesta recibida:", response);
                 if (response.result === 'success') {
                     // Update UI with response
                     updateUIWithResponse(response);
@@ -348,21 +348,21 @@ function EolOrderXBlock(runtime, element, settings) {
                 }
             })
             .fail(function() {
-                //console.log("[EOL-ORDER] Error en la petición");
+                //console.log("[CMM-ORDER] Error en la petición");
                 showMessage('Error al enviar la respuesta', 'error');
         });
     });
 
     // Add click handler for "Mostrar Respuesta" button
     $element.on('click', '.ver_respuesta', function(e) {
-        //console.log("[EOL-ORDER] Click en Mostrar Respuesta");
+        //console.log("[CMM-ORDER] Click en Mostrar Respuesta");
         e.preventDefault();
         var $solution = $element.find('solution');
         var blockId = $element.attr('id');
         
         // Create table structure for the correct answer
         var tableHtml = '<p><b>Orden correcto:</b></p>' +
-            '<table class="eol-order-table-content">' +
+            '<table class="cmm-order-table-content">' +
             '<thead>' +
             '<tr>'
 
@@ -447,10 +447,10 @@ function EolOrderXBlock(runtime, element, settings) {
         // Esperar a que el DOM se actualice antes de renderizar MathJax
         setTimeout(function() {
             if (typeof MathJax !== "undefined") {
-                //console.log("[EOL-ORDER] Renderizando MathJax en la tabla de respuesta");
+                //console.log("[CMM-ORDER] Renderizando MathJax en la tabla de respuesta");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, $solution[0]]);
             } else {
-                console.warn("[EOL-ORDER] MathJax no está cargado");
+                console.warn("[CMM-ORDER] MathJax no está cargado");
             }
         }, 100);
     });
@@ -545,7 +545,7 @@ function EolOrderXBlock(runtime, element, settings) {
         $element.data('state', state);
         $xblocksContainer.data(cachedStateId, state);
         
-        //console.log("[EOL-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
+        //console.log("[CMM-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
     }
 
     function showMessage(message, type) {
@@ -561,7 +561,7 @@ function EolOrderXBlock(runtime, element, settings) {
     $(function() {
         var cachedState = $xblocksContainer.data(cachedStateId);
         if (cachedState && cachedState.sublocation === sublocation) {
-            console.log("[EOL-ORDER] Restaurando estado en caché para XBlock " + sublocation);
+            console.log("[CMM-ORDER] Restaurando estado en caché para XBlock " + sublocation);
             updateUIWithState(cachedState);
             
             // Restore table order
@@ -569,16 +569,16 @@ function EolOrderXBlock(runtime, element, settings) {
                 restoreTableOrder(cachedState.order);
             }
         } else {
-            console.log("[EOL-ORDER] No se encontró estado en caché para XBlock " + sublocation);
+            console.log("[CMM-ORDER] No se encontró estado en caché para XBlock " + sublocation);
         }
     });
 
     function restoreTableOrder(order) {
         if (!order || !settings.ordeingelements) return;
         
-        console.log("[EOL-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
+        console.log("[CMM-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
         var orderArray = order.split('_');
-            var $table = $element.find('.eol-order-table-content');
+            var $table = $element.find('.cmm-order-table-content');
             var $tbody = $table.find('tbody');
             
             // Limpiar el tbody existente
@@ -639,7 +639,7 @@ function EolOrderXBlock(runtime, element, settings) {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("[EOL-ORDER] Error al actualizar estado para XBlock " + sublocation + ":", error);
+                    console.error("[CMM-ORDER] Error al actualizar estado para XBlock " + sublocation + ":", error);
                 }
             });
         }
@@ -651,11 +651,11 @@ function EolOrderXBlock(runtime, element, settings) {
 
     function updateUIWithState(state) {
         if (!state || state.sublocation !== sublocation) {
-            //console.log("[EOL-ORDER] Estado ignorado para XBlock " + sublocation + " (estado no coincide)");
+            //console.log("[CMM-ORDER] Estado ignorado para XBlock " + sublocation + " (estado no coincide)");
             return;
         }
         
-        //console.log("[EOL-ORDER] Actualizando UI para XBlock " + sublocation + " con estado:", state);
+        //console.log("[CMM-ORDER] Actualizando UI para XBlock " + sublocation + " con estado:", state);
         
         // Update score and attempts
         if (state.score !== undefined) {
@@ -706,7 +706,7 @@ function EolOrderXBlock(runtime, element, settings) {
             //console.log("encontrado " )
             //console.log($ordtab)
             if ($ordtab.length) {
-                $ordtab.find('.eol-order-table-content').each(function (index, ordtabelem) {
+                $ordtab.find('.cmm-order-table-content').each(function (index, ordtabelem) {
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
                 });
             }

@@ -6,7 +6,7 @@ import unittest
 from mock import MagicMock, Mock
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from xblock.field_data import DictFieldData
-from .eolorder import EolOrderXBlock
+from .cmmorder import CmmOrderXBlock
 
 
 class TestRequest(object):

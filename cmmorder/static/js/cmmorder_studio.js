@@ -1,4 +1,4 @@
-function EolOrderXBlock(runtime, element) {
+function CmmOrderXBlock(runtime, element) {
     'use strict';
 
     var $element = $(element);

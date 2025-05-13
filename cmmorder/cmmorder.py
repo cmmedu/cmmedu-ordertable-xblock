@@ -52,7 +52,7 @@ def number_to_roman(n, uppercase=True):
     return ''.join(result) if uppercase else ''.join(result).lower()
 
 @XBlock.needs('i18n')
-class EolOrderXBlock(XBlock):
+class CmmOrderXBlock(XBlock):
     """
     XBlock para crear tablas ordenadas con diferentes tipos de numeración
     """
@@ -60,7 +60,7 @@ class EolOrderXBlock(XBlock):
         display_name="Display Name",
         help="Nombre del componente",
         scope=Scope.settings,
-        default="Eol Order Table XBlock"
+        default="Cmm Order Table XBlock"
     )
 
     table_name = String(
@@ -250,7 +250,7 @@ class EolOrderXBlock(XBlock):
 
     def student_view(self, context=None):
         """
-        The primary view of the EolOrderXBlock, shown to students
+        The primary view of the CmmOrderXBlock, shown to students
         when viewing courses.
         """
         # Preparar los elementos con la numeración correcta
@@ -380,12 +380,12 @@ class EolOrderXBlock(XBlock):
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
-        html = loader.render_template('static/html/eolorder.html', context)
+        html = loader.render_template('static/html/cmmorder.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/eolorder.css'],
-            ['static/js/eolorder.js']
+            ['static/css/cmmorder.css'],
+            ['static/js/cmmorder.js']
         )
         return frag
 
@@ -491,12 +491,12 @@ class EolOrderXBlock(XBlock):
             }
         }
         
-        html = loader.render_template('static/html/eolorder_studio.html', context)
+        html = loader.render_template('static/html/cmmorder_studio.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/eolorder_studio.css'],
-            ['static/js/drag-and-drop.js', 'static/js/eolorder_studio.js']
+            ['static/css/cmmorder_studio.css'],
+            ['static/js/drag-and-drop.js', 'static/js/cmmorder_studio.js']
         )
         
         # Add the JavaScript file directly to the fragment
@@ -505,7 +505,7 @@ class EolOrderXBlock(XBlock):
         # Add the disordered order as a data attribute
         frag.add_javascript("""
             $(function() {
-                $('.eolorder-studio').data('disordered-order', '%s');
+                $('.cmmorder-studio').data('disordered-order', '%s');
             });
         """ % self.disordered_order)
         
@@ -643,8 +643,8 @@ class EolOrderXBlock(XBlock):
 
         # Get the answer - accept both 'order' and 'answer' parameters
         answer = data.get('order', data.get('answer', None))
-        print("[EOL-ORDER] Received answer:", answer)
-        print("[EOL-ORDER] Data received:", data)
+        print("[CMM-ORDER] Received answer:", answer)
+        print("[CMM-ORDER] Data received:", data)
         
         if not answer:
             return {
@@ -654,21 +654,21 @@ class EolOrderXBlock(XBlock):
 
         # Save the answer
         self.user_answer = answer
-        print("[EOL-ORDER] Saved user answer:", self.user_answer)
+        print("[CMM-ORDER] Saved user answer:", self.user_answer)
 
         # Check if the answer is correct
         correct_answers = self.get_correct_answers_list()
-        print("[EOL-ORDER] Correct answers list:", correct_answers)
-        print("[EOL-ORDER] Current correct_answers string:", self.correct_answers)
+        print("[CMM-ORDER] Correct answers list:", correct_answers)
+        print("[CMM-ORDER] Current correct_answers string:", self.correct_answers)
         
         # Convert answer to list format for comparison
         answer_list = answer.split('_')
-        print("[EOL-ORDER] Answer as list:", answer_list)
+        print("[CMM-ORDER] Answer as list:", answer_list)
         
         # Check if answer matches any of the correct answers
         is_correct = answer_list in correct_answers
-        print("[EOL-ORDER] Is correct?", is_correct)
-        print("[EOL-ORDER] Comparison result:", {
+        print("[CMM-ORDER] Is correct?", is_correct)
+        print("[CMM-ORDER] Comparison result:", {
             'user_answer': answer_list,
             'correct_answers': correct_answers,
             'is_match': is_correct
@@ -677,8 +677,8 @@ class EolOrderXBlock(XBlock):
         # Update the score
         self.score = 1.0 if is_correct else 0.0
         self.attempts += 1
-        print("[EOL-ORDER] Updated score:", self.score)
-        print("[EOL-ORDER] Updated attempts:", self.attempts)
+        print("[CMM-ORDER] Updated score:", self.score)
+        print("[CMM-ORDER] Updated attempts:", self.attempts)
         
         # Calculate weighted score
         weighted_score = float(self.weight) * self.score
@@ -700,10 +700,10 @@ class EolOrderXBlock(XBlock):
                 'possible': self.weight,
                 'complete': is_correct
             })
-            print("[EOL-ORDER] Published completion:", completion)
+            print("[CMM-ORDER] Published completion:", completion)
             
         except Exception as e:
-            print("[EOL-ORDER] Error publishing events:", str(e))
+            print("[CMM-ORDER] Error publishing events:", str(e))
 
         return {
             'result': 'success',
@@ -734,7 +734,7 @@ class EolOrderXBlock(XBlock):
         """
         Get the JS initialization function.
         """
-        return "EolOrderXBlock"
+        return "CmmOrderXBlock"
 
     def get_correct_answers_list(self):
         """
