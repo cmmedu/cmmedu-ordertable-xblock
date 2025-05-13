@@ -10,4 +10,4 @@ ln -s /openedx/staticfiles .
 
 cd /openedx/requirements/app
 
-DJANGO_SETTINGS_MODULE=lms.envs.test EDXAPP_TEST_MONGO_HOST=mongodb pytest eolorder/tests.py
+DJANGO_SETTINGS_MODULE=lms.envs.test EDXAPP_TEST_MONGO_HOST=mongodb pytest cmmorder/tests.py
