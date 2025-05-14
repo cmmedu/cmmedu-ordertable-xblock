@@ -6,7 +6,7 @@ import unittest
 from mock import MagicMock, Mock
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from xblock.field_data import DictFieldData
-from .cmmorder import CmmOrderXBlock
+from .ordertable import CmmEduOrderTableXBlock
 
 
 class TestRequest(object):
@@ -208,4 +208,46 @@ class TestCmmOrderXBlock(unittest.TestCase):
         Prueba el cálculo de la puntuación máxima
         """
         self.xblock.weight = 2
-        self.assertEqual(self.xblock.max_score(), 2.0) 
+        self.assertEqual(self.xblock.max_score(), 2.0)
+
+    def test_invalid_answer_format(self):
+        """
+        Prueba el envío de una respuesta con formato inválido
+        """
+        request = TestRequest()
+        request.method = 'POST'
+        data = json.dumps({'order': 'invalid_format', 'answer': 'invalid_format'})
+        request.body = data.encode('utf-8')
+        
+        response = self.xblock.submit_answer(request)
+        self.assertEqual(response.json_body['result'], 'error')
+
+    def test_empty_answer(self):
+        """
+        Prueba el envío de una respuesta vacía
+        """
+        request = TestRequest()
+        request.method = 'POST'
+        data = json.dumps({'order': '', 'answer': ''})
+        request.body = data.encode('utf-8')
+        
+        response = self.xblock.submit_answer(request)
+        self.assertEqual(response.json_body['result'], 'error')
+
+    def test_special_characters(self):
+        """
+        Prueba el manejo de caracteres especiales en las respuestas
+        """
+        self.xblock.ordeingelements = {
+            1: {'content': 'paso con ñ'},
+            2: {'content': 'paso con á'}
+        }
+        self.xblock.correct_answers = "1_2"
+        
+        request = TestRequest()
+        request.method = 'POST'
+        data = json.dumps({'order': '1_2', 'answer': '1_2'})
+        request.body = data.encode('utf-8')
+        
+        response = self.xblock.submit_answer(request)
+        self.assertEqual(response.json_body['result'], 'success') 

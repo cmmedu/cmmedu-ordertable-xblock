@@ -380,12 +380,12 @@ class CmmEduOrderTableXBlock(XBlock):
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
-        html = loader.render_template('static/html/cmmorder.html', context)
+        html = loader.render_template('static/html/ordertable.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/cmmorder.css'],
-            ['static/js/cmmorder.js']
+            ['static/css/ordertable.css'],
+            ['static/js/ordertable.js']
         )
         return frag
 
@@ -491,12 +491,12 @@ class CmmEduOrderTableXBlock(XBlock):
             }
         }
         
-        html = loader.render_template('static/html/cmmorder_studio.html', context)
+        html = loader.render_template('static/html/ordertable_studio.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/cmmorder_studio.css'],
-            ['static/js/drag-and-drop.js', 'static/js/cmmorder_studio.js']
+            ['static/css/ordertable_studio.css'],
+            ['static/js/drag-and-drop.js', 'static/js/ordertable_studio.js']
         )
         
         # Add the JavaScript file directly to the fragment
@@ -643,8 +643,8 @@ class CmmEduOrderTableXBlock(XBlock):
 
         # Get the answer - accept both 'order' and 'answer' parameters
         answer = data.get('order', data.get('answer', None))
-        print("[CMM-ORDER] Received answer:", answer)
-        print("[CMM-ORDER] Data received:", data)
+        print("[CMMEDU-ORDERTABLE] Received answer:", answer)
+        print("[CMMEDU-ORDERTABLE] Data received:", data)
         
         if not answer:
             return {
@@ -654,21 +654,21 @@ class CmmEduOrderTableXBlock(XBlock):
 
         # Save the answer
         self.user_answer = answer
-        print("[CMM-ORDER] Saved user answer:", self.user_answer)
+        print("[CMMEDU-ORDERTABLE] Saved user answer:", self.user_answer)
 
         # Check if the answer is correct
         correct_answers = self.get_correct_answers_list()
-        print("[CMM-ORDER] Correct answers list:", correct_answers)
-        print("[CMM-ORDER] Current correct_answers string:", self.correct_answers)
+        print("[CMMEDU-ORDERTABLE] Correct answers list:", correct_answers)
+        print("[CMMEDU-ORDERTABLE] Current correct_answers string:", self.correct_answers)
         
         # Convert answer to list format for comparison
         answer_list = answer.split('_')
-        print("[CMM-ORDER] Answer as list:", answer_list)
+        print("[CMMEDU-ORDERTABLE] Answer as list:", answer_list)
         
         # Check if answer matches any of the correct answers
         is_correct = answer_list in correct_answers
-        print("[CMM-ORDER] Is correct?", is_correct)
-        print("[CMM-ORDER] Comparison result:", {
+        print("[CMMEDU-ORDERTABLE] Is correct?", is_correct)
+        print("[CMMEDU-ORDERTABLE] Comparison result:", {
             'user_answer': answer_list,
             'correct_answers': correct_answers,
             'is_match': is_correct
@@ -677,8 +677,8 @@ class CmmEduOrderTableXBlock(XBlock):
         # Update the score
         self.score = 1.0 if is_correct else 0.0
         self.attempts += 1
-        print("[CMM-ORDER] Updated score:", self.score)
-        print("[CMM-ORDER] Updated attempts:", self.attempts)
+        print("[CMMEDU-ORDERTABLE] Updated score:", self.score)
+        print("[CMMEDU-ORDERTABLE] Updated attempts:", self.attempts)
         
         # Calculate weighted score
         weighted_score = float(self.weight) * self.score
@@ -700,10 +700,10 @@ class CmmEduOrderTableXBlock(XBlock):
                 'possible': self.weight,
                 'complete': is_correct
             })
-            print("[CMM-ORDER] Published completion:", completion)
+            print("[CMMEDU-ORDERTABLE] Published completion:", completion)
             
         except Exception as e:
-            print("[CMM-ORDER] Error publishing events:", str(e))
+            print("[CMMEDU-ORDERTABLE] Error publishing events:", str(e))
 
         return {
             'result': 'success',

@@ -1,4 +1,4 @@
-<div class="problem cmm-order-block" id="order_{{ sublocation }}" data-image-path="{{ image_path }}">
+<div class="problem cmmedu-ordertable-block" id="order_{{ sublocation }}" data-image-path="{{ image_path }}">
     {% if is_team or is_studio %}
     <div class="weight-info">
         <span class="weight-label">Peso de la pregunta:</span>
@@ -10,8 +10,8 @@
     {% else %}
     <div class="status" id="status_{{ sublocation }}" data-score="{{ score }}" >
     {% endif %}
-        <div class="cmm-order-table">
-            <table class="cmm-order-table-content">
+        <div class="cmmedu-ordertable-table">
+            <table class="cmmedu-ordertable-table-content">
                 <thead>
                     {% if table_name != "" %}
                     <tr>
@@ -72,7 +72,7 @@
     </solution>
     <div class="submit-box">
         <div class="action">
-            <button class="cmm-order-submit Submit submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
+            <button class="cmmedu-ordertable-submit Submit submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
             <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}
