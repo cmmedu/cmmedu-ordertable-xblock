@@ -1,17 +1,17 @@
 # CMM Order XBlock
 
-CMM Order XBlock is an educational tool designed to integrate into [edX courses](https://www.edx.org/). This tool allows students to order elements in a specific sequence, which is useful for assessing their understanding of processes, steps, or concepts that must follow a particular order.
+CMM Order Table XBlock is an educational tool designed to integrate into [edX courses](https://www.edx.org/). This tool allows students to order elements in a specific sequence, which is useful for assessing their understanding of processes, steps, or concepts that must follow a particular order.
 
 Right now this Xblock is only aviable in spanish.
 
 
-![CMM Order XBlock Usage Example](cmmorder/static/images/example.png)
+![CMM Order XBlock Usage Example](ordertable/static/images/example.png)
 
 ## Installation
 
 The installation method for CMM Order XBlock may vary depending on your Open edX setup. You are encouraged to consult the [official documentation](https://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/latest/configuration/install_xblock.html) for detailed guidance.
 
-To activate CMM Order XBlock in a course, it needs to be added to the list of advanced modules. This can be done in the course's advanced settings by entering `cmmorder` as the module name.
+To activate CMM Order XBlock in a course, it needs to be added to the list of advanced modules. This can be done in the course's advanced settings by entering `ordertable` as the module name.
 
 ## How to Use
 
@@ -29,7 +29,7 @@ The CMM Order XBlock allows you to configure:
 - **Correct Order**: Defines the correct order of elements
 - **Feedback**: show the ordered table
 
-![XBlock Configuration](cmmorder/static/images/example-studio.png)
+![XBlock Configuration](ordertable/static/images/example-studio.png)
 
 ## Use Cases
 

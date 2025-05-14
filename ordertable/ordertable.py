@@ -52,7 +52,7 @@ def number_to_roman(n, uppercase=True):
     return ''.join(result) if uppercase else ''.join(result).lower()
 
 @XBlock.needs('i18n')
-class CmmOrderXBlock(XBlock):
+class CmmEduOrderTableXBlock(XBlock):
     """
     XBlock para crear tablas ordenadas con diferentes tipos de numeración
     """
