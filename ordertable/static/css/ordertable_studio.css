@@ -1,10 +1,10 @@
-.cmm-order-xblock-studio {
+.cmmedu-ordertable-xblock-studio {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 20px;
     background-color: #fff;
 }
 
-.cmm-order-xblock-studio .tableSYS {
+.cmmedu-ordertable-xblock-studio .tableSYS {
     width: 100%;
     margin-bottom: 20px;
     border: 1px solid #ddd;
@@ -13,14 +13,14 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.cmm-order-xblock-studio .order-table {
+.cmmedu-ordertable-xblock-studio .order-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
 }
 
-.cmm-order-xblock-studio .order-table th,
-.cmm-order-xblock-studio .order-table td {
+.cmmedu-ordertable-xblock-studio .order-table th,
+.cmmedu-ordertable-xblock-studio .order-table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -28,26 +28,26 @@
     background-color: #fff;
 }
 
-.cmm-order-xblock-studio .order-table th:last-child,
-.cmm-order-xblock-studio .order-table td:last-child {
+.cmmedu-ordertable-xblock-studio .order-table th:last-child,
+.cmmedu-ordertable-xblock-studio .order-table td:last-child {
     border-right: none;
 }
 
-.cmm-order-xblock-studio .order-table tr:last-child td {
+.cmmedu-ordertable-xblock-studio .order-table tr:last-child td {
     border-bottom: none;
 }
 
-.cmm-order-xblock-studio .order-table th {
+.cmmedu-ordertable-xblock-studio .order-table th {
     background-color: #f5f5f5;
     font-weight: bold;
     color: #2c3e50;
 }
 
-.cmm-order-xblock-studio .order-table tr:hover td {
+.cmmedu-ordertable-xblock-studio .order-table tr:hover td {
     background-color: #f9f9f9;
 }
 
-.cmm-order-xblock-studio .item-content {
+.cmmedu-ordertable-xblock-studio .item-content {
     width: 100%;
     min-height: 60px;
     padding: 8px;
@@ -57,14 +57,14 @@
     background-color: #fff;
 }
 
-.cmm-order-xblock-studio .actions-cell {
+.cmmedu-ordertable-xblock-studio .actions-cell {
     white-space: nowrap;
     text-align: center;
 }
 
-.cmm-order-xblock-studio .move-up-button,
-.cmm-order-xblock-studio .move-down-button,
-.cmm-order-xblock-studio .delete-button {
+.cmmedu-ordertable-xblock-studio .move-up-button,
+.cmmedu-ordertable-xblock-studio .move-down-button,
+.cmmedu-ordertable-xblock-studio .delete-button {
     padding: 6px 12px;
     margin: 0 2px;
     border: none;
@@ -75,26 +75,26 @@
     transition: background-color 0.2s ease;
 }
 
-.cmm-order-xblock-studio .move-up-button:hover,
-.cmm-order-xblock-studio .move-down-button:hover {
+.cmmedu-ordertable-xblock-studio .move-up-button:hover,
+.cmmedu-ordertable-xblock-studio .move-down-button:hover {
     background-color: #005a8c;
 }
 
-.cmm-order-xblock-studio .delete-button {
+.cmmedu-ordertable-xblock-studio .delete-button {
     background-color: #dc3545;
 }
 
-.cmm-order-xblock-studio .delete-button:hover {
+.cmmedu-ordertable-xblock-studio .delete-button:hover {
     background-color: #c82333;
 }
 
-.cmm-order-xblock-studio .move-up-button:disabled,
-.cmm-order-xblock-studio .move-down-button:disabled {
+.cmmedu-ordertable-xblock-studio .move-up-button:disabled,
+.cmmedu-ordertable-xblock-studio .move-down-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 
-.cmm-order-xblock-studio .add-item-button {
+.cmmedu-ordertable-xblock-studio .add-item-button {
     margin-top: 10px;
     padding: 8px 16px;
     background-color: #28a745;
@@ -105,26 +105,26 @@
     transition: background-color 0.2s ease;
 }
 
-.cmm-order-xblock-studio .add-item-button:hover {
+.cmmedu-ordertable-xblock-studio .add-item-button:hover {
     background-color: #218838;
 }
 
-.cmm-order-xblock-studio .order-cell {
+.cmmedu-ordertable-xblock-studio .order-cell {
     width: 60px;
     text-align: center;
     font-weight: bold;
     color: #2c3e50;
 }
 
-.cmm-order-xblock-studio .content-cell {
+.cmmedu-ordertable-xblock-studio .content-cell {
     width: 70%;
 }
 
-.cmm-order-xblock-studio .actions-cell {
+.cmmedu-ordertable-xblock-studio .actions-cell {
     width: 120px;
 }
 
-.cmm-order-xblock-studio .items-table {
+.cmmedu-ordertable-xblock-studio .items-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
@@ -135,59 +135,59 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.cmm-order-xblock-studio .items-table th,
-.cmm-order-xblock-studio .items-table td {
+.cmmedu-ordertable-xblock-studio .items-table th,
+.cmmedu-ordertable-xblock-studio .items-table td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
     background-color: #fff;
 }
 
-.cmm-order-xblock-studio .items-table th:last-child,
-.cmm-order-xblock-studio .items-table td:last-child {
+.cmmedu-ordertable-xblock-studio .items-table th:last-child,
+.cmmedu-ordertable-xblock-studio .items-table td:last-child {
     border-right: none;
 }
 
-.cmm-order-xblock-studio .items-table tr:last-child td {
+.cmmedu-ordertable-xblock-studio .items-table tr:last-child td {
     border-bottom: none;
 }
 
-.cmm-order-xblock-studio .items-table th {
+.cmmedu-ordertable-xblock-studio .items-table th {
     background-color: #f5f5f5;
     font-weight: bold;
     color: #2c3e50;
 }
 
-.cmm-order-xblock-studio .items-table tr:hover td {
+.cmmedu-ordertable-xblock-studio .items-table tr:hover td {
     background-color: #f9f9f9;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit {
+.cmmedu-ordertable-xblock-studio .eol-order-edit {
     padding: 20px;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .wrapper-comp-settings {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .wrapper-comp-settings {
     margin-bottom: 30px;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .table-rows-container {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .table-rows-container {
     margin-top: 20px;
     padding: 20px;
     border-radius: 8px;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .table-rows-container h3 {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .table-rows-container h3 {
     margin-top: 0;
     margin-bottom: 15px;
     color: #2c3e50;
     font-size: 1.2em;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .table-rows {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .table-rows {
     margin: 15px 0;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .table-row {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .table-row {
     display: flex;
     align-items: flex-start;
     margin-bottom: 15px;
@@ -198,12 +198,12 @@
     border: 1px solid #e9ecef;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .row-content {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .row-content {
     flex: 1;
     margin-right: 15px;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .row-content-input {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .row-content-input {
     width: 100%;
     min-height: 100px;
     padding: 12px;
@@ -215,23 +215,23 @@
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .row-content-input:focus {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .row-content-input:focus {
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .row-content-input::placeholder {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .row-content-input::placeholder {
     color: #6c757d;
     opacity: 0.7;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .row-actions {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .row-actions {
     display: flex;
     align-items: center;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .remove-row {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .remove-row {
     padding: 8px 12px;
     background-color: #dc3545;
     color: white;
@@ -242,11 +242,11 @@
     transition: background-color 0.15s ease-in-out;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .remove-row:hover {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .remove-row:hover {
     background-color: #c82333;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .add-row-button {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .add-row-button {
     padding: 10px 15px;
     background-color: #28a745;
     color: white;
@@ -258,67 +258,68 @@
     margin-top: 10px;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .add-row-button:hover {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .add-row-button:hover {
     background-color: #218838;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .input.setting-input[type="color"] {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .input.setting-input[type="color"] {
     width: 50px;
     height: 30px;
     padding: 0;
     border: 1px solid #ccc;
 }
 
-.cmm-order-xblock-studio .cmm-order-edit .input.setting-input[type="checkbox"] {
+.cmmedu-ordertable-xblock-studio .eol-order-edit .input.setting-input[type="checkbox"] {
     width: auto;
     margin-top: 5px;
 }
 
-.cmm-order-xblock-studio .xblock-editor-error-message {
+
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message {
     margin: 10px 0;
     padding: 10px;
     border-radius: 4px;
     display: none;
 }
 
-.cmm-order-xblock-studio .xblock-editor-error-message.success {
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message.success {
     display: block;
     background-color: #dff0d8;
     color: #3c763d;
     border: 1px solid #d6e9c6;
 }
 
-.cmm-order-xblock-studio .xblock-editor-error-message.error {
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message.error {
     display: block;
     background-color: #f2dede;
     color: #a94442;
     border: 1px solid #ebccd1;
 }
 
-.cmm-order-xblock-studio .cmm-order-studio {
+.cmmedu-ordertable-xblock-studio .eol-order-studio {
     padding: 20px;
     background-color: #fff;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.cmm-order-xblock-studio .cmm-order-settings {
+.cmmedu-ordertable-xblock-studio .eol-order-settings {
     margin-bottom: 20px;
 }
 
-.cmm-order-xblock-studio .setting {
+.cmmedu-ordertable-xblock-studio .setting {
     margin-bottom: 10px;
 }
 
-.cmm-order-xblock-studio .setting label {
+.cmmedu-ordertable-xblock-studio .setting label {
     display: inline-block;
     width: 200px;
 }
 
-.cmm-order-xblock-studio .cmm-order-content {
+.cmmedu-ordertable-xblock-studio .eol-order-content {
     margin-bottom: 20px;
 }
 
-.cmm-order-xblock-studio .cmm-order-disorder {
+.cmmedu-ordertable-xblock-studio .eol-order-disorder {
     margin-top: 20px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -327,14 +328,14 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.cmm-order-xblock-studio .cmm-order-disorder h3 {
+.cmmedu-ordertable-xblock-studio .eol-order-disorder h3 {
     margin-top: 0;
     margin-bottom: 15px;
     color: #2c3e50;
     font-size: 1.2em;
 }
 
-.cmm-order-xblock-studio .disorder-preview {
+.cmmedu-ordertable-xblock-studio .disorder-preview {
     min-height: 150px;
     padding: 20px;
     border: 1px solid #e9ecef;
@@ -343,7 +344,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-xblock-studio .disordered-list {
+.cmmedu-ordertable-xblock-studio .disordered-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -356,7 +357,7 @@
     min-height: 100px;
 }
 
-.cmm-order-xblock-studio .disorder-item {
+.cmmedu-ordertable-xblock-studio .disorder-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -371,20 +372,20 @@
     max-width: 200px;
 }
 
-.cmm-order-xblock-studio .disorder-item:hover {
+.cmmedu-ordertable-xblock-studio .disorder-item:hover {
     background-color: #f0f7ff;
     border-color: #005a8c;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-xblock-studio .disorder-item.dragging {
+.cmmedu-ordertable-xblock-studio .disorder-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
     border: 2px dashed #0075b4;
 }
 
-.cmm-order-xblock-studio .disorder-item .item-content {
+.cmmedu-ordertable-xblock-studio .disorder-item .item-content {
     flex-grow: 1;
     font-weight: 500;
     color: #2c3e50;
@@ -393,10 +394,20 @@
     background-color: #f8f9fa;
     border-radius: 4px;
     border: 1px solid #e9ecef;
+    height: auto;
+    min-height: 24px;
+    max-height: 32px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.cmm-order-xblock-studio .disorder-item .move-left-button,
-.cmm-order-xblock-studio .disorder-item .move-right-button {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -412,21 +423,21 @@
     font-weight: bold;
 }
 
-.cmm-order-xblock-studio .disorder-item .move-left-button:hover,
-.cmm-order-xblock-studio .disorder-item .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button:hover {
     background-color: #005a8c;
     transform: translateY(-1px);
 }
 
-.cmm-order-xblock-studio .disorder-item .move-left-button:disabled,
-.cmm-order-xblock-studio .disorder-item .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     transform: none;
 }
 
-.cmm-order-xblock-studio .order-label,
-.cmm-order-xblock-studio .previous-order-label {
+.cmmedu-ordertable-xblock-studio .order-label,
+.cmmedu-ordertable-xblock-studio .previous-order-label {
     margin-bottom: 15px;
     padding: 12px;
     background-color: #fff;
@@ -436,17 +447,18 @@
     align-items: center;
     gap: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 98%;
 }
 
-.cmm-order-xblock-studio .order-label span,
-.cmm-order-xblock-studio .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .order-label span,
+.cmmedu-ordertable-xblock-studio .previous-order-label span {
     font-weight: 600;
     color: #2c3e50;
     min-width: 120px;
 }
 
-.cmm-order-xblock-studio .order-display,
-.cmm-order-xblock-studio .previous-order-display {
+.cmmedu-ordertable-xblock-studio .order-display,
+.cmmedu-ordertable-xblock-studio .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 8px 12px;
@@ -457,12 +469,12 @@
     flex-grow: 1;
 }
 
-.cmm-order-xblock-studio #current-order-value {
+.cmmedu-ordertable-xblock-studio #current-order-value {
     color: #0075b4;
     font-family: monospace;
 }
 
-.cmm-order-xblock-studio .order-input {
+.cmmedu-ordertable-xblock-studio .order-input {
     width: 100%;
     padding: 5px;
     margin: 5px 0;
@@ -472,13 +484,13 @@
     font-family: monospace;
 }
 
-.cmm-order-xblock-studio .order-input:focus {
+.cmmedu-ordertable-xblock-studio .order-input:focus {
     border-color: #0075b4;
     outline: none;
     box-shadow: 0 0 3px rgba(0, 117, 180, 0.3);
 }
 
-.cmm-order-xblock-studio .order-label {
+.cmmedu-ordertable-xblock-studio .order-label {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
@@ -487,18 +499,18 @@
     align-items: center;
 }
 
-.cmm-order-xblock-studio .move-left-button:hover,
-.cmm-order-xblock-studio .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .move-right-button:hover {
     color: #0075b4;
 }
 
-.cmm-order-xblock-studio .move-left-button:disabled,
-.cmm-order-xblock-studio .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .move-right-button:disabled {
     color: #ccc;
     cursor: not-allowed;
 }
 
-.cmm-order-xblock-studio .correct-answers-container {
+.cmmedu-ordertable-xblock-studio .correct-answers-container {
     margin-top: 15px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -506,8 +518,8 @@
     border: 1px solid #e9ecef;
 }
 
-.cmm-order-xblock-studio .correct-answers-container .order-label,
-.cmm-order-xblock-studio .correct-answers-container .previous-order-label {
+.cmmedu-ordertable-xblock-studio .correct-answers-container .order-label,
+.cmmedu-ordertable-xblock-studio .correct-answers-container .previous-order-label {
     margin-bottom: 15px;
     padding: 12px;
     background-color: #fff;
@@ -518,14 +530,14 @@
     gap: 10px;
 }
 
-.cmm-order-xblock-studio .correct-answers-container .order-label span,
-.cmm-order-xblock-studio .correct-answers-container .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .correct-answers-container .order-label span,
+.cmmedu-ordertable-xblock-studio .correct-answers-container .previous-order-label span {
     font-weight: 600;
     color: #2c3e50;
 }
 
-.cmm-order-xblock-studio .correct-answers-container .order-display,
-.cmm-order-xblock-studio .correct-answers-container .previous-order-display {
+.cmmedu-ordertable-xblock-studio .correct-answers-container .order-display,
+.cmmedu-ordertable-xblock-studio .correct-answers-container .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 6px 12px;
@@ -534,14 +546,14 @@
     font-size: 0.9em;
 }
 
-.cmm-order-xblock-studio .correct-answers-list {
+.cmmedu-ordertable-xblock-studio .correct-answers-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin: 20px 0;
 }
 
-.cmm-order-xblock-studio .correct-answers-group {
+.cmmedu-ordertable-xblock-studio .correct-answers-group {
     background-color: #fff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
@@ -549,11 +561,11 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-xblock-studio .correct-answers-group:hover {
+.cmmedu-ordertable-xblock-studio .correct-answers-group:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-xblock-studio .correct-answers-group .group-header {
+.cmmedu-ordertable-xblock-studio .correct-answers-group .group-header {
     padding: 12px;
     border-bottom: 1px solid #e9ecef;
     background-color: #f8f9fa;
@@ -562,7 +574,7 @@
     justify-content: flex-end;
 }
 
-.cmm-order-xblock-studio .correct-answers-group .remove-group-button {
+.cmmedu-ordertable-xblock-studio .correct-answers-group .remove-group-button {
     padding: 6px 12px;
     background-color: #dc3545;
     color: white;
@@ -573,19 +585,19 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-xblock-studio .correct-answers-group .remove-group-button:hover {
+.cmmedu-ordertable-xblock-studio .correct-answers-group .remove-group-button:hover {
     background-color: #c82333;
     transform: translateY(-1px);
 }
 
-.cmm-order-xblock-studio .correct-answers-group .group-content {
+.cmmedu-ordertable-xblock-studio .correct-answers-group .group-content {
     padding: 15px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.cmm-order-xblock-studio .correct-answer-item {
+.cmmedu-ordertable-xblock-studio .correct-answer-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -597,26 +609,26 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-xblock-studio .correct-answer-item:hover {
+.cmmedu-ordertable-xblock-studio .correct-answer-item:hover {
     background-color: #fff;
     border-color: #0075b4;
     box-shadow: 0 2px 4px rgba(0, 117, 180, 0.1);
 }
 
-.cmm-order-xblock-studio .correct-answer-item.dragging {
+.cmmedu-ordertable-xblock-studio .correct-answer-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
 }
 
-.cmm-order-xblock-studio .correct-answer-item .item-content {
+.cmmedu-ordertable-xblock-studio .correct-answer-item .item-content {
     flex-grow: 1;
     font-weight: 500;
     color: #2c3e50;
     padding: 4px 0;
 }
 
-.cmm-order-xblock-studio .correct-answer-item .move-left-button,
-.cmm-order-xblock-studio .correct-answer-item .move-right-button {
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-left-button,
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-right-button {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -631,20 +643,20 @@
     font-size: 14px;
 }
 
-.cmm-order-xblock-studio .correct-answer-item .move-left-button:hover,
-.cmm-order-xblock-studio .correct-answer-item .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-right-button:hover {
     background-color: #005a8c;
     transform: translateY(-1px);
 }
 
-.cmm-order-xblock-studio .correct-answer-item .move-left-button:disabled,
-.cmm-order-xblock-studio .correct-answer-item .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .correct-answer-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     transform: none;
 }
 
-.cmm-order-xblock-studio .add-answer-button {
+.cmmedu-ordertable-xblock-studio .add-answer-button {
     margin-top: 15px;
     padding: 10px 20px;
     background-color: #28a745;
@@ -661,23 +673,23 @@
     gap: 8px;
 }
 
-.cmm-order-xblock-studio .add-answer-button:hover {
+.cmmedu-ordertable-xblock-studio .add-answer-button:hover {
     background-color: #218838;
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 }
 
-.cmm-order-xblock-studio .add-answer-button:active {
+.cmmedu-ordertable-xblock-studio .add-answer-button:active {
     transform: translateY(0);
 }
 
-.cmm-order-xblock-studio .order-display {
+.cmmedu-ordertable-xblock-studio .order-display {
     color: #0075b4;
     font-family: monospace;
     margin-left: 5px;
 }
 
-.cmm-order-xblock-studio .disordered-list {
+.cmmedu-ordertable-xblock-studio .disordered-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -685,8 +697,8 @@
 }
 
 /* Estilos base para ambas listas */
-.cmm-order-xblock-studio .disorder-preview,
-.cmm-order-xblock-studio .correct-answers-container {
+.cmmedu-ordertable-xblock-studio .disorder-preview,
+.cmmedu-ordertable-xblock-studio .correct-answers-container {
     min-height: 100px;
     padding: 15px;
     border: 1px solid #e9ecef;
@@ -698,7 +710,7 @@
 }
 
 /* Estilos para los contenedores de elementos */
-.cmm-order-xblock-studio .disordered-list {
+.cmmedu-ordertable-xblock-studio .disordered-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -710,7 +722,7 @@
     margin-top: 15px;
 }
 
-.cmm-order-xblock-studio .correct-answers-list {
+.cmmedu-ordertable-xblock-studio .correct-answers-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -721,8 +733,8 @@
 }
 
 /* Estilos para los elementos individuales */
-.cmm-order-xblock-studio .disorder-item,
-.cmm-order-xblock-studio .correct-answer-item {
+.cmmedu-ordertable-xblock-studio .disorder-item,
+.cmmedu-ordertable-xblock-studio .correct-answer-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -736,26 +748,26 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-xblock-studio .disorder-item {
+.cmmedu-ordertable-xblock-studio .disorder-item {
     margin: 0;
 }
 
-.cmm-order-xblock-studio .disorder-item:hover,
-.cmm-order-xblock-studio .correct-answer-item:hover {
+.cmmedu-ordertable-xblock-studio .disorder-item:hover,
+.cmmedu-ordertable-xblock-studio .correct-answer-item:hover {
     background-color: #f8f9fa;
     border-color: #ced4da;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-.cmm-order-xblock-studio .disorder-item.dragging,
-.cmm-order-xblock-studio .correct-answer-item.dragging {
+.cmmedu-ordertable-xblock-studio .disorder-item.dragging,
+.cmmedu-ordertable-xblock-studio .correct-answer-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
 }
 
 /* Estilos para los botones de movimiento */
-.cmm-order-xblock-studio .move-left-button,
-.cmm-order-xblock-studio .move-right-button {
+.cmmedu-ordertable-xblock-studio .move-left-button,
+.cmmedu-ordertable-xblock-studio .move-right-button {
     padding: 4px 8px;
     border: none;
     border-radius: 3px;
@@ -771,20 +783,20 @@
     font-family: Arial, sans-serif;
 }
 
-.cmm-order-xblock-studio .move-left-button:hover,
-.cmm-order-xblock-studio .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .move-right-button:hover {
     background-color: #005a8c;
 }
 
-.cmm-order-xblock-studio .move-left-button:disabled,
-.cmm-order-xblock-studio .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 
 /* Estilos específicos para los botones en la lista desordenada */
-.cmm-order-xblock-studio .disorder-item .move-left-button,
-.cmm-order-xblock-studio .disorder-item .move-right-button {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button {
     background-color: #0075b4;
     color: white;
     border: none;
@@ -799,20 +811,20 @@
     justify-content: center;
 }
 
-.cmm-order-xblock-studio .disorder-item .move-left-button:hover,
-.cmm-order-xblock-studio .disorder-item .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button:hover {
     background-color: #005a8c;
 }
 
-.cmm-order-xblock-studio .disorder-item .move-left-button:disabled,
-.cmm-order-xblock-studio .disorder-item .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .disorder-item .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .disorder-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 
 /* Estilos para las etiquetas de orden */
-.cmm-order-xblock-studio .order-label,
-.cmm-order-xblock-studio .previous-order-label {
+.cmmedu-ordertable-xblock-studio .order-label,
+.cmmedu-ordertable-xblock-studio .previous-order-label {
     margin-bottom: 10px;
     padding: 10px;
     background-color: #f5f5f5;
@@ -823,15 +835,15 @@
     width: 100%;
 }
 
-.cmm-order-xblock-studio .order-label span,
-.cmm-order-xblock-studio .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .order-label span,
+.cmmedu-ordertable-xblock-studio .previous-order-label span {
     font-weight: bold;
     color: #2c3e50;
 }
 
 /* Estilos específicos para el order-display de la lista desordenada */
-.cmm-order-xblock-studio .disorder-preview .order-display,
-.cmm-order-xblock-studio .disorder-preview .previous-order-display {
+.cmmedu-ordertable-xblock-studio .disorder-preview .order-display,
+.cmmedu-ordertable-xblock-studio .disorder-preview .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 5px 10px;
@@ -840,8 +852,8 @@
 }
 
 /* Estilos específicos para el order-display de las respuestas correctas */
-.cmm-order-xblock-studio .correct-answers-container .order-display,
-.cmm-order-xblock-studio .correct-answers-container .previous-order-display {
+.cmmedu-ordertable-xblock-studio .correct-answers-container .order-display,
+.cmmedu-ordertable-xblock-studio .correct-answers-container .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 5px 10px;
@@ -850,33 +862,33 @@
 }
 
 /* Estilos específicos para el label de orden anterior */
-.cmm-order-xblock-studio .previous-order-label {
+.cmmedu-ordertable-xblock-studio .previous-order-label {
     background-color: #f8f9fa;
     border: 1px solid #e9ecef;
 }
 
-.cmm-order-xblock-studio .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .previous-order-label span {
     color: #6c757d;
 }
 
-.cmm-order-xblock-studio .previous-order-display {
+.cmmedu-ordertable-xblock-studio .previous-order-display {
     color: #6c757d;
     background-color: #f8f9fa;
 }
 
-.cmm-order-studio .list-input.settings-list {
+.cmmedu-ordertable-xblock-studio .list-input.settings-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.cmm-order-studio .wrapper-comp-setting {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .input.setting-input {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #ddd;
@@ -887,7 +899,7 @@
 }
 
 /* Estilos específicos para checkboxes */
-.cmm-order-studio .wrapper-comp-setting .input.setting-input[type="checkbox"] {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input[type="checkbox"] {
     width: 20px !important;
     height: 20px;
     min-width: 20px;
@@ -903,12 +915,12 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:checked {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:checked {
     background-color: #0075b4;
     border-color: #0075b4;
 }
 
-.cmm-order-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:checked::after {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:checked::after {
     content: '✓';
     position: absolute;
     top: 50%;
@@ -919,32 +931,32 @@
     font-weight: bold;
 }
 
-.cmm-order-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:hover {
     border-color: #005a8c;
     box-shadow: 0 0 0 2px rgba(0, 117, 180, 0.2);
 }
 
-.cmm-order-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:focus {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .input.setting-input[type="checkbox"]:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 117, 180, 0.3);
 }
 
 /* Contenedor para checkbox con label */
-.cmm-order-studio .wrapper-comp-setting .checkbox-wrapper {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .checkbox-wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-top: 8px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .checkbox-wrapper label {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .checkbox-wrapper label {
     margin: 0;
     cursor: pointer;
     user-select: none;
 }
 
 /* Estilo para el texto de ayuda en checkboxes */
-.cmm-order-studio .wrapper-comp-setting .checkbox-help {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .checkbox-help {
     margin-left: 30px;
     color: #666;
     font-size: 0.9em;
@@ -952,14 +964,18 @@
 }
 
 /* Estilos para los botones de acción */
-.cmm-order-studio .xblock-actions {
+.cmmedu-ordertable-xblock-studio .xblock-actions {
     margin-top: 20px;
     padding: 15px;
     background-color: #f8f9fa;
     border-top: 1px solid #e9ecef;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
 }
 
-.cmm-order-studio .xblock-actions ul {
+.cmmedu-ordertable-xblock-studio .xblock-actions ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -968,11 +984,11 @@
     gap: 10px;
 }
 
-.cmm-order-studio .action-item {
+.cmmedu-ordertable-xblock-studio .action-item {
     margin: 0;
 }
 
-.cmm-order-studio .button {
+.cmmedu-ordertable-xblock-studio .button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -981,40 +997,40 @@
     transition: background-color 0.2s ease;
 }
 
-.cmm-order-studio .save-button {
+.cmmedu-ordertable-xblock-studio .save-button {
     background-color: #0075b4;
     color: white;
 }
 
-.cmm-order-studio .save-button:hover {
+.cmmedu-ordertable-xblock-studio .save-button:hover {
     background-color: #005a8c;
 }
 
-.cmm-order-studio .cancel-button {
+.cmmedu-ordertable-xblock-studio .cancel-button {
     background-color: #6c757d;
     color: white;
 }
 
-.cmm-order-studio .cancel-button:hover {
+.cmmedu-ordertable-xblock-studio .cancel-button:hover {
     background-color: #5a6268;
 }
 
 /* Estilos para mensajes de error */
-.cmm-order-studio .xblock-editor-error-message {
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message {
     margin: 10px 0;
     padding: 10px;
     border-radius: 4px;
     display: none;
 }
 
-.cmm-order-studio .xblock-editor-error-message.success {
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message.success {
     display: block;
     background-color: #dff0d8;
     color: #3c763d;
     border: 1px solid #d6e9c6;
 }
 
-.cmm-order-studio .xblock-editor-error-message.error {
+.cmmedu-ordertable-xblock-studio .xblock-editor-error-message.error {
     display: block;
     background-color: #f2dede;
     color: #a94442;
@@ -1022,19 +1038,19 @@
 }
 
 /* Estilos para el contenedor de filas de la tabla */
-.cmm-order-studio .table-rows-container {
+.cmmedu-ordertable-xblock-studio .table-rows-container {
     margin: 20px 0;
     padding: 20px;
 }
 
-.cmm-order-studio .table-rows-container h3 {
+.cmmedu-ordertable-xblock-studio .table-rows-container h3 {
     margin: 0 0 10px 0;
     color: #2c3e50;
     font-size: 1.2em;
     font-weight: bold;
 }
 
-.cmm-order-studio .table-rows-container .tip.setting-help {
+.cmmedu-ordertable-xblock-studio .table-rows-container .tip.setting-help {
     display: block;
     margin-bottom: 15px;
     color: #666;
@@ -1042,7 +1058,7 @@
 }
 
 /* Estilos para las filas de la tabla */
-.cmm-order-studio .table-rows {
+.cmmedu-ordertable-xblock-studio .table-rows {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -1050,8 +1066,8 @@
     background-color: #f8f9fa;
 }
 
-.cmm-order-studio .table-row {
-    display: inline;
+.cmmedu-ordertable-xblock-studio .table-row {
+    display: inline list-item;
     padding: 15px;
     background-color: #f8f9fa;
     border: 1px solid #e9ecef;
@@ -1060,24 +1076,24 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-studio .table-row:hover {
+.cmmedu-ordertable-xblock-studio .table-row:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilos para el contenido de las filas */
-.cmm-order-studio .table-row .row-content {
+.cmmedu-ordertable-xblock-studio .table-row .row-content {
     flex: 1;
     min-width: 0; /* Previene que el contenido se desborde */
     margin-bottom: 12px;
 }
 
-.cmm-order-studio .table-row .row-content p {
+.cmmedu-ordertable-xblock-studio .table-row .row-content p {
     margin: 0 0 8px 0;
     font-weight: bold;
     color: #2c3e50;
 }
 
-.cmm-order-studio .table-row .row-content textarea {
+.cmmedu-ordertable-xblock-studio .table-row .row-content textarea {
     width: 100%;
     min-height: 100px;
     border: 1px solid #ced4da;
@@ -1090,7 +1106,7 @@
     padding: 0px;
 }
 
-.cmm-order-studio .table-row .row-content-input {
+.cmmedu-ordertable-xblock-studio .table-row .row-content-input {
     width: 100%;
     min-height: 100px;
     padding: 12px;
@@ -1103,25 +1119,25 @@
     background-color: #fff;
 }
 
-.cmm-order-studio .table-row .row-content-input:focus {
+.cmmedu-ordertable-xblock-studio .table-row .row-content-input:focus {
     border-color: #0075b4;
     outline: 0;
     box-shadow: 0 0 0 2px rgba(0, 117, 180, 0.2);
 }
 
-.cmm-order-studio .table-row .row-content-input::placeholder {
+.cmmedu-ordertable-xblock-studio .table-row .row-content-input::placeholder {
     color: #6c757d;
     opacity: 0.7;
 }
 
 /* Estilos para los botones de acción */
-.cmm-order-studio .table-row .row-actions {
+.cmmedu-ordertable-xblock-studio .table-row .row-actions {
     display: flex;
     align-items: flex-start;
     gap: 8px;
 }
 
-.cmm-order-studio .table-row .remove-row {
+.cmmedu-ordertable-xblock-studio .table-row .remove-row {
     padding: 8px 12px;
     background-color: #dc3545;
     color: white;
@@ -1132,12 +1148,12 @@
     transition: background-color 0.15s ease-in-out;
 }
 
-.cmm-order-studio .table-row .remove-row:hover {
+.cmmedu-ordertable-xblock-studio .table-row .remove-row:hover {
     background-color: #c82333;
 }
 
 /* Estilo para el botón de agregar */
-.cmm-order-studio .add-row-button {
+.cmmedu-ordertable-xblock-studio .add-row-button {
     padding: 10px 15px;
     background-color: #28a745;
     color: white;
@@ -1148,12 +1164,12 @@
     transition: background-color 0.15s ease-in-out;
 }
 
-.cmm-order-studio .add-row-button:hover {
+.cmmedu-ordertable-xblock-studio .add-row-button:hover {
     background-color: #218838;
 }
 
 /* Estilos para el contenedor de respuestas correctas */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container {
     margin-top: 15px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -1163,8 +1179,8 @@
 }
 
 /* Estilos para las etiquetas de orden */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .order-label,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .previous-order-label {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .order-label,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .previous-order-label {
     margin-bottom: 15px;
     padding: 12px;
     background-color: #fff;
@@ -1175,14 +1191,14 @@
     gap: 10px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .order-label span,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .order-label span,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .previous-order-label span {
     font-weight: 600;
     color: #2c3e50;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .order-display,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .previous-order-display {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .order-display,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 6px 12px;
@@ -1192,7 +1208,7 @@
 }
 
 /* Estilos para la lista de respuestas correctas */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answers-list {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answers-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -1200,7 +1216,7 @@
 }
 
 /* Estilos para cada grupo de respuestas */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answers-group {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answers-group {
     width: 100%;
     background-color: #e9ecef;
     border: 1px solid #e9ecef;
@@ -1209,12 +1225,12 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answers-group:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answers-group:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilos para el encabezado del grupo */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .group-header {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .group-header {
     padding: 12px;
     border-bottom: 1px solid #e9ecef;
     background-color: #f8f9fa;
@@ -1223,7 +1239,7 @@
     justify-content: flex-end;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .remove-group-button {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .remove-group-button {
     padding: 6px 12px;
     background-color: #dc3545;
     color: white;
@@ -1234,13 +1250,13 @@
     transition: all 0.2s ease;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .remove-group-button:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .remove-group-button:hover {
     background-color: #c82333;
     transform: translateY(-1px);
 }
 
 /* Estilos para el contenido del grupo */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .group-content {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .group-content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1254,7 +1270,7 @@
 }
 
 /* Estilos para cada elemento de respuesta */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1269,20 +1285,20 @@
     max-width: 200px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item:hover {
     background-color: #f0f7ff;
     border-color: #005a8c;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item.dragging {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
     border: 2px dashed #0075b4;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .item-content {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .item-content {
     flex-grow: 1;
     font-weight: 500;
     color: #2c3e50;
@@ -1291,11 +1307,21 @@
     background-color: #f8f9fa;
     border-radius: 4px;
     border: 1px solid #e9ecef;
+    height: auto;
+    min-height: 24px;
+    max-height: 32px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Estilos para los botones de movimiento */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -1311,21 +1337,21 @@
     font-weight: bold;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button:hover,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button:hover {
     background-color: #005a8c;
     transform: translateY(-1px);
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button:disabled,
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .correct-answer-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     transform: none;
 }
 
 /* Estilo para el botón de agregar respuesta */
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .add-answer-button {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .add-answer-button {
     margin-top: 15px;
     padding: 10px 20px;
     background-color: #28a745;
@@ -1346,17 +1372,17 @@
     margin-right: auto;
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .add-answer-button:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .add-answer-button:hover {
     background-color: #218838;
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 }
 
-.cmm-order-studio .wrapper-comp-setting .correct-answers-container .add-answer-button:active {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .correct-answers-container .add-answer-button:active {
     transform: translateY(0);
 }
 
-.cmm-order-studio .wrapper-comp-setting .cmm-order-disorder {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .cmmedu-ordertable-disorder {
     margin-top: 20px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -1365,7 +1391,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-preview {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-preview {
     min-height: 150px;
     padding: 20px;
     border: 1px solid #e9ecef;
@@ -1374,7 +1400,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-studio .wrapper-comp-setting .disordered-list {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disordered-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1387,7 +1413,7 @@
     min-height: 100px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1402,20 +1428,20 @@
     max-width: 200px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item:hover {
     background-color: #f0f7ff;
     border-color: #005a8c;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item.dragging {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item.dragging {
     opacity: 0.7;
     background-color: #e9ecef;
     border: 2px dashed #0075b4;
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item .item-content {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .item-content {
     flex-grow: 1;
     font-weight: 500;
     color: #2c3e50;
@@ -1424,10 +1450,20 @@
     background-color: #f8f9fa;
     border-radius: 4px;
     border: 1px solid #e9ecef;
+    height: auto;
+    min-height: 24px;
+    max-height: 32px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-left-button,
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-right-button {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-left-button,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-right-button {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -1443,21 +1479,21 @@
     font-weight: bold;
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-left-button:hover,
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-right-button:hover {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-left-button:hover,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-right-button:hover {
     background-color: #005a8c;
     transform: translateY(-1px);
 }
 
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-left-button:disabled,
-.cmm-order-studio .wrapper-comp-setting .disorder-item .move-right-button:disabled {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-left-button:disabled,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .disorder-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     transform: none;
 }
 
-.cmm-order-studio .wrapper-comp-setting .order-label,
-.cmm-order-studio .wrapper-comp-setting .previous-order-label {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .order-label,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .previous-order-label {
     margin-bottom: 15px;
     padding: 12px;
     background-color: #fff;
@@ -1469,15 +1505,15 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.cmm-order-studio .wrapper-comp-setting .order-label span,
-.cmm-order-studio .wrapper-comp-setting .previous-order-label span {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .order-label span,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .previous-order-label span {
     font-weight: 600;
     color: #2c3e50;
     min-width: 120px;
 }
 
-.cmm-order-studio .wrapper-comp-setting .order-display,
-.cmm-order-studio .wrapper-comp-setting .previous-order-display {
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .order-display,
+.cmmedu-ordertable-xblock-studio .wrapper-comp-setting .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 8px 12px;
@@ -1487,3 +1523,4 @@
     font-size: 0.9em;
     flex-grow: 1;
 }
+

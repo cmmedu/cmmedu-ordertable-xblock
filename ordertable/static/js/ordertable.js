@@ -156,7 +156,7 @@ function CmmOrderXBlock(runtime, element, settings) {
     var $element = $(element);
     var blockId = $element.attr('id');
     var $itemsContainer = $element.find('.items-container');
-    var $submitButton = $element.find('.cmm-order-submit');
+    var $submitButton = $element.find('.cmmedu-ordertable-submit');
     var handlerUrl = runtime.handlerUrl(element, 'submit_answer');
     var elements = [];
     var imagePath = $element.attr('data-image-path');
