@@ -18,15 +18,15 @@ class TestRequest(object):
     success = None
 
 
-class TestCmmOrderXBlock(unittest.TestCase):
+class TestCmmEduOrderTableXBlock(unittest.TestCase):
     """
-    A complete suite of unit tests for the CmmOrder XBlock
+    A complete suite of unit tests for the CmmEduOrderTable XBlock
     """
 
     @classmethod
     def make_an_xblock(cls, **kw):
         """
-        Helper method that creates a CmmOrder XBlock
+        Helper method that creates a CmmEduOrderTable XBlock
         """
         course_id = SlashSeparatedCourseKey('foo', 'bar', 'baz')
         runtime = Mock(
@@ -37,7 +37,7 @@ class TestCmmOrderXBlock(unittest.TestCase):
         )
         scope_ids = Mock()
         field_data = DictFieldData(kw)
-        xblock = CmmOrderXBlock(runtime, field_data, scope_ids)
+        xblock = CmmEduOrderTableXBlock(runtime, field_data, scope_ids)
         xblock.xmodule_runtime = runtime
         return xblock
 
@@ -45,13 +45,13 @@ class TestCmmOrderXBlock(unittest.TestCase):
         """
         Creates an xblock
         """
-        self.xblock = TestCmmOrderXBlock.make_an_xblock()
+        self.xblock = TestCmmEduOrderTableXBlock.make_an_xblock()
 
     def test_validate_field_data(self):
         """
         Verifica que el xblock se crea correctamente con los valores por defecto
         """
-        self.assertEqual(self.xblock.display_name, "Cmm Order Table XBlock")
+        self.assertEqual(self.xblock.display_name, "Cmm Edu Order Table XBlock")
         self.assertEqual(self.xblock.table_name, "Tabla Ordenada")
         self.assertEqual(self.xblock.textcolumn_order, "Orden")
         self.assertEqual(self.xblock.textcolumn_content, "Elementos a ordenar")
