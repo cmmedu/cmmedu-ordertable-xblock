@@ -637,8 +637,8 @@ function CmmOrderXBlock(runtime, element, settings) {
                             ...response
                         };
                         updateUIWithState(state);
-                        // Restaurar el orden de la tabla si hay una respuesta del usuario
-                        if (response.user_answer) {
+                        // Solo restaurar el orden de la tabla si hay una respuesta del usuario y no es la tabla de respuesta correcta
+                        if (response.user_answer && !$element.find('solution').is(':visible')) {
                             restoreTableOrder(response.user_answer);
                         }
                     }
