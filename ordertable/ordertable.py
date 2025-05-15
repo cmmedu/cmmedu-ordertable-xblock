@@ -52,7 +52,7 @@ def number_to_roman(n, uppercase=True):
     return ''.join(result) if uppercase else ''.join(result).lower()
 
 @XBlock.needs('i18n')
-class EolOrderXBlock(XBlock):
+class CmmEduOrderTableXBlock(XBlock):
     """
     XBlock para crear tablas ordenadas con diferentes tipos de numeración
     """
@@ -60,7 +60,7 @@ class EolOrderXBlock(XBlock):
         display_name="Display Name",
         help="Nombre del componente",
         scope=Scope.settings,
-        default="Eol Order Table XBlock"
+        default="Cmm Edu Order Table XBlock"
     )
 
     table_name = String(
@@ -250,7 +250,7 @@ class EolOrderXBlock(XBlock):
 
     def student_view(self, context=None):
         """
-        The primary view of the EolOrderXBlock, shown to students
+        The primary view of the CmmOrderXBlock, shown to students
         when viewing courses.
         """
         # Preparar los elementos con la numeración correcta
@@ -380,12 +380,12 @@ class EolOrderXBlock(XBlock):
             'indicator_class': 'correct' if self.score >= 1.0 else 'incorrect' if self.attempts > 0 else 'unanswered'
         }
         
-        html = loader.render_template('static/html/eolorder.html', context)
+        html = loader.render_template('static/html/ordertable.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/eolorder.css'],
-            ['static/js/eolorder.js']
+            ['static/css/ordertable.css'],
+            ['static/js/ordertable.js']
         )
         return frag
 
@@ -491,12 +491,12 @@ class EolOrderXBlock(XBlock):
             }
         }
         
-        html = loader.render_template('static/html/eolorder_studio.html', context)
+        html = loader.render_template('static/html/ordertable_studio.html', context)
         frag = self.build_fragment(
             html,
             self._get_js_init(),
-            ['static/css/eolorder_studio.css'],
-            ['static/js/drag-and-drop.js', 'static/js/eolorder_studio.js']
+            ['static/css/ordertable_studio.css'],
+            ['static/js/drag-and-drop.js', 'static/js/ordertable_studio.js']
         )
         
         # Add the JavaScript file directly to the fragment
@@ -505,7 +505,7 @@ class EolOrderXBlock(XBlock):
         # Add the disordered order as a data attribute
         frag.add_javascript("""
             $(function() {
-                $('.eolorder-studio').data('disordered-order', '%s');
+                $('.cmmorder-studio').data('disordered-order', '%s');
             });
         """ % self.disordered_order)
         
@@ -517,6 +517,7 @@ class EolOrderXBlock(XBlock):
         Handle studio submissions.
         """
         try:
+            self.display_name = data.get('display_name', self.display_name)
             self.table_name = data.get('table_name', self.table_name)
             self.background_color = data.get('background_color', self.background_color)
             self.numbering_type = data.get('numbering_type', self.numbering_type)
@@ -529,10 +530,18 @@ class EolOrderXBlock(XBlock):
             self.textcolumn_content = data.get('textcolumn_content', self.textcolumn_content)
             self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
             
-            # Asegurarse de que ordeingelements sea un diccionario válido
-            ordeingelements = data.get('ordeingelements', {})
-            if isinstance(ordeingelements, dict):
-                self.ordeingelements = ordeingelements
+            # Manejar los elementos a ordenar
+            items = data.get('items', [])
+            if items:
+                # Convertir la lista de items en un diccionario de ordeingelements
+                self.ordeingelements = {
+                    str(i+1): {'content': item} for i, item in enumerate(items)
+                }
+            else:
+                # Si no hay items, usar ordeingelements si está presente
+                ordeingelements = data.get('ordeingelements', {})
+                if isinstance(ordeingelements, dict):
+                    self.ordeingelements = ordeingelements
             
             # Guardar el orden desordenado como string
             disordered_order = data.get('disordered_order', '')
@@ -643,8 +652,8 @@ class EolOrderXBlock(XBlock):
 
         # Get the answer - accept both 'order' and 'answer' parameters
         answer = data.get('order', data.get('answer', None))
-        print("[EOL-ORDER] Received answer:", answer)
-        print("[EOL-ORDER] Data received:", data)
+        print("[CMMEDU-ORDERTABLE] Received answer:", answer)
+        print("[CMMEDU-ORDERTABLE] Data received:", data)
         
         if not answer:
             return {
@@ -652,23 +661,30 @@ class EolOrderXBlock(XBlock):
                 'message': 'No se ha enviado una respuesta'
             }
 
+        # Validate answer format (should be numbers separated by underscores)
+        if not all(part.isdigit() for part in answer.split('_')):
+            return {
+                'result': 'error',
+                'message': 'Formato de respuesta inválido'
+            }
+
         # Save the answer
         self.user_answer = answer
-        print("[EOL-ORDER] Saved user answer:", self.user_answer)
+        print("[CMMEDU-ORDERTABLE] Saved user answer:", self.user_answer)
 
         # Check if the answer is correct
         correct_answers = self.get_correct_answers_list()
-        print("[EOL-ORDER] Correct answers list:", correct_answers)
-        print("[EOL-ORDER] Current correct_answers string:", self.correct_answers)
+        print("[CMMEDU-ORDERTABLE] Correct answers list:", correct_answers)
+        print("[CMMEDU-ORDERTABLE] Current correct_answers string:", self.correct_answers)
         
         # Convert answer to list format for comparison
         answer_list = answer.split('_')
-        print("[EOL-ORDER] Answer as list:", answer_list)
+        print("[CMMEDU-ORDERTABLE] Answer as list:", answer_list)
         
         # Check if answer matches any of the correct answers
         is_correct = answer_list in correct_answers
-        print("[EOL-ORDER] Is correct?", is_correct)
-        print("[EOL-ORDER] Comparison result:", {
+        print("[CMMEDU-ORDERTABLE] Is correct?", is_correct)
+        print("[CMMEDU-ORDERTABLE] Comparison result:", {
             'user_answer': answer_list,
             'correct_answers': correct_answers,
             'is_match': is_correct
@@ -677,8 +693,8 @@ class EolOrderXBlock(XBlock):
         # Update the score
         self.score = 1.0 if is_correct else 0.0
         self.attempts += 1
-        print("[EOL-ORDER] Updated score:", self.score)
-        print("[EOL-ORDER] Updated attempts:", self.attempts)
+        print("[CMMEDU-ORDERTABLE] Updated score:", self.score)
+        print("[CMMEDU-ORDERTABLE] Updated attempts:", self.attempts)
         
         # Calculate weighted score
         weighted_score = float(self.weight) * self.score
@@ -700,10 +716,10 @@ class EolOrderXBlock(XBlock):
                 'possible': self.weight,
                 'complete': is_correct
             })
-            print("[EOL-ORDER] Published completion:", completion)
+            print("[CMMEDU-ORDERTABLE] Published completion:", completion)
             
         except Exception as e:
-            print("[EOL-ORDER] Error publishing events:", str(e))
+            print("[CMMEDU-ORDERTABLE] Error publishing events:", str(e))
 
         return {
             'result': 'success',
@@ -734,7 +750,7 @@ class EolOrderXBlock(XBlock):
         """
         Get the JS initialization function.
         """
-        return "EolOrderXBlock"
+        return "CmmOrderXBlock"
 
     def get_correct_answers_list(self):
         """
@@ -784,6 +800,57 @@ class EolOrderXBlock(XBlock):
 
     def max_score(self):
         """
-        Returns the maximum score for this XBlock.
+        Return the maximum score possible.
         """
-        return self.weight 
+        return self.weight if self.has_score else None
+
+    def get_numbering(self, index):
+        """
+        Obtiene la numeración según el tipo seleccionado y el índice.
+        Args:
+            index (int): Índice base cero del elemento
+        Returns:
+            str: Numeración formateada con pre y post texto
+        """
+        number = index + 1  # Convertir de base 0 a base 1
+        result = ""
+
+        if self.numbering_type == "numbers":
+            result = str(number)
+        elif self.numbering_type == "numbers_zero":
+            result = str(index)  # Usar el índice base 0 directamente
+        elif self.numbering_type == "letters":
+            result = number_to_letter(number, self.uppercase_letters)
+        elif self.numbering_type == "roman":
+            result = number_to_roman(number, self.uppercase_letters)
+        elif self.numbering_type == "none":
+            return ""
+
+        return f"{self.pretext_num}{result}{self.postext_num}"
+
+    def student_view_data(self, context=None):
+        """
+        Return a JSON representation of the student_view data.
+        """
+        return {
+            'display_name': self.display_name,
+            'table_name': self.table_name,
+            'textcolumn_order': self.textcolumn_order,
+            'textcolumn_content': self.textcolumn_content,
+            'textcolumn_actions': self.textcolumn_actions,
+            'background_color': self.background_color,
+            'numbering_type': self.numbering_type,
+            'pretext_num': self.pretext_num,
+            'postext_num': self.postext_num,
+            'uppercase_letters': self.uppercase_letters,
+            'ordeingelements': self.ordeingelements,
+            'correct_answers': self.correct_answers,
+            'disordered_order': self.disordered_order,
+            'random_disorder': self.random_disorder,
+            'show_answer': self.show_answer,
+            'weight': self.weight,
+            'max_attempts': self.max_attempts,
+            'attempts': self.attempts,
+            'score': self.score,
+            'user_answer': self.user_answer
+        } 

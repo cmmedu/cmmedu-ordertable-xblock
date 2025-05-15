@@ -1,10 +1,10 @@
-.problem.eol-order-block {
+.problem.cmmedu-ordertable-block {
     margin: 20px 0;
     font-family: Arial, sans-serif;
 }
 
 /* Add submit button styles with maximum specificity */
-div.problem.eol-order-block div.submit-box div.action button.eol-order-submit {
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit {
     background-color: #dc0000 !important;
     background-image: none !important;
     border-color: white !important;
@@ -25,19 +25,19 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit {
     font-size: 16px;
 }
 
-div.problem.eol-order-block div.submit-box div.action button.eol-order-submit:hover {
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit:hover {
     background-color: #750101 !important;
     box-shadow: none !important;
     border-width: 1px !important;
 }
 
-div.problem.eol-order-block div.submit-box div.action button.eol-order-submit:focus {
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit:focus {
     background-color: #b30000 !important;
     box-shadow: none !important;
     border-width: 1px !important;
 }
 
-div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[disabled=disabled] {
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit[disabled=disabled] {
     border-color: #d2d0d0 !important;
     background: #f2f3f3 !important;
     color: #676666 !important;
@@ -45,8 +45,8 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border-style: solid !important;
 }
 
-.problem.eol-order-block .eol-order-table .move-up-button,
-.problem.eol-order-block .eol-order-table .move-down-button {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .move-up-button,
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .move-down-button {
     padding: 4px 8px;
     margin: 0 2px;
     border: 1px solid #ddd;
@@ -55,28 +55,28 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     cursor: pointer;
 }
 
-.problem.eol-order-block .eol-order-table .move-up-button:disabled,
-.problem.eol-order-block .eol-order-table .move-down-button:disabled {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .move-up-button:disabled,
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .move-down-button:disabled {
     background-color: #eee;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.problem.eol-order-block .eol-order-table {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table {
     width: 100%;
     margin-bottom: 20px;
     border-collapse: collapse;
 }
 
-.problem.eol-order-block .eol-order-table-content {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     border: 2px solid #bbb;
 }
 
-.problem.eol-order-block .eol-order-table-content th,
-.problem.eol-order-block .eol-order-table-content td {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content th,
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content td {
     padding: 10px;
     border: 1px solid #ddd;
     border-right: 2px solid #bbb;
@@ -84,58 +84,58 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     vertical-align: middle;
 }
 
-.problem.eol-order-block .eol-order-table-content th:first-child,
-.problem.eol-order-block .eol-order-table-content td:first-child {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content th:first-child,
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content td:first-child {
     border-left: 2px solid #bbb;
 }
 
-.problem.eol-order-block .eol-order-table-content th:last-child,
-.problem.eol-order-block .eol-order-table-content td:last-child {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content th:last-child,
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content td:last-child {
     border-right: 2px solid #bbb;
 }
 
-.problem.eol-order-block .eol-order-table-content thead tr:first-child th {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content thead tr:first-child th {
     border-top: 2px solid #bbb;
     background-color: #f5f5f5;
 }
 
-.problem.eol-order-block .eol-order-table-content tbody tr:first-child td {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content tbody tr:first-child td {
     border-top: 2px solid #bbb;
 }
 
-.problem.eol-order-block .eol-order-table-content tbody tr:last-child td {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content tbody tr:last-child td {
     border-bottom: 2px solid #bbb;
 }
 
 /* Estilos específicos para cuando hay título */
-.problem.eol-order-block .eol-order-table-content thead tr:first-child th.order-header {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table-content thead tr:first-child th.order-header {
     border: 2px solid #bbb;
 }
 
-.problem.eol-order-block .order-header,
-.problem.eol-order-block .content-header,
-.problem.eol-order-block .actions-header {
+.problem.cmmedu-ordertable-block .order-header,
+.problem.cmmedu-ordertable-block .content-header,
+.problem.cmmedu-ordertable-block .actions-header {
     padding: 10px;
     text-align: left;
     font-weight: bold;
 }
 
-.problem.eol-order-block .order-cell,
-.problem.eol-order-block .content-cell,
-.problem.eol-order-block .actions-cell {
+.problem.cmmedu-ordertable-block .order-cell,
+.problem.cmmedu-ordertable-block .content-cell,
+.problem.cmmedu-ordertable-block .actions-cell {
     padding: 10px;
     border-top: 1px solid #ddd;
 }
 
-.problem.eol-order-block .eol-order-table .item-row {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .item-row {
     background-color: #fff;
 }
 
-.problem.eol-order-block .eol-order-table .item-row:hover {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .item-row:hover {
     background-color: #f9f9f9;
 }
 
-.problem.eol-order-block .eol-order-table .weight-info {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .weight-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
@@ -145,67 +145,66 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     gap: 10px;
 }
 
-.problem.eol-order-block .eol-order-table .weight-label {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .weight-label {
     font-weight: bold;
     color: #333;
 }
 
-.problem.eol-order-block .eol-order-table .weight-value {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .weight-value {
     color: #0075b4;
     font-weight: bold;
 }
 
-.problem.eol-order-block .eol-order-table .table-title {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .table-title {
     margin-bottom: 15px;
     color: #333;
 }
 
-.problem.eol-order-block .eol-order-table .attempts-info {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .attempts-info {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #f5f5f5;
     border-radius: 4px;
 }
 
-.problem.eol-order-block .eol-order-table .attempts-text {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-table .attempts-text {
     margin: 0;
     color: #666;
     font-size: 14px;
 }
 
 /* Studio view styles */
-.eol-order-xblock-studio .order-table {
+.cmmedu-ordertable-xblock-studio .order-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 10px;
 }
 
-.eol-order-xblock-studio .order-table th,
-.eol-order-xblock-studio .order-table td {
+.cmmedu-ordertable-xblock-studio .order-table th,
+.cmmedu-ordertable-xblock-studio .order-table td {
     padding: 8px;
     border: 1px solid #ddd;
-
 }
 
-.eol-order-xblock-studio .item-content {
+.cmmedu-ordertable-xblock-studio .item-content {
     width: 100%;
     min-height: 60px;
     padding: 5px;
 }
 
-.eol-order-xblock-studio .actions-cell {
+.cmmedu-ordertable-xblock-studio .actions-cell {
     white-space: nowrap;
 }
 
-.eol-order-xblock-studio .move-up-button,
-.eol-order-xblock-studio .move-down-button,
-.eol-order-xblock-studio .delete-button {
+.cmmedu-ordertable-xblock-studio .move-up-button,
+.cmmedu-ordertable-xblock-studio .move-down-button,
+.cmmedu-ordertable-xblock-studio .delete-button {
     padding: 4px 8px;
     margin: 0 2px;
     cursor: pointer;
 }
 
-.eol-order-xblock-studio .add-item-button {
+.cmmedu-ordertable-xblock-studio .add-item-button {
     margin-top: 10px;
     padding: 8px 16px;
     background-color: #0075b4;
@@ -215,12 +214,12 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     cursor: pointer;
 }
 
-.eol-order-xblock-studio .add-item-button:hover {
+.cmmedu-ordertable-xblock-studio .add-item-button:hover {
     background-color: #005a8c;
 }
 
 /* Horizontal Drag and Drop Styles */
-.problem.eol-order-block .eol-order-disorder {
+.problem.cmmedu-ordertable-block .cmmedu-ordertable-disorder {
     margin: 20px 0;
     padding: 20px;
     background: #f8f9fa;
@@ -228,7 +227,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border: 1px solid #e9ecef;
 }
 
-.problem.eol-order-block .disorder-preview {
+.problem.cmmedu-ordertable-block .disorder-preview {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -238,7 +237,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border: 1px solid #e9ecef;
 }
 
-.problem.eol-order-block .disordered-list {
+.problem.cmmedu-ordertable-block .disordered-list {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -251,7 +250,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     align-items: center;
 }
 
-.problem.eol-order-block .disorder-item {
+.problem.cmmedu-ordertable-block .disorder-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -266,25 +265,25 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     flex-shrink: 0;
 }
 
-.problem.eol-order-block .disorder-item:hover {
+.problem.cmmedu-ordertable-block .disorder-item:hover {
     background: #fff;
     border-color: #0075b4;
     box-shadow: 0 2px 4px rgba(0, 117, 180, 0.1);
     transform: translateY(-1px);
 }
 
-.problem.eol-order-block .disorder-item.dragging {
+.problem.cmmedu-ordertable-block .disorder-item.dragging {
     opacity: 0.7;
     background: #e9ecef;
     transform: rotate(-2deg);
 }
 
-.problem.eol-order-block .disorder-item.over {
+.problem.cmmedu-ordertable-block .disorder-item.over {
     border: 2px dashed #0075b4;
     background: #f0f7ff;
 }
 
-.problem.eol-order-block .disorder-item .item-content {
+.problem.cmmedu-ordertable-block .disorder-item .item-content {
     flex-grow: 1;
     color: #2c3e50;
     font-weight: 500;
@@ -294,8 +293,8 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     text-overflow: ellipsis;
 }
 
-.problem.eol-order-block .disorder-item .move-left-button,
-.problem.eol-order-block .disorder-item .move-right-button {
+.problem.cmmedu-ordertable-block .disorder-item .move-left-button,
+.problem.cmmedu-ordertable-block .disorder-item .move-right-button {
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
@@ -311,21 +310,21 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     flex-shrink: 0;
 }
 
-.problem.eol-order-block .disorder-item .move-left-button:hover,
-.problem.eol-order-block .disorder-item .move-right-button:hover {
+.problem.cmmedu-ordertable-block .disorder-item .move-left-button:hover,
+.problem.cmmedu-ordertable-block .disorder-item .move-right-button:hover {
     background-color: #005a8c;
     transform: translateY(-1px);
 }
 
-.problem.eol-order-block .disorder-item .move-left-button:disabled,
-.problem.eol-order-block .disorder-item .move-right-button:disabled {
+.problem.cmmedu-ordertable-block .disorder-item .move-left-button:disabled,
+.problem.cmmedu-ordertable-block .disorder-item .move-right-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
     transform: none;
 }
 
-.problem.eol-order-block .order-label,
-.problem.eol-order-block .previous-order-label {
+.problem.cmmedu-ordertable-block .order-label,
+.problem.cmmedu-ordertable-block .previous-order-label {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -335,14 +334,14 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border-radius: 6px;
 }
 
-.problem.eol-order-block .order-label span,
-.problem.eol-order-block .previous-order-label span {
+.problem.cmmedu-ordertable-block .order-label span,
+.problem.cmmedu-ordertable-block .previous-order-label span {
     font-weight: 600;
     color: #2c3e50;
 }
 
-.problem.eol-order-block .order-display,
-.problem.eol-order-block .previous-order-display {
+.problem.cmmedu-ordertable-block .order-display,
+.problem.cmmedu-ordertable-block .previous-order-display {
     color: #0075b4;
     font-family: monospace;
     padding: 6px 12px;
@@ -351,17 +350,17 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     font-size: 0.9em;
 }
 
-.problem.eol-order-block .response-icon {
+.problem.cmmedu-ordertable-block .response-icon {
     margin-top: 10px;
 }
 
-.problem.eol-order-block .response-icon img {
+.problem.cmmedu-ordertable-block .response-icon img {
     width: 24px;
     height: 24px;
     vertical-align: middle;
 }
 
-.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta {
+.problem.cmmedu-ordertable-block .submit-box .action .notificacion .ver_respuesta {
     background-color: transparent !important;
     background-image: none !important;
     color: #0075b4 !important;
@@ -376,7 +375,7 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     transition: all 0.2s ease !important;
 }
 
-.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta:hover {
+.problem.cmmedu-ordertable-block .submit-box .action .notificacion .ver_respuesta:hover {
     background-color: transparent !important;
     background-image: none !important;
     color: #005a8c !important;
@@ -384,17 +383,17 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     border-radius: 4px !important;
 }
 
-.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta .icon {
+.problem.cmmedu-ordertable-block .submit-box .action .notificacion .ver_respuesta .icon {
     margin-right: 5px !important;
     font-size: 16px !important;
 }
 
-.problem.eol-order-block .submit-box .action .notificacion .ver_respuesta span {
+.problem.cmmedu-ordertable-block .submit-box .action .notificacion .ver_respuesta span {
     display: block !important;
     line-height: 1.2 !important;
 }
 
-.problem.eol-order-block .column-title {
+.problem.cmmedu-ordertable-block .column-title {
     font-weight: bold;
     font-size: 1.1em;
     padding: 8px;
@@ -402,9 +401,9 @@ div.problem.eol-order-block div.submit-box div.action button.eol-order-submit[di
     color: #333;
 }
 
-.problem.eol-order-block .order-header,
-.problem.eol-order-block .content-header,
-.problem.eol-order-block .actions-header {
+.problem.cmmedu-ordertable-block .order-header,
+.problem.cmmedu-ordertable-block .content-header,
+.problem.cmmedu-ordertable-block .actions-header {
     padding: 10px;
     border-bottom: 2px solid #ddd;
 }

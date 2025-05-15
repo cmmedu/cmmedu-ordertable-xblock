@@ -15,11 +15,10 @@ def package_data(pkg, roots):
     return {pkg: data}
 
 setup(
-    name='eol-order-xblock',
+    name='cmmedu-ordertable-xblock',
     version='0.1.0',
     description='XBlock for ordering items',
     packages=[
-        'eolorder',
     ],
     install_requires=[
         'XBlock',
@@ -27,8 +26,8 @@ setup(
     ],
     entry_points={
         'xblock.v1': [
-            'eolorder = eolorder.eolorder:EolOrderXBlock',
+            'ordertable = ordertable.ordertable:CmmEduOrderTableXBlock',
         ]
     },
-    package_data=package_data("eolorder", ["static", "public"]),
+    package_data=package_data("ordertable", ["static", "public"]),
 ) 
