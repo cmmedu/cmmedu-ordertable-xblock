@@ -106,6 +106,20 @@ class CmmEduOrderTableXBlock(XBlock):
         values=["numbers", "numbers_zero", "letters", "roman", "none"]
     )
 
+    use_custom_labels = Boolean(
+        display_name="Usar etiquetas personalizadas",
+        help="Usar etiquetas personalizadas para la primera columna",
+        scope=Scope.settings,
+        default=False
+    )
+
+    custom_labels = Dict(
+        display_name="Etiquetas personalizadas",
+        help="Etiquetas personalizadas para la primera columna",
+        scope=Scope.settings,
+        default={1: {'content':''}, 2: {'content':''}}
+    )
+
     pretext_num = String(
         display_name="Texto antes de la numeración",
         help="Texto que se mostrará antes del simbolo de la numeración, vacio se asume no hay texto previo",
@@ -203,7 +217,7 @@ class CmmEduOrderTableXBlock(XBlock):
         help="Respuesta enviada por el usuario"
     )
 
-    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer')
+    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'use_custom_labels', 'custom_labels')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -488,6 +502,16 @@ class CmmEduOrderTableXBlock(XBlock):
                 'value': self.textcolumn_actions,
                 'display_name': self.fields['textcolumn_actions'].display_name,
                 'help': self.fields['textcolumn_actions'].help
+            },
+            'use_custom_labels': {
+                'value': self.use_custom_labels,
+                'display_name': self.fields['use_custom_labels'].display_name,
+                'help': self.fields['use_custom_labels'].help
+            },
+            'custom_labels': {
+                'value': self.custom_labels,
+                'display_name': self.fields['custom_labels'].display_name,
+                'help': self.fields['custom_labels'].help
             }
         }
         
@@ -517,6 +541,8 @@ class CmmEduOrderTableXBlock(XBlock):
         Handle studio submissions.
         """
         try:
+            print("[CMMEDU-ORDERTABLE] Received data in studio_submit:", data)
+            
             self.display_name = data.get('display_name', self.display_name)
             self.table_name = data.get('table_name', self.table_name)
             self.background_color = data.get('background_color', self.background_color)
@@ -529,6 +555,21 @@ class CmmEduOrderTableXBlock(XBlock):
             self.textcolumn_order = data.get('textcolumn_order', self.textcolumn_order)
             self.textcolumn_content = data.get('textcolumn_content', self.textcolumn_content)
             self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
+            self.use_custom_labels = data.get('use_custom_labels', self.use_custom_labels)
+            
+            print("[CMMEDU-ORDERTABLE] use_custom_labels:", self.use_custom_labels)
+            print("[CMMEDU-ORDERTABLE] custom_labels received:", data.get('custom_labels'))
+            
+            if self.use_custom_labels:
+                custom_labels = data.get('custom_labels', {})
+                if isinstance(custom_labels, dict):
+                    self.custom_labels = custom_labels
+                    print("[CMMEDU-ORDERTABLE] custom_labels saved:", self.custom_labels)
+                else:
+                    print("[CMMEDU-ORDERTABLE] Warning: custom_labels is not a dict:", type(custom_labels))
+            else:
+                self.custom_labels = {}
+                print("[CMMEDU-ORDERTABLE] custom_labels reset to empty dict")
             
             # Manejar los elementos a ordenar
             items = data.get('items', [])
@@ -612,7 +653,9 @@ class CmmEduOrderTableXBlock(XBlock):
                 'correct_answers': self.correct_answers,
                 'weight': self.weight,
                 'max_attempts': self.max_attempts,
-                'show_answer': self.show_answer
+                'show_answer': self.show_answer,
+                'use_custom_labels': self.use_custom_labels,
+                'custom_labels': self.custom_labels
             })
             
             return {
@@ -621,11 +664,13 @@ class CmmEduOrderTableXBlock(XBlock):
                 'correct_answers': self.correct_answers,
                 'weight': self.weight,
                 'max_attempts': self.max_attempts,
-                'show_answer': self.show_answer
+                'show_answer': self.show_answer,
+                'use_custom_labels': self.use_custom_labels,
+                'custom_labels': self.custom_labels
             }
         except Exception as e:
-            print("Error saving data:", str(e))
-            print("Error type:", type(e))
+            print("[CMMEDU-ORDERTABLE] Error saving data:", str(e))
+            print("[CMMEDU-ORDERTABLE] Error type:", type(e))
             return {'result': 'error', 'message': str(e)}
 
     @XBlock.json_handler
@@ -852,5 +897,7 @@ class CmmEduOrderTableXBlock(XBlock):
             'max_attempts': self.max_attempts,
             'attempts': self.attempts,
             'score': self.score,
-            'user_answer': self.user_answer
+            'user_answer': self.user_answer,
+            'use_custom_labels': self.use_custom_labels,
+            'custom_labels': self.custom_labels
         } 
