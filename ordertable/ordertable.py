@@ -60,7 +60,7 @@ class CmmEduOrderTableXBlock(XBlock):
         display_name="Display Name",
         help="Nombre del componente",
         scope=Scope.settings,
-        default="Cmm Order Table XBlock"
+        default="Cmm Edu Order Table XBlock"
     )
 
     table_name = String(
@@ -517,6 +517,7 @@ class CmmEduOrderTableXBlock(XBlock):
         Handle studio submissions.
         """
         try:
+            self.display_name = data.get('display_name', self.display_name)
             self.table_name = data.get('table_name', self.table_name)
             self.background_color = data.get('background_color', self.background_color)
             self.numbering_type = data.get('numbering_type', self.numbering_type)
@@ -652,6 +653,13 @@ class CmmEduOrderTableXBlock(XBlock):
                 'message': 'No se ha enviado una respuesta'
             }
 
+        # Validate answer format (should be numbers separated by underscores)
+        if not all(part.isdigit() for part in answer.split('_')):
+            return {
+                'result': 'error',
+                'message': 'Formato de respuesta inválido'
+            }
+
         # Save the answer
         self.user_answer = answer
         print("[CMMEDU-ORDERTABLE] Saved user answer:", self.user_answer)
@@ -784,6 +792,57 @@ class CmmEduOrderTableXBlock(XBlock):
 
     def max_score(self):
         """
-        Returns the maximum score for this XBlock.
+        Return the maximum score possible.
         """
-        return self.weight 
+        return self.weight if self.has_score else None
+
+    def get_numbering(self, index):
+        """
+        Obtiene la numeración según el tipo seleccionado y el índice.
+        Args:
+            index (int): Índice base cero del elemento
+        Returns:
+            str: Numeración formateada con pre y post texto
+        """
+        number = index + 1  # Convertir de base 0 a base 1
+        result = ""
+
+        if self.numbering_type == "numbers":
+            result = str(number)
+        elif self.numbering_type == "numbers_zero":
+            result = str(index)  # Usar el índice base 0 directamente
+        elif self.numbering_type == "letters":
+            result = number_to_letter(number, self.uppercase_letters)
+        elif self.numbering_type == "roman":
+            result = number_to_roman(number, self.uppercase_letters)
+        elif self.numbering_type == "none":
+            return ""
+
+        return f"{self.pretext_num}{result}{self.postext_num}"
+
+    def student_view_data(self, context=None):
+        """
+        Return a JSON representation of the student_view data.
+        """
+        return {
+            'display_name': self.display_name,
+            'table_name': self.table_name,
+            'textcolumn_order': self.textcolumn_order,
+            'textcolumn_content': self.textcolumn_content,
+            'textcolumn_actions': self.textcolumn_actions,
+            'background_color': self.background_color,
+            'numbering_type': self.numbering_type,
+            'pretext_num': self.pretext_num,
+            'postext_num': self.postext_num,
+            'uppercase_letters': self.uppercase_letters,
+            'ordeingelements': self.ordeingelements,
+            'correct_answers': self.correct_answers,
+            'disordered_order': self.disordered_order,
+            'random_disorder': self.random_disorder,
+            'show_answer': self.show_answer,
+            'weight': self.weight,
+            'max_attempts': self.max_attempts,
+            'attempts': self.attempts,
+            'score': self.score,
+            'user_answer': self.user_answer
+        } 

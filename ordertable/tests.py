@@ -327,9 +327,46 @@ class TestCmmEduOrderTableXBlock(unittest.TestCase):
             1: {'content': 'Item 1'},
             2: {'content': 'Item 2'}
         }
+        self.xblock.score = 0.5
+        self.xblock.attempts = 2
+        self.xblock.max_attempts = 3
+        self.xblock.user_answer = "1_2"
+        self.xblock.show_answer = "when_attempts_run_out"
+        self.xblock.display_name = "Test Table"
+        self.xblock.table_name = "Test Order"
+        self.xblock.textcolumn_order = "Test Order"
+        self.xblock.textcolumn_content = "Test Content"
+        self.xblock.textcolumn_actions = "Test Actions"
+        self.xblock.background_color = "#ffffff"
+        self.xblock.numbering_type = "letters"
+        self.xblock.pretext_num = "["
+        self.xblock.postext_num = "]"
+        self.xblock.uppercase_letters = True
+        self.xblock.weight = 10
+        self.xblock.correct_answers = "1_2"
+        self.xblock.disordered_order = "2_1"
+        self.xblock.random_disorder = False
+
         data = self.xblock.student_view_data()
         
-        self.assertIn('items', data)
-        self.assertEqual(len(data['items']), 2)
-        self.assertEqual(data['numbering_type'], 'numbers')
-        self.assertEqual(data['max_attempts'], self.xblock.max_attempts) 
+        # Verificar que todos los campos estén presentes y tengan los valores correctos
+        self.assertEqual(data['display_name'], "Test Table")
+        self.assertEqual(data['table_name'], "Test Order")
+        self.assertEqual(data['textcolumn_order'], "Test Order")
+        self.assertEqual(data['textcolumn_content'], "Test Content")
+        self.assertEqual(data['textcolumn_actions'], "Test Actions")
+        self.assertEqual(data['background_color'], "#ffffff")
+        self.assertEqual(data['numbering_type'], "letters")
+        self.assertEqual(data['pretext_num'], "[")
+        self.assertEqual(data['postext_num'], "]")
+        self.assertEqual(data['uppercase_letters'], True)
+        self.assertEqual(data['ordeingelements'], {1: {'content': 'Item 1'}, 2: {'content': 'Item 2'}})
+        self.assertEqual(data['correct_answers'], "1_2")
+        self.assertEqual(data['disordered_order'], "2_1")
+        self.assertEqual(data['random_disorder'], False)
+        self.assertEqual(data['show_answer'], "when_attempts_run_out")
+        self.assertEqual(data['weight'], 10)
+        self.assertEqual(data['max_attempts'], 3)
+        self.assertEqual(data['attempts'], 2)
+        self.assertEqual(data['score'], 0.5)
+        self.assertEqual(data['user_answer'], "1_2") 
