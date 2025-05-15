@@ -530,10 +530,18 @@ class CmmEduOrderTableXBlock(XBlock):
             self.textcolumn_content = data.get('textcolumn_content', self.textcolumn_content)
             self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
             
-            # Asegurarse de que ordeingelements sea un diccionario válido
-            ordeingelements = data.get('ordeingelements', {})
-            if isinstance(ordeingelements, dict):
-                self.ordeingelements = ordeingelements
+            # Manejar los elementos a ordenar
+            items = data.get('items', [])
+            if items:
+                # Convertir la lista de items en un diccionario de ordeingelements
+                self.ordeingelements = {
+                    str(i+1): {'content': item} for i, item in enumerate(items)
+                }
+            else:
+                # Si no hay items, usar ordeingelements si está presente
+                ordeingelements = data.get('ordeingelements', {})
+                if isinstance(ordeingelements, dict):
+                    self.ordeingelements = ordeingelements
             
             # Guardar el orden desordenado como string
             disordered_order = data.get('disordered_order', '')
