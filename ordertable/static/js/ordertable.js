@@ -294,7 +294,7 @@ function CmmOrderXBlock(runtime, element, settings) {
     function getCurrentOrder() {
         var order = [];
         // Usar la tabla correcta
-        var $tbody = $element.find('.cmm-order-table-content tbody');
+        var $tbody = $element.find('.cmmedu-ordertable-table-content tbody');
         
         //console.log("[CMM-ORDER] Buscando orden en tabla:", $tbody.length ? "encontrada" : "no encontrada");
         
@@ -362,7 +362,7 @@ function CmmOrderXBlock(runtime, element, settings) {
         
         // Create table structure for the correct answer
         var tableHtml = '<p><b>Orden correcto:</b></p>' +
-            '<table class="cmm-order-table-content">' +
+            '<table class="cmmedu-ordertable-table-content">' +
             '<thead>' +
             '<tr>'
 
@@ -385,15 +385,20 @@ function CmmOrderXBlock(runtime, element, settings) {
             '</thead>' +
             '<tbody>';
         
-        // Sort elements by their original key to show correct order
-        var sortedElements = elements.slice().sort(function(a, b) {
-            return parseInt(a.key) - parseInt(b.key);
-        });
-        
-
+        // Get ordered elements from settings
+        var orderedElements = [];
+        if (settings.ordeingelements) {
+            // Convert object to array and sort by index
+            Object.keys(settings.ordeingelements).forEach(function(key) {
+                orderedElements.push({
+                    key: key,
+                    content: settings.ordeingelements[key].content
+                });
+            });
+        }
         
         // Add rows for each element in correct order
-        sortedElements.forEach(function(element, index) {
+        orderedElements.forEach(function(element, index) {
             var orderValue = '';
             
             switch(numbering_type) {
@@ -450,7 +455,7 @@ function CmmOrderXBlock(runtime, element, settings) {
                 //console.log("[CMM-ORDER] Renderizando MathJax en la tabla de respuesta");
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, $solution[0]]);
             } else {
-                console.warn("[CMM-ORDER] MathJax no está cargado");
+                console.warn("MathJax no está cargado.");
             }
         }, 100);
     });
@@ -578,42 +583,42 @@ function CmmOrderXBlock(runtime, element, settings) {
         
         console.log("[CMM-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
         var orderArray = order.split('_');
-            var $table = $element.find('.cmm-order-table-content');
-            var $tbody = $table.find('tbody');
-            
-            // Limpiar el tbody existente
-            $tbody.find('.item-row').remove();
-            
-            let tablecontentHtml = ''
+        var $table = $element.find('.cmmedu-ordertable-table-content');
+        var $tbody = $table.find('tbody');
+        
+        // Limpiar el tbody existente
+        $tbody.find('.item-row').remove();
+        
+        let tablecontentHtml = '';
 
-            // Rebuild the table in the correct order
-            orderArray.forEach(function(index, arrayIndex) {
-                var element = settings.ordeingelements[index].content;
-                tablecontentHtml = ''
-                if (element) {
-                        tablecontentHtml += '<tr class="item-row" data-key="' + index + '">' 
-                        if (settings.numbering_type == 'none') {
-                            tablecontentHtml += '<td class="content-cell">' + element + '</td>'
-                        } else {
-                            tablecontentHtml += '<td class="order-cell">' + pretext_num + index + postext_num + '</td>' +
-                            '<td class="content-cell">' + element + '</td>'
-                        }
-                        tablecontentHtml += '<td class="actions-cell" style="text-align: center;">' +
-                            '<button class="move-up-button">↑</button>' +
-                            '<button class="move-down-button">↓</button>' +
-                            '</td>' +
-                            '</tr>'
-                    var $row = $(tablecontentHtml);
-                        $tbody.append($row);
-                    }
-            });
-            
-            // Update button states after rebuilding
-            updateButtonStates();
-            
-            // Re-render MathJax if needed
-            var ordertableid = "order_" + settings.sublocation;
-            renderMathForSpecificElements(ordertableid);
+        // Rebuild the table in the correct order
+        orderArray.forEach(function(index, arrayIndex) {
+            var element = settings.ordeingelements[index];
+            tablecontentHtml = '';
+            if (element && element.content) {
+                tablecontentHtml += '<tr class="item-row" data-key="' + index + '">';
+                if (settings.numbering_type == 'none') {
+                    tablecontentHtml += '<td class="content-cell">' + element.content + '</td>';
+                } else {
+                    tablecontentHtml += '<td class="order-cell">' + pretext_num + (arrayIndex + 1) + postext_num + '</td>' +
+                    '<td class="content-cell">' + element.content + '</td>';
+                }
+                tablecontentHtml += '<td class="actions-cell" style="text-align: center;">' +
+                    '<button class="move-up-button">↑</button>' +
+                    '<button class="move-down-button">↓</button>' +
+                    '</td>' +
+                    '</tr>';
+                var $row = $(tablecontentHtml);
+                $tbody.append($row);
+            }
+        });
+        
+        // Update button states after rebuilding
+        updateButtonStates();
+        
+        // Re-render MathJax if needed
+        var ordertableid = "order_" + settings.sublocation;
+        renderMathForSpecificElements(ordertableid);
     }
 
     // Add visibility change handler
@@ -632,8 +637,8 @@ function CmmOrderXBlock(runtime, element, settings) {
                             ...response
                         };
                         updateUIWithState(state);
-                        // Solo restaurar el orden de la tabla si no estamos mostrando la respuesta
-                        if (response.user_answer && !$element.find('solution').is(':visible')) {
+                        // Restaurar el orden de la tabla si hay una respuesta del usuario
+                        if (response.user_answer) {
                             restoreTableOrder(response.user_answer);
                         }
                     }

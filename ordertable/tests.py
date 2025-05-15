@@ -61,6 +61,9 @@ class TestCmmEduOrderTableXBlock(unittest.TestCase):
         self.assertEqual(self.xblock.attempts, 0)
         self.assertEqual(self.xblock.score, 0.0)
         self.assertEqual(self.xblock.user_answer, "")
+        self.assertEqual(self.xblock.pretext_num, "")
+        self.assertEqual(self.xblock.postext_num, "")
+        self.assertEqual(self.xblock.uppercase_letters, False)
 
     def test_submit_answer_correct(self):
         """
@@ -250,4 +253,83 @@ class TestCmmEduOrderTableXBlock(unittest.TestCase):
         request.body = data.encode('utf-8')
         
         response = self.xblock.submit_answer(request)
-        self.assertEqual(response.json_body['result'], 'success') 
+        self.assertEqual(response.json_body['result'], 'success')
+
+    def test_numbering_types(self):
+        """
+        Prueba los diferentes tipos de numeración
+        """
+        # Probar números
+        self.xblock.numbering_type = "numbers"
+        self.xblock.pretext_num = "("
+        self.xblock.postext_num = ")"
+        self.assertEqual(self.xblock.get_numbering(0), "(1)")
+        
+        # Probar números desde cero
+        self.xblock.numbering_type = "numbers_zero"
+        self.assertEqual(self.xblock.get_numbering(0), "(0)")
+        
+        # Probar letras minúsculas
+        self.xblock.numbering_type = "letters"
+        self.xblock.uppercase_letters = False
+        self.assertEqual(self.xblock.get_numbering(0), "(a)")
+        
+        # Probar letras mayúsculas
+        self.xblock.uppercase_letters = True
+        self.assertEqual(self.xblock.get_numbering(0), "(A)")
+        
+        # Probar números romanos minúsculos
+        self.xblock.numbering_type = "roman"
+        self.xblock.uppercase_letters = False
+        self.assertEqual(self.xblock.get_numbering(0), "(i)")
+        
+        # Probar números romanos mayúsculos
+        self.xblock.uppercase_letters = True
+        self.assertEqual(self.xblock.get_numbering(0), "(I)")
+
+    def test_studio_submit(self):
+        """
+        Prueba el envío de datos desde el Studio
+        """
+        request = TestRequest()
+        request.method = 'POST'
+        data = {
+            'display_name': 'Test Table',
+            'table_name': 'Test Order',
+            'textcolumn_order': 'Test Order',
+            'textcolumn_content': 'Test Content',
+            'textcolumn_actions': 'Test Actions',
+            'background_color': '#ffffff',
+            'numbering_type': 'letters',
+            'pretext_num': '[',
+            'postext_num': ']',
+            'uppercase_letters': True,
+            'weight': 10,
+            'max_attempts': 5,
+            'show_answer': 'always',
+            'items': ['Item 1', 'Item 2']
+        }
+        request.body = json.dumps(data).encode('utf-8')
+        
+        response = self.xblock.studio_submit(request)
+        self.assertEqual(response.json_body['result'], 'success')
+        self.assertEqual(self.xblock.display_name, 'Test Table')
+        self.assertEqual(self.xblock.table_name, 'Test Order')
+        self.assertEqual(self.xblock.numbering_type, 'letters')
+        self.assertEqual(self.xblock.max_attempts, 5)
+        self.assertEqual(len(self.xblock.ordeingelements), 2)
+
+    def test_student_view_data(self):
+        """
+        Prueba la vista de datos del estudiante
+        """
+        self.xblock.ordeingelements = {
+            1: {'content': 'Item 1'},
+            2: {'content': 'Item 2'}
+        }
+        data = self.xblock.student_view_data()
+        
+        self.assertIn('items', data)
+        self.assertEqual(len(data['items']), 2)
+        self.assertEqual(data['numbering_type'], 'numbers')
+        self.assertEqual(data['max_attempts'], self.xblock.max_attempts) 
