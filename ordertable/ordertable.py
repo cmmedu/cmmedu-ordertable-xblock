@@ -106,6 +106,13 @@ class CmmEduOrderTableXBlock(XBlock):
         values=["numbers", "numbers_zero", "letters", "roman", "none"]
     )
 
+    label_width = String(
+        display_name="Ancho de la columna de etiquetas",
+        help="Ancho de la columna de etiquetas en porcentaje, recuerde incluir el % o el px",
+        scope=Scope.settings,
+        default="15%"
+    )
+
     use_custom_labels = Boolean(
         display_name="Usar etiquetas personalizadas",
         help="Usar etiquetas personalizadas para la primera columna",
@@ -217,7 +224,7 @@ class CmmEduOrderTableXBlock(XBlock):
         help="Respuesta enviada por el usuario"
     )
 
-    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'use_custom_labels', 'custom_labels')
+    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'label_width', 'use_custom_labels', 'custom_labels')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -251,6 +258,9 @@ class CmmEduOrderTableXBlock(XBlock):
             'pretext_num': self.pretext_num,
             'postext_num': self.postext_num,
             'numbering_type': self.numbering_type,
+            'label_width': self.label_width,
+            'use_custom_labels': self.use_custom_labels,
+            'custom_labels': self.custom_labels,
             'uppercase_letters': self.uppercase_letters,
             'correct_answers': self.correct_answers,
             'disordered_order': self.disordered_order,
@@ -378,6 +388,9 @@ class CmmEduOrderTableXBlock(XBlock):
             'numbering_type': self.numbering_type,
             'pretext_num': self.pretext_num,
             'postext_num': self.postext_num,
+            'label_width': self.label_width,
+            'use_custom_labels': self.use_custom_labels,
+            'custom_labels': self.custom_labels,
             'uppercase_letters': self.uppercase_letters,
             'correct_answers': self.correct_answers,
             'random_disorder': self.random_disorder,
@@ -503,6 +516,11 @@ class CmmEduOrderTableXBlock(XBlock):
                 'display_name': self.fields['textcolumn_actions'].display_name,
                 'help': self.fields['textcolumn_actions'].help
             },
+            'label_width': {
+                'value': self.label_width,
+                'display_name': self.fields['label_width'].display_name,
+                'help': self.fields['label_width'].help
+            },
             'use_custom_labels': {
                 'value': self.use_custom_labels,
                 'display_name': self.fields['use_custom_labels'].display_name,
@@ -555,6 +573,7 @@ class CmmEduOrderTableXBlock(XBlock):
             self.textcolumn_order = data.get('textcolumn_order', self.textcolumn_order)
             self.textcolumn_content = data.get('textcolumn_content', self.textcolumn_content)
             self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
+            self.label_width = data.get('label_width', self.label_width)
             self.use_custom_labels = data.get('use_custom_labels', self.use_custom_labels)
             
             print("[CMMEDU-ORDERTABLE] use_custom_labels:", self.use_custom_labels)
@@ -654,6 +673,7 @@ class CmmEduOrderTableXBlock(XBlock):
                 'weight': self.weight,
                 'max_attempts': self.max_attempts,
                 'show_answer': self.show_answer,
+                'label_width': self.label_width,
                 'use_custom_labels': self.use_custom_labels,
                 'custom_labels': self.custom_labels
             })
@@ -665,6 +685,7 @@ class CmmEduOrderTableXBlock(XBlock):
                 'weight': self.weight,
                 'max_attempts': self.max_attempts,
                 'show_answer': self.show_answer,
+                'label_width': self.label_width,
                 'use_custom_labels': self.use_custom_labels,
                 'custom_labels': self.custom_labels
             }
@@ -898,6 +919,7 @@ class CmmEduOrderTableXBlock(XBlock):
             'attempts': self.attempts,
             'score': self.score,
             'user_answer': self.user_answer,
+            'label_width': self.label_width,
             'use_custom_labels': self.use_custom_labels,
             'custom_labels': self.custom_labels
         } 

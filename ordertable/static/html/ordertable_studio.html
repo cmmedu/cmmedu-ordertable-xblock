@@ -127,12 +127,21 @@
                 </li>
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="label_width">{{label_width.display_name}}</label>
+                        <span class="tip setting-help">{{label_width.help}}</span>
+                        <input class="input setting-input" name="label_width" id="label_width"
+                            value="{{label_width.value}}" type="text" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
                         <label class="label setting-label" for="use_custom_labels">{{use_custom_labels.display_name}}</label>
                         <span class="tip setting-help">{{use_custom_labels.help}}</span>
                         <input class="input setting-input" name="use_custom_labels" id="use_custom_labels"
                             type="checkbox" {% if use_custom_labels.value %}checked{% endif %} />
                     </div>
                 </li>
+                
                 <li class="field comp-setting-entry is-set custom-labels-container" style="display: none;">
                     <div class="wrapper-comp-setting">
                         <label class="label setting-label" for="custom_labels">{{custom_labels.display_name}}</label>
