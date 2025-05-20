@@ -20,14 +20,14 @@
                     {% endif %}
                     <tr>
                         {% if numbering_type != 'none' %}
-                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;" pretext="{{ pretext_num }}" postext="{{ postext_num }}" ordertype="{{ numbering_type }}">
+                        <th class="order-header" style="background-color: {{ background_color }}; text-align: center; width: {{ label_width }};" pretext="{{ pretext_num }}" postext="{{ postext_num }}" ordertype="{{ numbering_type }}">
                             {{ textcolumn_order }}
                         </th>
                         {% endif %}
                         <th class="content-header" style="background-color: {{ background_color }}; text-align: center;">
                             {{ textcolumn_content }}
                         </th>
-                        <th class="actions-header" style="background-color: {{ background_color }}; text-align: center; width: 15%;">
+                        <th class="actions-header" style="background-color: {{ background_color }}; text-align: center; width: {{ label_width }};">
                             {{ textcolumn_actions }}
                         </th>
                     </tr>
@@ -36,22 +36,33 @@
                     {% for item in elements %}
                     <tr class="item-row" data-key="{{ item.key }}">
                         {% if numbering_type != 'none' %}
-                        <td class="order-cell">
-                            {% if numbering_type == 'numbers' %}
-                                {{ pretext_num }}{{ item.position }}{{ postext_num }}
-                            {% elif numbering_type == 'numbers_zero' %}
-                                {{ pretext_num }}{{ item.zero_index }}{{ postext_num }}
-                            {% elif numbering_type == 'letters' %}
-                                {% if uppercase_letters %}
-                                    {{ pretext_num }}{{ item.letter_upper }}{{ postext_num }}
-                                {% else %}
-                                    {{ pretext_num }}{{ item.letter_lower }}{{ postext_num }}
-                                {% endif %}
-                            {% elif numbering_type == 'roman' %}
-                                {% if uppercase_letters %}
-                                    {{ pretext_num }}{{ item.roman_upper }}{{ postext_num }}
-                                {% else %}
-                                    {{ pretext_num }}{{ item.roman_lower }}{{ postext_num }}
+                            {% if use_custom_labels %}
+                            <td class="order-cell">
+                                {% with position=item.position|stringformat:"s" %}
+                                    {% if custom_labels and custom_labels|get_item:position %}
+                                        {{ pretext_num|safe }}{{ custom_labels|get_item:position|get_item:"content"|safe }}{{ postext_num|safe }}
+                                    {% else %}
+                                        {{ pretext_num|safe }}{{ item.position }}{{ postext_num|safe }}
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                            <td class="order-cell">
+                                {% if numbering_type == 'numbers' %}
+                                    {{ pretext_num|safe }}{{ item.position }}{{ postext_num|safe }}
+                                {% elif numbering_type == 'numbers_zero' %}
+                                    {{ pretext_num|safe }}{{ item.zero_index }}{{ postext_num|safe }}
+                                {% elif numbering_type == 'letters' %}
+                                    {% if uppercase_letters %}
+                                        {{ pretext_num|safe }}{{ item.letter_upper }}{{ postext_num|safe }}
+                                    {% else %}
+                                        {{ pretext_num|safe }}{{ item.letter_lower }}{{ postext_num|safe }}
+                                    {% endif %}
+                                {% elif numbering_type == 'roman' %}
+                                    {% if uppercase_letters %}
+                                        {{ pretext_num|safe }}{{ item.roman_upper }}{{ postext_num|safe }}
+                                    {% else %}
+                                        {{ pretext_num|safe }}{{ item.roman_lower }}{{ postext_num|safe }}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </td>

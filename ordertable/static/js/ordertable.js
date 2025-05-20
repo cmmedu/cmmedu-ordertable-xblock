@@ -17,9 +17,21 @@ function CmmOrderXBlockEdit(runtime, element) {
         }
         
         $itemsContainer.find('.item-row').each(function(index) {
+            var $row = $(this);
             var number = currentOrderNumber + index;
-            $(this).find('.order-cell').text(pretext_num + number + postext_num);
-            $(this).attr('data-index', currentOrderNumber + index);
+            var labelKey = number.toString();
+            var displayText = '';
+            
+            // Verificar si hay etiquetas personalizadas
+            if (settings.use_custom_labels && settings.custom_labels && settings.custom_labels[labelKey]) {
+                displayText = settings.pretext_num + settings.custom_labels[labelKey].content + settings.postext_num;
+            } else {
+                // Usar el formato por defecto
+                displayText = settings.pretext_num + number + settings.postext_num;
+            }
+            
+            $row.find('.order-cell').text(displayText);
+            $row.attr('data-index', currentOrderNumber + index);
         });
     }
 
@@ -47,6 +59,20 @@ function CmmOrderXBlockEdit(runtime, element) {
         
         if (content) {
             $newRow.find('.item-content').val(content);
+        }
+        
+        // Agregar soporte para etiquetas personalizadas
+        var customLabel = '';
+        if (settings.use_custom_labels && settings.custom_labels) {
+            var index = $itemsContainer.find('.item-row').length + 1;
+            var labelKey = index.toString();
+            if (settings.custom_labels[labelKey] && settings.custom_labels[labelKey].content) {
+                customLabel = settings.pretext_num + settings.custom_labels[labelKey].content + settings.postext_num;
+            }
+        }
+        
+        if (customLabel) {
+            $newRow.find('.order-cell').attr('data-custom-label', customLabel);
         }
         
         $itemsContainer.append($newRow);
@@ -378,7 +404,7 @@ function CmmOrderXBlock(runtime, element, settings) {
         if (numbering_type == 'none') {
             tableHtml += '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>'
         } else {
-            tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center; width: 15%;">' + textcolumn_order + '</th>' +
+            tableHtml += '<th class="order-header" style="background-color: #f5f5f5; text-align: center; width: ' + settings.label_width + ';">' + textcolumn_order + '</th>' +
                 '<th class="content-header" style="background-color: #f5f5f5; text-align: center;">'+ textcolumn_content +'</th>'
         }
         tableHtml += '</tr>' +
@@ -401,29 +427,64 @@ function CmmOrderXBlock(runtime, element, settings) {
         orderedElements.forEach(function(element, index) {
             var orderValue = '';
             
-            switch(numbering_type) {
-                case 'numbers':
-                    orderValue = pretext_num + (index + 1) + postext_num;
-                    break;
-                case 'numbers_zero':
-                    orderValue = pretext_num + index + postext_num;
-                    break;
-                case 'letters':
-                    if (settings.uppercase_letters) {
-                        orderValue = pretext_num + String.fromCharCode(65 + index) + postext_num; // A, B, C, ...
-                    } else {
-                        orderValue = pretext_num + String.fromCharCode(97 + index) + postext_num; // a, b, c, ...
+            // Verificar si hay etiquetas personalizadas
+            if (settings.use_custom_labels && settings.custom_labels) {
+                var labelKey = (index + 1).toString();
+                if (settings.custom_labels[labelKey] && settings.custom_labels[labelKey].content) {
+                    orderValue = settings.pretext_num + settings.custom_labels[labelKey].content + settings.postext_num;
+                } else {
+                    // Si no hay etiqueta personalizada, usar el formato por defecto
+                    switch(numbering_type) {
+                        case 'numbers':
+                            orderValue = pretext_num + (index + 1) + postext_num;
+                            break;
+                        case 'numbers_zero':
+                            orderValue = pretext_num + index + postext_num;
+                            break;
+                        case 'letters':
+                            if (settings.uppercase_letters) {
+                                orderValue = pretext_num + String.fromCharCode(65 + index) + postext_num;
+                            } else {
+                                orderValue = pretext_num + String.fromCharCode(97 + index) + postext_num;
+                            }
+                            break;
+                        case 'roman':
+                            if (settings.uppercase_letters) {
+                                orderValue = pretext_num + toRoman(index + 1).toUpperCase() + postext_num;
+                            } else {
+                                orderValue = pretext_num + toRoman(index + 1).toLowerCase() + postext_num;
+                            }
+                            break;
+                        default:
+                            orderValue = pretext_num + (index + 1) + postext_num;
                     }
-                    break;
-                case 'roman':
-                    if (settings.uppercase_letters) {
-                        orderValue = pretext_num + toRoman(index + 1).toUpperCase() + postext_num;
-                    } else {
-                        orderValue = pretext_num + toRoman(index + 1).toLowerCase() + postext_num;
-                    }
-                    break;
-                default:
-                    orderValue = pretext_num + (index + 1) + postext_num;
+                }
+            } else {
+                // Si no hay etiquetas personalizadas habilitadas, usar el formato por defecto
+                switch(numbering_type) {
+                    case 'numbers':
+                        orderValue = pretext_num + (index + 1) + postext_num;
+                        break;
+                    case 'numbers_zero':
+                        orderValue = pretext_num + index + postext_num;
+                        break;
+                    case 'letters':
+                        if (settings.uppercase_letters) {
+                            orderValue = pretext_num + String.fromCharCode(65 + index) + postext_num;
+                        } else {
+                            orderValue = pretext_num + String.fromCharCode(97 + index) + postext_num;
+                        }
+                        break;
+                    case 'roman':
+                        if (settings.uppercase_letters) {
+                            orderValue = pretext_num + toRoman(index + 1).toUpperCase() + postext_num;
+                        } else {
+                            orderValue = pretext_num + toRoman(index + 1).toLowerCase() + postext_num;
+                        }
+                        break;
+                    default:
+                        orderValue = pretext_num + (index + 1) + postext_num;
+                }
             }
             
             tableHtml += '<tr>'
@@ -596,11 +657,27 @@ function CmmOrderXBlock(runtime, element, settings) {
             var element = settings.ordeingelements[index];
             tablecontentHtml = '';
             if (element && element.content) {
+                var orderValue = '';
+                
+                // Verificar si hay etiquetas personalizadas
+                if (settings.use_custom_labels && settings.custom_labels) {
+                    var labelKey = (arrayIndex + 1).toString();
+                    if (settings.custom_labels[labelKey] && settings.custom_labels[labelKey].content) {
+                        orderValue =  pretext_num  + settings.custom_labels[labelKey].content + postext_num;
+                    } else {
+                        // Si no hay etiqueta personalizada, usar el formato por defecto
+                        orderValue = pretext_num + (arrayIndex + 1) + postext_num;
+                    }
+                } else {
+                    // Si no hay etiquetas personalizadas habilitadas, usar el formato por defecto
+                    orderValue = pretext_num + (arrayIndex + 1) + postext_num;
+                }
+                
                 tablecontentHtml += '<tr class="item-row" data-key="' + index + '">';
                 if (settings.numbering_type == 'none') {
                     tablecontentHtml += '<td class="content-cell">' + element.content + '</td>';
                 } else {
-                    tablecontentHtml += '<td class="order-cell">' + pretext_num + (arrayIndex + 1) + postext_num + '</td>' +
+                    tablecontentHtml += '<td class="order-cell">' + orderValue + '</td>' +
                     '<td class="content-cell">' + element.content + '</td>';
                 }
                 tablecontentHtml += '<td class="actions-cell" style="text-align: center;">' +

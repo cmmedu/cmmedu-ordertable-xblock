@@ -96,10 +96,27 @@ function CmmOrderXBlock(runtime, element) {
             random_disorder: $element.find('#random_disorder').is(':checked'),
             ordeingelements: getTableRowsData(),
             disordered_order: normalizedOrder,
-            correct_answers: correctAnswersString
+            correct_answers: correctAnswersString,
+            use_custom_labels: $('#use_custom_labels').is(':checked'),
+            label_width: $element.find('#label_width').val(),
+            custom_labels: {}
         };
         
-        console.log('Form data to submit:', data);
+        // Recolectar las etiquetas personalizadas si el checkbox está marcado
+        if (data.use_custom_labels) {
+            console.log('Recolectando etiquetas personalizadas...');
+            var cleanCustomLabels = {};
+            $('.custom-label-item').each(function() {
+                var key = $(this).data('key').trim();
+                var value = $(this).find('.custom-label-input').val();
+                console.log('Etiqueta personalizada:', key, '=', value);
+                cleanCustomLabels[key] = { content: value };
+            });
+            data.custom_labels = cleanCustomLabels;
+            console.log('Etiquetas personalizadas recolectadas:', data.custom_labels);
+        }
+        
+        console.log('Datos completos a enviar:', JSON.stringify(data, null, 2));
         return data;
     }
 
@@ -284,6 +301,7 @@ function CmmOrderXBlock(runtime, element) {
     }
 
     function addRow() {
+        console.log('[CMMEDU-ORDERTABLE] addRow llamado');
         var nextLabelNumber = $('.table-row').length + 1;
         var rowHtml = `
             <div class="table-row" data-row-id="${nextLabelNumber}">
@@ -315,10 +333,24 @@ function CmmOrderXBlock(runtime, element) {
         currentOrder = newOrder;
         updateDisorderPreview();
         resetCorrectAnswers(); // Resetear respuestas correctas
+        
+        // Actualizar los inputs de etiquetas personalizadas si están activos
+        if ($('#use_custom_labels').is(':checked')) {
+            // Guardar los valores actuales de custom_labels
+            var currentCustomLabels = {};
+            $('.custom-label-item').each(function() {
+                var key = $(this).data('key');
+                var value = $(this).find('.custom-label-input').val();
+                currentCustomLabels[key] = { content: value };
+            });
+            // Actualizar el input oculto con los valores actuales
+            $('#current-custom-labels-value').val(JSON.stringify(currentCustomLabels));
+            updateCustomLabelsInputs();
+        }
     }
 
     function removeRow(event) {
-        console.log('Remove row event triggered');
+        console.log('[CMMEDU-ORDERTABLE] removeRow llamado');
         event.preventDefault();
         event.stopPropagation();
         
@@ -362,20 +394,34 @@ function CmmOrderXBlock(runtime, element) {
         currentOrder = newOrder;
         updateDisorderPreview();
         resetCorrectAnswers(); // Resetear respuestas correctas
+        
+        // Actualizar los inputs de etiquetas personalizadas si están activos
+        if ($('#use_custom_labels').is(':checked')) {
+            // Guardar los valores actuales de custom_labels
+            var currentCustomLabels = {};
+            $('.custom-label-item').each(function() {
+                var key = $(this).data('key');
+                var value = $(this).find('.custom-label-input').val();
+                currentCustomLabels[key] = { content: value };
+            });
+            // Actualizar el input oculto con los valores actuales
+            $('#current-custom-labels-value').val(JSON.stringify(currentCustomLabels));
+            updateCustomLabelsInputs();
+        }
     }
 
     function saveChanges(event) {
         if (event) {
             event.preventDefault();
         }
-        console.log('Starting save process...');
+        console.log('Iniciando proceso de guardado...');
         
         // Guardar los valores actuales como valores anteriores
         previousDisorderOrder = $('#current-disorder-value').val();
         previousCorrectAnswers = $('#current-answers-value').val();
         
         var data = getFormData();
-        console.log('Data to be sent:', data);
+        console.log('Datos a enviar:', JSON.stringify(data, null, 2));
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
         
         if ($.isFunction(runtime.notify)) {
@@ -387,15 +433,15 @@ function CmmOrderXBlock(runtime, element) {
             url: handlerUrl,
             data: JSON.stringify(data),
             success: function(response) {
-                console.log('Server response:', response);
+                console.log('Respuesta del servidor:', response);
                 if (response.result === 'success') {
                     if ($.isFunction(runtime.notify)) {
                         runtime.notify('save', {state: 'end'});
                     }
                     // Actualizar savedOrder con el orden actual después de guardar
                     savedOrder = currentOrder;
-                    console.log('Order saved successfully. Current order:', currentOrder);
-                    console.log('Saved order:', savedOrder);
+                    console.log('Orden guardado exitosamente. Orden actual:', currentOrder);
+                    console.log('Orden guardado:', savedOrder);
                     
                     // Actualizar el display del orden
                     $('.order-display').text(response.correct_answers);
@@ -403,13 +449,19 @@ function CmmOrderXBlock(runtime, element) {
                     // Actualizar el display del orden anterior
                     var previousAnswers = previousCorrectAnswers || 'No definido';
                     $('.correct-answers-container .previous-order-display').text(previousAnswers);
+                    
+                    // Guardar los valores de las etiquetas personalizadas
+                    if (data.use_custom_labels) {
+                        console.log('Guardando etiquetas personalizadas:', data.custom_labels);
+                        $('#current-custom-labels-value').val(JSON.stringify(data.custom_labels));
+                    }
                 } else {
-                    console.error('Error saving order:', response.message);
+                    console.error('Error al guardar:', response.message);
                     showMessage('Error al guardar: ' + response.message, 'error');
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX error:', error);
+                console.error('Error AJAX:', error);
                 console.error('Status:', status);
                 console.error('Response:', xhr.responseText);
                 showMessage('Error al guardar los cambios', 'error');
@@ -763,6 +815,165 @@ function CmmOrderXBlock(runtime, element) {
         $addAnswerButton.on('click', addAnswer);
         
         updateAnswerMoveButtons();
+    }
+
+    // Función para obtener el valor por defecto según el tipo de numeración
+    function getDefaultLabelValue(index, numberingType, uppercase) {
+        var number = index + 1; // Convertir de base 0 a base 1
+        switch(numberingType) {
+            case 'numbers':
+                return number.toString();
+            case 'numbers_zero':
+                return index.toString();
+            case 'letters':
+                return numberToLetter(number, uppercase);
+            case 'roman':
+                return numberToRoman(number, uppercase);
+            default:
+                return number.toString();
+        }
+    }
+
+    // Función para convertir número a letra
+    function numberToLetter(n, uppercase) {
+        if (n < 1) return '';
+        var result = '';
+        while (n > 0) {
+            n--;
+            result = String.fromCharCode(65 + (n % 26)) + result;
+            n = Math.floor(n / 26);
+        }
+        return uppercase ? result : result.toLowerCase();
+    }
+
+    // Función para convertir número a romano
+    function numberToRoman(n, uppercase) {
+        if (!n || n < 1 || n > 3999) return '';
+        var ints = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+        var nums = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+        var result = '';
+        for (var i = 0; i < ints.length; i++) {
+            while (n >= ints[i]) {
+                result += nums[i];
+                n -= ints[i];
+            }
+        }
+        return uppercase ? result : result.toLowerCase();
+    }
+
+    // Función para actualizar los inputs de etiquetas personalizadas
+    function updateCustomLabelsInputs() {
+        //console.log('[CMMEDU-ORDERTABLE] updateCustomLabelsInputs llamado desde:', new Error().stack);
+        var $container = $('.custom-labels-list');
+        $container.empty();
+        
+        // Obtener todos los labels actuales
+        var labels = getOrderedLabels();
+        var numberingType = $('#numbering_type').val();
+        var uppercase = $('#uppercase_letters').is(':checked');
+        
+        // Obtener los valores guardados si existen
+        var savedLabels = {};
+        try {
+            var rawValue = $('#current-custom-labels-value').val();
+            //console.log('[CMMEDU-ORDERTABLE] Valor raw del input:', rawValue);
+            //console.log('[CMMEDU-ORDERTABLE] Tipo del valor raw:', typeof rawValue);
+            
+            if (!rawValue) {
+                console.log('[CMMEDU-ORDERTABLE] No hay valor guardado, usando objeto vacío');
+                savedLabels = {};
+            } else {
+                var savedData;
+                // Intentar parsear como JSON primero
+                try {
+                    savedData = JSON.parse(rawValue);
+                } catch (e) {
+                    // Si falla, intentar evaluar como objeto literal
+                    try {
+                        savedData = eval('(' + rawValue + ')');
+                    } catch (e2) {
+                        console.warn('[CMMEDU-ORDERTABLE] Error al parsear el valor:', e2);
+                        savedData = {};
+                    }
+                }
+                
+                //console.log('[CMMEDU-ORDERTABLE] Datos guardados originales:', savedData);
+                // Limpiar las claves del objeto guardado y convertirlas a string
+                Object.keys(savedData).forEach(function(key) {
+                    var cleanKey = key.trim().toString();
+                    savedLabels[cleanKey] = savedData[key];
+                });
+                //console.log('[CMMEDU-ORDERTABLE] Custom labels limpios:', savedLabels);
+            }
+        } catch (e) {
+            //console.warn('[CMMEDU-ORDERTABLE] Error general:', e);
+            //console.warn('[CMMEDU-ORDERTABLE] Valor que causó el error:', $('#current-custom-labels-value').val());
+            savedLabels = {};
+        }
+        
+        labels.forEach(function(label, index) {
+            var defaultValue = getDefaultLabelValue(index, numberingType, uppercase);
+            // Convertir el label a string para la comparación
+            var labelStr = label.toString();
+            //console.log('[CMMEDU-ORDERTABLE] labelStr:', labelStr);
+            //console.log('[CMMEDU-ORDERTABLE] savedLabels:', savedLabels);
+            //console.log('[CMMEDU-ORDERTABLE] savedLabels[labelStr]:', savedLabels[labelStr]);
+            //console.log('[CMMEDU-ORDERTABLE] savedLabels[parseInt(labelStr)]:', savedLabels[parseInt(labelStr)]);
+            
+            // Usar el valor guardado si existe, de lo contrario usar el valor por defecto
+            var savedValue = '';
+            // Intentar con string primero, luego con número
+            if (savedLabels[labelStr] && savedLabels[labelStr].content) {
+                savedValue = savedLabels[labelStr].content;
+                //console.log('[CMMEDU-ORDERTABLE] Usando valor guardado (string) para label', labelStr, ':', savedValue);
+            } else if (savedLabels[parseInt(labelStr)] && savedLabels[parseInt(labelStr)].content) {
+                savedValue = savedLabels[parseInt(labelStr)].content;
+                //console.log('[CMMEDU-ORDERTABLE] Usando valor guardado (número) para label', labelStr, ':', savedValue);
+            } else {
+                savedValue = defaultValue;
+                //console.log('[CMMEDU-ORDERTABLE] Usando valor por defecto para label', labelStr, ':', savedValue);
+            }
+            
+            var $item = $('<div class="custom-label-item" data-key="' + labelStr + '">' +
+                '<label>Etiqueta ' + labelStr + ':</label>' +
+                '<input type="text" name="custom_label_' + labelStr + '" class="custom-label-input" value="' + savedValue + '" />' +
+                '</div>');
+            $container.append($item);
+        });
+    }
+
+    // Función para manejar la visibilidad del contenedor de etiquetas personalizadas
+    function handleCustomLabelsVisibility() {
+        console.log('[CMMEDU-ORDERTABLE] handleCustomLabelsVisibility llamado');
+        var useCustomLabels = $('#use_custom_labels').is(':checked');
+        $('.custom-labels-container').toggle(useCustomLabels);
+        
+        if (useCustomLabels) {
+            updateCustomLabelsInputs();
+        }
+    }
+
+    // Agregar eventos para actualizar los valores por defecto cuando cambie el tipo de numeración
+    $('#numbering_type, #uppercase_letters').on('change', function() {
+        console.log('[CMMEDU-ORDERTABLE] Cambio en numbering_type o uppercase_letters');
+        if ($('#use_custom_labels').is(':checked')) {
+            updateCustomLabelsInputs();
+        }
+    });
+
+    // Agregar el evento change al checkbox
+    $('#use_custom_labels').on('change', handleCustomLabelsVisibility);
+
+    // Ejecutar al inicio
+    handleCustomLabelsVisibility();
+    
+    // Mostrar el valor de custom_labels al inicio
+    //console.log('[CMMEDU-ORDERTABLE] Custom labels al inicio:', $('#current-custom-labels-value').val());
+    try {
+        var savedLabels = JSON.parse($('#current-custom-labels-value').val() || '{}');
+        //console.log('[CMMEDU-ORDERTABLE] Custom labels parseados:', savedLabels);
+    } catch (e) {
+        console.warn('[CMMEDU-ORDERTABLE] Error al parsear custom labels:', e);
     }
 
     // Inicialización de eventos
