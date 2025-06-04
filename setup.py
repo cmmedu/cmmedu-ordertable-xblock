@@ -16,7 +16,7 @@ def package_data(pkg, roots):
 
 setup(
     name='cmmedu-ordertable-xblock',
-    version='0.1.0',
+    version='1.0.0',
     description='XBlock for ordering items',
     packages=[
     ],
