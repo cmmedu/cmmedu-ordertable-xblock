@@ -495,9 +495,9 @@ function CmmOrderXBlock(runtime, element) {
         
         orderedLabels.forEach(function(label) {
             var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
-                '<button class="move-left-button" title="Mover izquierda">></button>' +
+                '<button class="move-left-button" title="Mover izquierda"><</button>' +
                 '<span class="item-content">' + label + '</span>' +
-                '<button class="move-right-button" title="Mover derecha"><</button>' +
+                '<button class="move-right-button" title="Mover derecha">></button>' +
                 '</div>');
             
             $newAnswerList.append($newAnswer);
@@ -599,9 +599,9 @@ function CmmOrderXBlock(runtime, element) {
         var orderedLabels = getOrderedLabels();
         orderedLabels.forEach(function(label) {
             var $newAnswer = $('<div class="correct-answer-item" draggable="true">' +
-                '<button class="move-left-button" title="Mover izquierda">></button>' +
+                '<button class="move-left-button" title="Mover izquierda"><</button>' +
                 '<span class="item-content">' + label + '</span>' +
-                '<button class="move-right-button" title="Mover derecha"><</button>' +
+                '<button class="move-right-button" title="Mover derecha">></button>' +
                 '</div>');
             
             $groupContent.append($newAnswer);
@@ -760,9 +760,9 @@ function CmmOrderXBlock(runtime, element) {
                 
                 answerList.forEach(function(answer) {
                     var $answerItem = $('<div class="correct-answer-item" draggable="true">' +
-                        '<button class="move-left-button" title="Mover izquierda">></button>' +
+                        '<button class="move-left-button" title="Mover izquierda"><</button>' +
                         '<span class="item-content">' + answer + '</span>' +
-                        '<button class="move-right-button" title="Mover derecha"><</button>' +
+                        '<button class="move-right-button" title="Mover derecha">></button>' +
                         '</div>');
                     
                     $groupContent.append($answerItem);
