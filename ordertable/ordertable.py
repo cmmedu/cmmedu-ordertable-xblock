@@ -60,12 +60,12 @@ class CmmEduOrderTableXBlock(XBlock):
         display_name="Display Name",
         help="Nombre del componente",
         scope=Scope.settings,
-        default="Cmm Edu Order Table XBlock"
+        default="CmmEdu Order Table XBlock"
     )
 
     table_name = String(
         display_name="Nombre de la tabla",
-        help="Nombre que se mostrará en la cabecera de la tabla",
+        help="Nombre que se mostrará en la cabecera de la tabla, vacio para no incluir la cabecera",
         scope=Scope.settings,
         default="Tabla Ordenada"
     )
@@ -436,6 +436,11 @@ class CmmEduOrderTableXBlock(XBlock):
             self.correct_answers = '_'.join([str(key) for key in self.ordeingelements.keys()])
         
         context = {
+            'display_name': {
+                'value': self.display_name,
+                'display_name': self.fields['display_name'].display_name,
+                'help': self.fields['display_name'].help
+            },
             'table_name': {
                 'value': self.table_name,
                 'display_name': self.fields['table_name'].display_name,

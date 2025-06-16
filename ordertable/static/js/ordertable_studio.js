@@ -9,6 +9,9 @@ function CmmOrderXBlock(runtime, element) {
     var $disorderPreview = $element.find('.disordered-list');
     var $correctAnswersList = $element.find('.correct-answers-list');
     var $addAnswerButton = $element.find('.add-answer-button');
+    var $displayNameInput = $element.find('#display_name');
+    var $resetDisplayNameButton = $element.find('.reset-display-name');
+    var defaultDisplayName = 'CmmEdu Order Table XBlock';
     var currentOrder = [];
     var savedOrder = [];
     var previousDisorderOrder = $('#current-disorder-value').val();
@@ -83,6 +86,7 @@ function CmmOrderXBlock(runtime, element) {
         console.log('Correct answers string:', correctAnswersString);
         
         var data = {
+            display_name: $element.find('#display_name').val(),
             table_name: $element.find('#table_name').val(),
             textcolumn_order: $element.find('#textcolumn_order').val(),
             textcolumn_content: $element.find('#textcolumn_content').val(),
@@ -975,6 +979,22 @@ function CmmOrderXBlock(runtime, element) {
         console.warn('[CMMEDU-ORDERTABLE] Error al parsear custom labels:', e);
     }
 
+    // Función para manejar la visibilidad del botón de reinicio
+    function handleResetButtonVisibility() {
+        var currentValue = $displayNameInput.val();
+        if (currentValue !== defaultDisplayName) {
+            $resetDisplayNameButton.show();
+        } else {
+            $resetDisplayNameButton.hide();
+        }
+    }
+
+    // Función para reiniciar el display_name
+    function resetDisplayName() {
+        $displayNameInput.val(defaultDisplayName);
+        handleResetButtonVisibility();
+    }
+
     // Inicialización de eventos
     $tableRows.on('click', '.remove-row', removeRow);
     $addRowButton.on('click', addRow);
@@ -994,6 +1014,21 @@ function CmmOrderXBlock(runtime, element) {
     function initialize() {
         // ... existing initialization code ...
         initializeCorrectAnswers();
+        $addRowButton.on('click', addRow);
+        $saveButton.on('click', saveChanges);
+        $cancelButton.on('click', function() {
+            runtime.notify('cancel', {});
+        });
+        
+        // Add reset button functionality
+        $displayNameInput.on('input', handleResetButtonVisibility);
+        $resetDisplayNameButton.on('click', resetDisplayName);
+        
+        // Initialize reset button visibility
+        handleResetButtonVisibility();
+        
+        // Rest of the initialization code
+        // ... existing code ...
     }
 
     initialize();

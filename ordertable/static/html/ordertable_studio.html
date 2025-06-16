@@ -5,6 +5,17 @@
             <ul class="list-input settings-list">
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
+                        <label class="label setting-label" for="display_name">{{display_name.display_name}}</label>
+                        <span class="tip setting-help">{{display_name.help}}</span>
+                        <div class="display-name-container" style="display: flex; align-items: center; gap: 10px;">
+                            <input class="input setting-input" name="display_name" id="display_name"
+                                value="{{display_name.value}}" type="text" />
+                            <button type="button" class="reset-display-name" style="display: none;" title="Restablecer al valor por defecto">↺</button>
+                        </div>
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
                         <label class="label setting-label" for="table_name">{{table_name.display_name}}</label>
                         <span class="tip setting-help">{{table_name.help}}</span>
                         <input class="input setting-input" name="table_name" id="table_name"
