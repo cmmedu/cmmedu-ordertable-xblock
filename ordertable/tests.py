@@ -51,7 +51,7 @@ class TestCmmEduOrderTableXBlock(unittest.TestCase):
         """
         Verifica que el xblock se crea correctamente con los valores por defecto
         """
-        self.assertEqual(self.xblock.display_name, "Cmm Edu Order Table XBlock")
+        self.assertEqual(self.xblock.display_name, "CmmEdu Order Table XBlock")
         self.assertEqual(self.xblock.table_name, "Tabla Ordenada")
         self.assertEqual(self.xblock.textcolumn_order, "Orden")
         self.assertEqual(self.xblock.textcolumn_content, "Elementos a ordenar")
