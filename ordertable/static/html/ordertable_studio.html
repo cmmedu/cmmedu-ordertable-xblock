@@ -206,9 +206,9 @@
                                     <div class="group-content">
                                         {% for answer in answer_list|split:"_" %}
                                         <div class="correct-answer-item" draggable="true" data-value="{{answer}}">
-                                            <button class="move-left-button" title="Mover izquierda">&lt;</button>
+                                            <button class="move-left-button" title="Mover izquierda">&gt;</button>
                                             <span class="item-content">{{answer}}</span>
-                                            <button class="move-right-button" title="Mover derecha">&gt;</button>
+                                            <button class="move-right-button" title="Mover derecha">&lt;</button>
                                         </div>
                                         {% endfor %}
                                     </div>

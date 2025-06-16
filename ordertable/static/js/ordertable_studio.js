@@ -135,7 +135,6 @@ function CmmOrderXBlock(runtime, element) {
     function getDisorderList() {
         var disorderList = [];
         $('.table-row').each(function(index) {
-            var $row = $(this);
             var rowNumber = index + 1; // Usar el número de orden basado en la posición
             disorderList.push(rowNumber.toString());
         });
@@ -478,9 +477,9 @@ function CmmOrderXBlock(runtime, element) {
     // Obtener lista de labels ordenados
     function getOrderedLabels() {
         var labels = [];
-        $('.table-row').each(function() {
-            var label = $(this).find('.row-content p').text().replace('Label: ', '');
-            labels.push(label);
+        $('.table-row').each(function(index) {
+            // Usar el índice + 1 como etiqueta (1-based index)
+            labels.push((index + 1).toString());
         });
         return labels;
     }
