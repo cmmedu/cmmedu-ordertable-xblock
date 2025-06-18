@@ -212,14 +212,31 @@ function CmmOrderXBlock(runtime, element, settings) {
     
     // Obtener el estado actual
     var currentScore = parseFloat($element.find('.status').attr('data-score') || '0');
-    var attempts = parseInt($element.find('.submission-feedback').text().match(/\d+/)[0] || '0');
-    var maxAttempts = parseInt($element.find('.submission-feedback').text().match(/\d+/g)[1] || '0');
+    
+    // Mejorar la extracción de intentos del texto
+    var attempts = 0;
+    var maxAttempts = 0;
+    var submissionFeedbackText = $element.find('.submission-feedback').text();
+    var attemptsMatch = submissionFeedbackText.match(/(\d+)\s+de\s+(\d+)/);
+    if (attemptsMatch) {
+        attempts = parseInt(attemptsMatch[1]);
+        maxAttempts = parseInt(attemptsMatch[2]);
+    } else {
+        // Fallback: intentar extraer solo números
+        var numbers = submissionFeedbackText.match(/\d+/g);
+        if (numbers && numbers.length >= 2) {
+            attempts = parseInt(numbers[0]);
+            maxAttempts = parseInt(numbers[1]);
+        }
+    }
     
     /*
-    console.log("[CMM-ORDER] Estado inicial para XBlock " + xblockId + ":", {
+    console.log("[CMM-ORDER] Estado inicial extraído para XBlock " + sublocation + ":", {
         score: currentScore,
         attempts: attempts,
-        maxAttempts: maxAttempts
+        maxAttempts: maxAttempts,
+        submissionFeedbackText: submissionFeedbackText
+c
     });
     */
 
@@ -256,18 +273,55 @@ function CmmOrderXBlock(runtime, element, settings) {
         }
     }
 
+    // Función para inicializar el estado del XBlock
+    function initializeXBlockState() {
+        // Update status class - CRITICAL for conditional XBlock detection
+        var $statusDiv = $element.find('.status');
+        $statusDiv.removeClass('correct incorrect unanswered');
+        
+        //console.log("[CMM-ORDER] Inicializando estado para XBlock " + sublocation + " - Score:", currentScore, "Attempts:", attempts, "MaxAttempts:", maxAttempts);
+        
+        // Determinar si el botón debe estar desactivado
+        var shouldDisableButton = false;
+        var shouldDisableMoveButtons = false;
+        
+        if (currentScore >= 1.0) {
+            $statusDiv.addClass('correct');
+            //console.log("[CMM-ORDER] Estado inicial marcado como CORRECTO para XBlock " + sublocation);
+            $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
+            shouldDisableButton = true;
+            shouldDisableMoveButtons = true;
+        } else if (currentScore === 0.0 && attempts > 0) {
+            $statusDiv.addClass('incorrect');
+            //console.log("[CMM-ORDER] Estado inicial marcado como INCORRECTO para XBlock " + sublocation);
+            $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
+            
+            // Verificar si se agotaron los intentos (solo si hay un límite de intentos)
+            if (maxAttempts > 0 && attempts >= maxAttempts) {
+                //console.log("[CMM-ORDER] Intentos agotados para XBlock " + sublocation + " - Desactivando botón");
+                shouldDisableButton = true;
+                shouldDisableMoveButtons = true;
+                showVerRespuestaButton($notification);
+            } else if (maxAttempts === 0) {
+                //console.log("[CMM-ORDER] Sin límite de intentos para XBlock " + sublocation + " - Botón habilitado");
+            }
+        } else {
+            $statusDiv.addClass('unanswered');
+            //console.log("[CMM-ORDER] Estado inicial marcado como SIN RESPONDER para XBlock " + sublocation);
+        }
+        
+        // Aplicar el estado de los botones
+        $submitButton.prop('disabled', shouldDisableButton);
+        $element.find('.move-up-button, .move-down-button').prop('disabled', shouldDisableMoveButtons);
+        
+        //console.log("[CMM-ORDER] Estado inicial final para XBlock " + sublocation + " - Status class:", $statusDiv.attr('class'), "Button disabled:", shouldDisableButton, "Move buttons disabled:", shouldDisableMoveButtons);
+    }
+
     // Inicializar el ícono basado en el estado actual
     var $notification = $element.find('.notificacion');
-    if (currentScore >= 1.0) {
-        $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
-        $submitButton.prop('disabled', true);
-        $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-    } else if (currentScore === 0.0 && attempts > 0) {
-        $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
-        if (attempts >= maxAttempts) {
-            showVerRespuestaButton($notification);
-        }
-    }
+    
+    // Llamar a la función de inicialización del estado
+    initializeXBlockState();
 
     function updateButtonStates() {
         $itemsContainer.find('.item-row').each(function(index) {
@@ -352,9 +406,27 @@ function CmmOrderXBlock(runtime, element, settings) {
     $submitButton.on('click', function(e) {
         e.preventDefault();
         
+        // Verificar si el botón debería estar desactivado
+        if ($submitButton.prop('disabled')) {
+            //console.log("[CMM-ORDER] Intento de envío bloqueado - botón desactivado para XBlock " + sublocation);
+            return;
+        }
+        
+        // Verificar si se agotaron los intentos
+        if (maxAttempts > 0 && attempts >= maxAttempts) {
+            //console.log("[CMM-ORDER] Intento de envío bloqueado - intentos agotados para XBlock " + sublocation);
+            return;
+        }
+        
+        // Verificar si ya se respondió correctamente
+        if (currentScore >= 1.0) {
+            //console.log("[CMM-ORDER] Intento de envío bloqueado - ya respondido correctamente para XBlock " + sublocation);
+            return;
+        }
+        
         // Get current order
         var orderString = getCurrentOrder();
-        //console.log("[CMM-ORDER] Enviando orden:", orderString);
+        //console.log("[CMM-ORDER] Enviando orden para XBlock " + sublocation + ":", orderString);
         
         // Send both 'order' and 'answer' for compatibility
         var data = {
@@ -364,7 +436,7 @@ function CmmOrderXBlock(runtime, element, settings) {
         
         $.post(handlerUrl, JSON.stringify(data))
             .done(function(response) {
-                //console.log("[CMM-ORDER] Respuesta recibida:", response);
+                //console.log("[CMM-ORDER] Respuesta recibida para XBlock " + sublocation + ":", response);
                 if (response.result === 'success') {
                     // Update UI with response
                     updateUIWithResponse(response);
@@ -374,7 +446,7 @@ function CmmOrderXBlock(runtime, element, settings) {
                 }
             })
             .fail(function() {
-                //console.log("[CMM-ORDER] Error en la petición");
+                console.log("[CMM-ORDER] Error en la petición para XBlock " + sublocation);
                 showMessage('Error al enviar la respuesta', 'error');
         });
     });
@@ -561,38 +633,32 @@ function CmmOrderXBlock(runtime, element, settings) {
     });
 
     function updateUIWithResponse(response) {
-        // Update attempts counter
+        //console.log("[CMM-ORDER] Actualizando UI con respuesta para XBlock " + sublocation + ":", response);
+        
+        // Update attempts counter and global variables
         if (response.attempts && response.max_attempts) {
-            var attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intentos";
-            if (response.max_attempts === 1) {
-                attemptsText = "Ha realizado " + response.attempts + " de " + response.max_attempts + " intento";
-                }
-                $element.find('.submission-feedback').text(attemptsText);
-            }
+            attempts = parseInt(response.attempts);
+            maxAttempts = parseInt(response.max_attempts);
             
-        // Update notification area
-            var $notification = $element.find('.notificacion');
-        if (response.is_correct) {
-                $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
-                $submitButton.prop('disabled', true);
-                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-        } else {
-                $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
-            if (response.max_attempts > 0 && response.attempts >= response.max_attempts) {
-                showVerRespuestaButton($notification);
+            var attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intentos";
+            if (maxAttempts === 1) {
+                attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intento";
             }
+            $element.find('.submission-feedback').text(attemptsText);
+            
+            //console.log("[CMM-ORDER] Intentos actualizados para XBlock " + sublocation + ":", attempts, "/", maxAttempts);
         }
-
-        // Update status class
-        var $statusDiv = $element.find('.status');
-        $statusDiv.removeClass('correct incorrect unanswered');
-        $statusDiv.addClass(response.is_correct ? 'correct' : 'incorrect');
+        
+        // Update global score variable
+        if (response.score !== undefined) {
+            currentScore = parseFloat(response.score);
+            $element.find('.status').attr('data-score', currentScore);
+            //console.log("[CMM-ORDER] Score actualizado para XBlock " + sublocation + ":", currentScore);
+        }
             
-            // Disable submit button if needed
-        if (response.is_correct || (response.max_attempts > 0 && response.attempts >= response.max_attempts)) {
-                $submitButton.prop('disabled', true);
-                $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-            }
+        // Re-inicializar el estado usando la función centralizada
+        //console.log("[CMM-ORDER] Llamando a initializeXBlockState para XBlock " + sublocation);
+        initializeXBlockState();
 
         // Save complete state object with sublocation identifier
         var currentOrder = getCurrentOrder();
@@ -611,7 +677,7 @@ function CmmOrderXBlock(runtime, element, settings) {
         $element.data('state', state);
         $xblocksContainer.data(cachedStateId, state);
         
-        //console.log("[CMM-ORDER] Estado actualizado para XBlock " + sublocation + ":", state);
+        //console.log("[CMM-ORDER] Estado final guardado para XBlock " + sublocation + ":", state);
     }
 
     function showMessage(message, type) {
@@ -627,7 +693,7 @@ function CmmOrderXBlock(runtime, element, settings) {
     $(function() {
         var cachedState = $xblocksContainer.data(cachedStateId);
         if (cachedState && cachedState.sublocation === sublocation) {
-            console.log("[CMM-ORDER] Restaurando estado en caché para XBlock " + sublocation);
+            //console.log("[CMM-ORDER] Restaurando estado en caché para XBlock " + sublocation);
             updateUIWithState(cachedState);
             
             // Restore table order
@@ -635,14 +701,14 @@ function CmmOrderXBlock(runtime, element, settings) {
                 restoreTableOrder(cachedState.order);
             }
         } else {
-            console.log("[CMM-ORDER] No se encontró estado en caché para XBlock " + sublocation);
+            //console.log("[CMM-ORDER] No se encontró estado en caché para XBlock " + sublocation);
         }
     });
 
     function restoreTableOrder(order) {
         if (!order || !settings.ordeingelements) return;
         
-        console.log("[CMM-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
+        //console.log("[CMM-ORDER] Restaurando orden de tabla para XBlock " + sublocation);
         var orderArray = order.split('_');
         var $table = $element.find('.cmmedu-ordertable-table-content');
         var $tbody = $table.find('tbody');
@@ -756,33 +822,21 @@ function CmmOrderXBlock(runtime, element, settings) {
             $element.find('.submission-feedback').text(attemptsText);
         }
 
-        // Update notification area based on score
-        var $notification = $element.find('.notificacion');
-        if (currentScore >= 1.0) {
-            $notification.html('<img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta');
-            $submitButton.prop('disabled', true);
-            $element.find('.move-up-button, .move-down-button').prop('disabled', true);
-        } else if (currentScore === 0.0 && attempts > 0) {
-            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta');
-            if (attempts >= maxAttempts) {
-                showVerRespuestaButton($notification);
-            }
-        } else {
-            $notification.empty();
-            $submitButton.prop('disabled', false);
-            $element.find('.move-up-button, .move-down-button').prop('disabled', false);
-        }
+        // Re-inicializar el estado usando la función centralizada
+        initializeXBlockState();
 
         // Store the updated state in both places
         $element.data('state', state);
         $xblocksContainer.data(cachedStateId, state);
+        
+        //console.log("[CMM-ORDER] Estado final para XBlock " + sublocation + " - Score:", currentScore, "Attempts:", attempts, "Status class:", $element.find('.status').attr('class'));
     }
 
     var ordertableid = "order_" + settings.sublocation;
     renderMathForSpecificElements(ordertableid);
 
     function renderMathForSpecificElements(id) {
-        console.log("Render mathjax in " + id)
+        //console.log("Render mathjax in " + id)
         if (typeof MathJax !== "undefined") {
             var $ordtab = $('#' + id);
             //console.log("encontrado " )
