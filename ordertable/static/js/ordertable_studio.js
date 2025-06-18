@@ -37,11 +37,11 @@ function CmmOrderXBlock(runtime, element) {
     // Convertir string a array para respuestas correctas
     function stringToAnswersArray(answerString) {
         if (!answerString) return [];
-        console.log('Converting string to array:', answerString);
+        //console.log('Converting string to array:', answerString);
         
         // Separar las listas usando _[|]_
         var lists = answerString.split('_[|]_');
-        console.log('Split lists:', lists);
+        //console.log('Split lists:', lists);
         
         return lists.map(function(listString) {
             // Limpiar espacios en blanco y separar por _
@@ -54,21 +54,21 @@ function CmmOrderXBlock(runtime, element) {
     // Convertir array a string para respuestas correctas
     function answersArrayToString(answerArray) {
         if (!answerArray || !answerArray.length) return '';
-        console.log('Converting array to string:', answerArray);
+        //console.log('Converting array to string:', answerArray);
         
         // Convertir cada lista a string usando _ como separador
         var result = answerArray.map(function(list) {
             return list.join('_');
         }).join('_[|]_');
         
-        console.log('Result string:', result);
+        //console.log('Result string:', result);
         return result;
     }
 
     function getFormData() {
         // Obtener el valor directamente del input
         var orderString = $('#current-disorder-value').val();
-        console.log('Disorder order string from input:', orderString);
+        //console.log('Disorder order string from input:', orderString);
         
         // Validar que el valor no contenga el separador de respuestas correctas
         if (orderString.includes('_[|]_')) {
@@ -79,11 +79,11 @@ function CmmOrderXBlock(runtime, element) {
         
         // Convertir a array y luego de vuelta a string para asegurar el formato correcto
         var normalizedOrder = arrayToString(stringToArray(orderString));
-        console.log('Normalized disorder order:', normalizedOrder);
+        //console.log('Normalized disorder order:', normalizedOrder);
         
         // Obtener las respuestas correctas directamente del input
         var correctAnswersString = $('#current-answers-value').val();
-        console.log('Correct answers string:', correctAnswersString);
+        //console.log('Correct answers string:', correctAnswersString);
         
         var data = {
             display_name: $element.find('#display_name').val(),
@@ -108,27 +108,27 @@ function CmmOrderXBlock(runtime, element) {
         
         // Recolectar las etiquetas personalizadas si el checkbox está marcado
         if (data.use_custom_labels) {
-            console.log('Recolectando etiquetas personalizadas...');
+            //console.log('Recolectando etiquetas personalizadas...');
             var cleanCustomLabels = {};
             $('.custom-label-item').each(function() {
                 var key = $(this).data('key').trim();
                 var value = $(this).find('.custom-label-input').val();
-                console.log('Etiqueta personalizada:', key, '=', value);
+                //console.log('Etiqueta personalizada:', key, '=', value);
                 cleanCustomLabels[key] = { content: value };
             });
             data.custom_labels = cleanCustomLabels;
-            console.log('Etiquetas personalizadas recolectadas:', data.custom_labels);
+            //console.log('Etiquetas personalizadas recolectadas:', data.custom_labels);
         }
         
-        console.log('Datos completos a enviar:', JSON.stringify(data, null, 2));
+        //console.log('Datos completos a enviar:', JSON.stringify(data, null, 2));
         return data;
     }
 
     function getTableRowsData() {
         var rows = {};
-        $element.find('.table-row').each(function() {
+        $element.find('.table-row').each(function(index) {
             var $row = $(this);
-            var rowId = $row.find('.row-label').text().trim() || $row.data('row-id');
+            var rowId = (index + 1).toString(); // Usar índice + 1 como ID
             rows[rowId] = {
                 content: $row.find('.row-content-input').val()
             };
@@ -142,7 +142,7 @@ function CmmOrderXBlock(runtime, element) {
             var rowNumber = index + 1; // Usar el número de orden basado en la posición
             disorderList.push(rowNumber.toString());
         });
-        console.log('Getting disorder list:', disorderList);
+        //console.log('Getting disorder list:', disorderList);
         return disorderList;
     }
 
@@ -151,7 +151,7 @@ function CmmOrderXBlock(runtime, element) {
         $disorderPreview.find('.disorder-item').each(function() {
             currentOrder.push($(this).data('value'));
         });
-        console.log('Current disorder order updated:', currentOrder);
+        //console.log('Current disorder order updated:', currentOrder);
         
         // Validar que el orden no contenga el separador de respuestas correctas
         var orderString = arrayToString(currentOrder);
@@ -176,8 +176,8 @@ function CmmOrderXBlock(runtime, element) {
         currentOrder = stringToArray(currentValue);
         
         var disorderList = getDisorderList();
-        console.log('Disorder list:', disorderList);
-        console.log('Current order from input:', currentOrder);
+        //console.log('Disorder list:', disorderList);
+        //console.log('Current order from input:', currentOrder);
         
         // Si no hay elementos en la lista, no hacer nada
         if (disorderList.length === 0) {
@@ -197,7 +197,7 @@ function CmmOrderXBlock(runtime, element) {
             }
         });
         
-        console.log('Updated current order:', currentOrder);
+        //console.log('Updated current order:', currentOrder);
         
         // Mantener el label y el input
         var $label = $disorderPreview.find('.order-label');
@@ -304,7 +304,7 @@ function CmmOrderXBlock(runtime, element) {
     }
 
     function addRow() {
-        console.log('[CMMEDU-ORDERTABLE] addRow llamado');
+        //console.log('[CMMEDU-ORDERTABLE] addRow llamado');
         var nextLabelNumber = $('.table-row').length + 1;
         var rowHtml = `
             <div class="table-row" data-row-id="${nextLabelNumber}">
@@ -322,11 +322,10 @@ function CmmOrderXBlock(runtime, element) {
         `;
         $('.table-rows').append(rowHtml);
         
-        // Obtener todos los labels actuales
+        // Obtener todos los labels actuales usando índices
         var newOrder = [];
-        $('.table-row').each(function() {
-            var label = $(this).find('.row-content p').text().replace('Label: ', '');
-            newOrder.push(label);
+        $('.table-row').each(function(index) {
+            newOrder.push((index + 1).toString());
         });
         
         // Actualizar el input con el nuevo orden
@@ -353,7 +352,7 @@ function CmmOrderXBlock(runtime, element) {
     }
 
     function removeRow(event) {
-        console.log('[CMMEDU-ORDERTABLE] removeRow llamado');
+        //console.log('[CMMEDU-ORDERTABLE] removeRow llamado');
         event.preventDefault();
         event.stopPropagation();
         
@@ -371,23 +370,22 @@ function CmmOrderXBlock(runtime, element) {
         // Renumerar los labels restantes desde 1 hasta el total
         var $rows = $('.table-row');
         var totalRows = $rows.length;
-        console.log('Total rows before renumbering:', totalRows);
+        //console.log('Total rows before renumbering:', totalRows);
         
         $rows.each(function(index) {
             var $currentLabel = $(this).find('.row-content p');
             if ($currentLabel.length) {
                 var newNumber = index + 1;
-                console.log('Renumbering row', index, 'to', newNumber);
+                //console.log('Renumbering row', index, 'to', newNumber);
                 $currentLabel.text('Label: ' + newNumber);
                 $(this).attr('data-row-id', newNumber);
             }
         });
         
-        // Obtener todos los labels actuales
+        // Obtener todos los labels actuales usando índices
         var newOrder = [];
-        $('.table-row').each(function() {
-            var label = $(this).find('.row-content p').text().replace('Label: ', '');
-            newOrder.push(label);
+        $('.table-row').each(function(index) {
+            newOrder.push((index + 1).toString());
         });
         
         // Actualizar el input con el nuevo orden
@@ -424,7 +422,7 @@ function CmmOrderXBlock(runtime, element) {
         previousCorrectAnswers = $('#current-answers-value').val();
         
         var data = getFormData();
-        console.log('Datos a enviar:', JSON.stringify(data, null, 2));
+        //console.log('Datos a enviar:', JSON.stringify(data, null, 2));
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
         
         if ($.isFunction(runtime.notify)) {
@@ -436,15 +434,16 @@ function CmmOrderXBlock(runtime, element) {
             url: handlerUrl,
             data: JSON.stringify(data),
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
+                console.log('Subido Correctamente');
+                //console.log('Respuesta del servidor:', response);
                 if (response.result === 'success') {
                     if ($.isFunction(runtime.notify)) {
                         runtime.notify('save', {state: 'end'});
                     }
                     // Actualizar savedOrder con el orden actual después de guardar
                     savedOrder = currentOrder;
-                    console.log('Orden guardado exitosamente. Orden actual:', currentOrder);
-                    console.log('Orden guardado:', savedOrder);
+                    //console.log('Orden guardado exitosamente. Orden actual:', currentOrder);
+                    //console.log('Orden guardado:', savedOrder);
                     
                     // Actualizar el display del orden
                     $('.order-display').text(response.correct_answers);
@@ -455,7 +454,7 @@ function CmmOrderXBlock(runtime, element) {
                     
                     // Guardar los valores de las etiquetas personalizadas
                     if (data.use_custom_labels) {
-                        console.log('Guardando etiquetas personalizadas:', data.custom_labels);
+                        //console.log('Guardando etiquetas personalizadas:', data.custom_labels);
                         $('#current-custom-labels-value').val(JSON.stringify(data.custom_labels));
                     }
                 } else {
@@ -675,7 +674,7 @@ function CmmOrderXBlock(runtime, element) {
             }).join('_[|]_');
         }
         
-        console.log('Updating correct answers:', answerString);
+        //console.log('Updating correct answers:', answerString);
         $('#current-answers-value').val(answerString);
         $('.correct-answers-container .order-display').text(answerString);
         
@@ -739,11 +738,11 @@ function CmmOrderXBlock(runtime, element) {
     function initializeCorrectAnswers() {
         // Obtener el valor inicial del input oculto
         var initialAnswers = $('#current-answers-value').val();
-        console.log('Initial correct answers:', initialAnswers);
+        //console.log('Initial correct answers:', initialAnswers);
         
         if (initialAnswers) {
             var answersArray = stringToAnswersArray(initialAnswers);
-            console.log('Parsed answers array:', answersArray);
+            ///console.log('Parsed answers array:', answersArray);
             
             // Limpiar las respuestas existentes
             $('.correct-answers-list').empty();
@@ -947,7 +946,7 @@ function CmmOrderXBlock(runtime, element) {
 
     // Función para manejar la visibilidad del contenedor de etiquetas personalizadas
     function handleCustomLabelsVisibility() {
-        console.log('[CMMEDU-ORDERTABLE] handleCustomLabelsVisibility llamado');
+        //console.log('[CMMEDU-ORDERTABLE] handleCustomLabelsVisibility llamado');
         var useCustomLabels = $('#use_custom_labels').is(':checked');
         $('.custom-labels-container').toggle(useCustomLabels);
         
@@ -958,7 +957,7 @@ function CmmOrderXBlock(runtime, element) {
 
     // Agregar eventos para actualizar los valores por defecto cuando cambie el tipo de numeración
     $('#numbering_type, #uppercase_letters').on('change', function() {
-        console.log('[CMMEDU-ORDERTABLE] Cambio en numbering_type o uppercase_letters');
+        //console.log('[CMMEDU-ORDERTABLE] Cambio en numbering_type o uppercase_letters');
         if ($('#use_custom_labels').is(':checked')) {
             updateCustomLabelsInputs();
         }
@@ -997,7 +996,6 @@ function CmmOrderXBlock(runtime, element) {
 
     // Inicialización de eventos
     $tableRows.on('click', '.remove-row', removeRow);
-    $addRowButton.on('click', addRow);
     $saveButton.on('click', saveChanges);
     $cancelButton.on('click', function(event) {
         event.preventDefault();
