@@ -777,17 +777,7 @@ class CmmEduOrderTableXBlock(XBlock):
                 'max_value': self.weight
             })
             
-            # Publish completion event
-            completion = 1.0 if is_correct else 0.0
-            self.runtime.publish(self, 'completion', {
-                'completion': completion,
-                'user_id': self.scope_ids.user_id,
-                'block_key': str(self.scope_ids.usage_id),
-                'earned': weighted_score,
-                'possible': self.weight,
-                'complete': is_correct
-            })
-            print("[CMMEDU-ORDERTABLE] Published completion:", completion)
+            print("[CMMEDU-ORDERTABLE] Published grade event")
             
         except Exception as e:
             print("[CMMEDU-ORDERTABLE] Error publishing events:", str(e))
@@ -874,6 +864,42 @@ class CmmEduOrderTableXBlock(XBlock):
         Return the maximum score possible.
         """
         return self.weight if self.has_score else None
+
+    def get_progress(self):
+        """
+        Returns a statement of progress for the XBlock, which depends
+        on the user's current score
+        """
+        if self.weight == 0:
+            result = '0 puntos posibles'
+        elif self.attempts <= 0:
+            if self.weight == 1:
+                result = "1 punto posible"
+            else:
+                result = str(self.weight) + " puntos posibles"
+        else:
+            scaled_score = self.score * self.weight
+            # No trailing zero and no scientific notation
+            score_string = ('%.15f' % scaled_score).rstrip('0').rstrip('.')
+            if self.weight == 1:
+                result = str(score_string) + "/" + str(self.weight) + " punto"
+            else:
+                result = str(score_string) + "/" + str(self.weight) + " puntos"
+        return result
+
+    def get_completion_status(self):
+        """
+        Returns the completion status of the XBlock
+        """
+        if self.attempts > 0:
+            return {
+                'completion': self.score,
+                'complete': self.score >= 1.0
+            }
+        return {
+            'completion': 0.0,
+            'complete': False
+        }
 
     def get_numbering(self, index):
         """
