@@ -110,8 +110,10 @@ function CmmOrderXBlock(runtime, element) {
         if (data.use_custom_labels) {
             //console.log('Recolectando etiquetas personalizadas...');
             var cleanCustomLabels = {};
+            var iterator = 0;
             $('.custom-label-item').each(function() {
-                var key = $(this).data('key').trim();
+                var key = String( $(this).data('key') ).trim() || String(iterator);
+                iterator++; // Incrementar el contador
                 var value = $(this).find('.custom-label-input').val();
                 //console.log('Etiqueta personalizada:', key, '=', value);
                 cleanCustomLabels[key] = { content: value };
