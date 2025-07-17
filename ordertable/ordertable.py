@@ -186,6 +186,13 @@ class CmmEduOrderTableXBlock(XBlock):
         ]
     )
 
+    text_before_answer = String(
+        display_name="Texto antes de la respuesta correcta",
+        default="",
+        scope=Scope.settings,
+        help="Texto que se mostrará antes de la respuesta correcta, solo se mostrara si hay texto en el campo y se ha respondido correctamente"
+    )
+
     has_score = True
     icon_class = "problem"
 
@@ -224,7 +231,11 @@ class CmmEduOrderTableXBlock(XBlock):
         help="Respuesta enviada por el usuario"
     )
 
-    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'label_width', 'use_custom_labels', 'custom_labels')
+
+    
+    
+
+    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'label_width', 'use_custom_labels', 'custom_labels', 'text_before_answer')
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -265,7 +276,7 @@ class CmmEduOrderTableXBlock(XBlock):
             'correct_answers': self.correct_answers,
             'disordered_order': self.disordered_order,
             'random_disorder': self.random_disorder,
-            
+            'text_before_answer': self.text_before_answer
         }
 
         fragment.initialize_js(initialize_js_func, json_args=settings)
@@ -535,6 +546,11 @@ class CmmEduOrderTableXBlock(XBlock):
                 'value': self.custom_labels,
                 'display_name': self.fields['custom_labels'].display_name,
                 'help': self.fields['custom_labels'].help
+            },
+            'text_before_answer': {
+                'value': self.text_before_answer,
+                'display_name': self.fields['text_before_answer'].display_name,
+                'help': self.fields['text_before_answer'].help
             }
         }
         
@@ -580,7 +596,8 @@ class CmmEduOrderTableXBlock(XBlock):
             self.textcolumn_actions = data.get('textcolumn_actions', self.textcolumn_actions)
             self.label_width = data.get('label_width', self.label_width)
             self.use_custom_labels = data.get('use_custom_labels', self.use_custom_labels)
-            
+            self.text_before_answer = data.get('text_before_answer', self.text_before_answer)
+
             print("[CMMEDU-ORDERTABLE] use_custom_labels:", self.use_custom_labels)
             print("[CMMEDU-ORDERTABLE] custom_labels received:", data.get('custom_labels'))
             
@@ -680,7 +697,8 @@ class CmmEduOrderTableXBlock(XBlock):
                 'show_answer': self.show_answer,
                 'label_width': self.label_width,
                 'use_custom_labels': self.use_custom_labels,
-                'custom_labels': self.custom_labels
+                'custom_labels': self.custom_labels,
+                'text_before_answer': self.text_before_answer
             })
             
             return {
@@ -692,7 +710,8 @@ class CmmEduOrderTableXBlock(XBlock):
                 'show_answer': self.show_answer,
                 'label_width': self.label_width,
                 'use_custom_labels': self.use_custom_labels,
-                'custom_labels': self.custom_labels
+                'custom_labels': self.custom_labels,
+                'text_before_answer': self.text_before_answer
             }
         except Exception as e:
             print("[CMMEDU-ORDERTABLE] Error saving data:", str(e))

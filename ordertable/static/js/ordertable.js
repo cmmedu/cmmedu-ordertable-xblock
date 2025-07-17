@@ -457,9 +457,15 @@ c
         e.preventDefault();
         var $solution = $element.find('solution');
         var blockId = $element.attr('id');
-        
+
+        var answerHtml = '<p><b>Orden correcto:</b></p>'
+
+        if (settings.text_before_answer != "") {
+            answerHtml += '<p>' + settings.text_before_answer + '</p>'
+        }
+
         // Create table structure for the correct answer
-        var tableHtml = '<p><b>Orden correcto:</b></p>' +
+        let tableHtml =
             '<table class="cmmedu-ordertable-table-content">' +
             '<thead>' +
             '<tr>'
@@ -572,7 +578,7 @@ c
         tableHtml += '</tbody></table>';
         
         // Update solution content and show it
-        $solution.html(tableHtml);
+        $solution.html(answerHtml + tableHtml);
         $solution.show();
         
         // Change button text to indicate answer is shown

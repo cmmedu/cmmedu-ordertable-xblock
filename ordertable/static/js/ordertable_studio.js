@@ -103,7 +103,8 @@ function CmmOrderXBlock(runtime, element) {
             correct_answers: correctAnswersString,
             use_custom_labels: $('#use_custom_labels').is(':checked'),
             label_width: $element.find('#label_width').val(),
-            custom_labels: {}
+            custom_labels: {},
+            text_before_answer: $element.find('#text_before_answer').val()
         };
         
         // Recolectar las etiquetas personalizadas si el checkbox está marcado
