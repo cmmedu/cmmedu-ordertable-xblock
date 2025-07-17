@@ -11,6 +11,7 @@ import json
 from django.template import Context, Template
 from django.template.defaulttags import register
 import random  # Agregamos la importación de random
+from django.utils.translation import ugettext as _
 
 @register.filter
 def get_item(dictionary, key):
@@ -349,9 +350,13 @@ class CmmEduOrderTableXBlock(XBlock):
         texto_intentos = ''
         no_mas_intentos = False
         if self.max_attempts and self.max_attempts > 0:
-            texto_intentos = "Ha realizado "+str(self.attempts)+" de "+str(self.max_attempts)+" intentos"
+            texto_intentos = _(u"Ha realizado %(attempts)s de %(max_attempts)s intentos") % {
+                "attempts": self.attempts, "max_attempts": self.max_attempts
+            }
             if self.max_attempts == 1:
-                texto_intentos = "Ha realizado "+str(self.attempts)+" de "+str(self.max_attempts)+" intento"
+                texto_intentos = _(u"Ha realizado %(attempts)s de %(max_attempts)s intento") % {
+                    "attempts": self.attempts, "max_attempts": self.max_attempts
+                }
             if self.attempts >= self.max_attempts:
                 no_mas_intentos = True
 

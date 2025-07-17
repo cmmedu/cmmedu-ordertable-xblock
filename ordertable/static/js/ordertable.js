@@ -260,10 +260,15 @@ c
         */
     });
 
+    // Fallback para gettext si no está definido (desarrollo/testing)
+    if (typeof gettext !== "function") {
+        window.gettext = function(text) { return text; };
+    }
+
     function createVerRespuestaButton() {
-        return '<button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">' +
+        return '<button class="ver_respuesta" data-checking="' + gettext("Cargando...") + '" data-value="' + gettext("Ver Respuesta") + '">' +
             '<span class="icon fa fa-info-circle" aria-hidden="true"></span><br>' +
-            '<span>Mostrar<br>Respuesta</span>' +
+            '<span>' + gettext("Mostrar") + '<br>' + gettext("Respuesta") + '</span>' +
             '</button>';
     }
 
@@ -288,13 +293,13 @@ c
         if (currentScore >= 1.0) {
             $statusDiv.addClass('correct');
             //console.log("[CMM-ORDER] Estado inicial marcado como CORRECTO para XBlock " + sublocation);
-            $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="Respuesta Correcta"/> &nbsp; Respuesta Correcta &nbsp;');
+            $notification.html('&nbsp; <img src="/static/images/correct-icon.png" alt="' + gettext("Respuesta Correcta") + '"/> &nbsp; ' + gettext("Respuesta Correcta") + ' &nbsp;');
             shouldDisableButton = true;
             shouldDisableMoveButtons = true;
         } else if (currentScore === 0.0 && attempts > 0) {
             $statusDiv.addClass('incorrect');
             //console.log("[CMM-ORDER] Estado inicial marcado como INCORRECTO para XBlock " + sublocation);
-            $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta"/> &nbsp; Respuesta Incorrecta &nbsp;');
+            $notification.html('&nbsp; <img src="/static/images/incorrect-icon.png" alt="' + gettext("Respuesta Incorrecta") + '"/> &nbsp; ' + gettext("Respuesta Incorrecta") + ' &nbsp;');
             
             // Verificar si se agotaron los intentos (solo si hay un límite de intentos)
             if (maxAttempts > 0 && attempts >= maxAttempts) {
@@ -458,7 +463,7 @@ c
         var $solution = $element.find('solution');
         var blockId = $element.attr('id');
 
-        var answerHtml = '<p><b>Orden correcto:</b></p>'
+        var answerHtml = '<p><b>' + gettext("Orden correcto:") + '</b></p>'
 
         if (settings.text_before_answer != "") {
             answerHtml += '<p>' + settings.text_before_answer + '</p>'
@@ -646,9 +651,13 @@ c
             attempts = parseInt(response.attempts);
             maxAttempts = parseInt(response.max_attempts);
             
-            var attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intentos";
+            var attemptsText = gettext("Ha realizado %(attempts)s de %(max_attempts)s intentos")
+                .replace("%(attempts)s", attempts)
+                .replace("%(max_attempts)s", maxAttempts);
             if (maxAttempts === 1) {
-                attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intento";
+                attemptsText = gettext("Ha realizado %(attempts)s de %(max_attempts)s intento")
+                    .replace("%(attempts)s", attempts)
+                    .replace("%(max_attempts)s", maxAttempts);
             }
             $element.find('.submission-feedback').text(attemptsText);
             
@@ -689,9 +698,9 @@ c
     function showMessage(message, type) {
         var $notification = $element.find('.notificacion');
         if (type === 'error') {
-            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Error"/> &nbsp; ' + message);
+            $notification.html('<img src="/static/images/incorrect-icon.png" alt="Error"/> &nbsp; ' + (message ? gettext(message) : gettext('Error al enviar la respuesta')));
         } else {
-            $notification.html(message);
+            $notification.html(gettext(message));
         }
     }
 
@@ -884,9 +893,13 @@ c
             attempts = parseInt(state.attempts);
             maxAttempts = parseInt(state.max_attempts);
             
-            var attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intentos";
+            var attemptsText = gettext("Ha realizado %(attempts)s de %(max_attempts)s intentos")
+                .replace("%(attempts)s", attempts)
+                .replace("%(max_attempts)s", maxAttempts);
             if (maxAttempts === 1) {
-                attemptsText = "Ha realizado " + attempts + " de " + maxAttempts + " intento";
+                attemptsText = gettext("Ha realizado %(attempts)s de %(max_attempts)s intento")
+                    .replace("%(attempts)s", attempts)
+                    .replace("%(max_attempts)s", maxAttempts);
             }
             $element.find('.submission-feedback').text(attemptsText);
         }

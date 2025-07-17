@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="problem cmmedu-ordertable-block" id="order_{{ sublocation }}" data-image-path="{{ image_path }}">
     {% if is_team or is_studio %}
     <div class="weight-info">
@@ -83,7 +84,7 @@
     </solution>
     <div class="submit-box">
         <div class="action">
-            <button class="cmmedu-ordertable-submit Submit submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
+            <button class="cmmedu-ordertable-submit Submit submit" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>{% trans "Enviar" %}</button>
             <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}
@@ -93,13 +94,13 @@
                 {% if show_correctness != 'never' %}
                     {% if attempts > 0 %}
                         {% if score >= 1 %}
-                            <img src="/static/images/correct-icon.png" alt="Respuesta Correcta" class="status-icon"/>
+                            <img src="/static/images/correct-icon.png" alt="{% trans 'Respuesta Correcta' %}" class="status-icon"/>
                         {% else %}
-                            <img src="/static/images/incorrect-icon.png" alt="Respuesta Incorrecta" class="status-icon"/>
+                            <img src="/static/images/incorrect-icon.png" alt="{% trans 'Respuesta Incorrecta' %}" class="status-icon"/>
                             {% if show_answer == "when_attempts_run_out" and no_mas_intentos %}
                                 <button class="ver_respuesta" data-checking="Cargando..." data-value="Ver Respuesta">
                                     <span class="icon fa fa-info-circle" aria-hidden="true"></span><br>
-                                    <span>Mostrar<br>Respuesta</span>
+                                    <span>{% trans "Mostrar" %}<br>{% trans "Respuesta" %}</span>
                                 </button>
                             {% endif %}
                         {% endif %}

@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: ordertable.py
+msgid "Ha realizado %(attempts)s de %(max_attempts)s intentos"
+msgstr "You have made %(attempts)s out of %(max_attempts)s attempts"
+
+#: ordertable.py
+msgid "Ha realizado %(attempts)s de %(max_attempts)s intento"
+msgstr "You have made %(attempts)s out of %(max_attempts)s attempt"
+
+#: static/html/ordertable.html
+msgid "Enviar"
+msgstr "Submit"
+
+#: static/html/ordertable.html
+msgid "Respuesta Correcta"
+msgstr "Correct Answer"
+
+#: static/html/ordertable.html
+msgid "Respuesta Incorrecta"
+msgstr "Incorrect Answer"
+
+#: static/html/ordertable.html
+msgid "Mostrar"
+msgstr "Show"
+
+#: static/html/ordertable.html
+msgid "Respuesta"
+msgstr "Answer"
+
+#: static/js/ordertable.js
+msgid "Cargando..."
+msgstr "Loading..."
+
+#: static/js/ordertable.js
+msgid "Ver Respuesta"
+msgstr "Show Answer"
+
+#: static/js/ordertable.js
+msgid "Mostrar"
+msgstr "Show"
+
+#: static/js/ordertable.js
+msgid "Respuesta"
+msgstr "Answer"
+
+#: static/js/ordertable.js
+msgid "Error al enviar la respuesta"
+msgstr "Error sending the answer"
+
+#: static/js/ordertable.js
+msgid "Orden correcto:"
+msgstr "Correct order:"
