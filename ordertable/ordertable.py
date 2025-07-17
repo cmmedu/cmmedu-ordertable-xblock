@@ -190,7 +190,7 @@ class CmmEduOrderTableXBlock(XBlock):
         display_name="Texto antes de la respuesta correcta",
         default="",
         scope=Scope.settings,
-        help="Texto que se mostrará antes de la respuesta correcta, solo se mostrara si hay texto en el campo y se ha respondido correctamente"
+        help="Texto que se mostrará antes de la respuesta correcta, solo se mostrara si hay texto en el campo"
     )
 
     has_score = True
