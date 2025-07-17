@@ -760,8 +760,7 @@ c
         updateButtonStates();
         
         // Re-render MathJax if needed
-        var ordertableid = "order_" + settings.sublocation;
-        renderMathForSpecificElements(ordertableid);
+        reRenderMathJax();
     }
 
     // Add visibility change handler
@@ -784,6 +783,9 @@ c
                         if (response.user_answer && !$element.find('solution').is(':visible')) {
                             restoreTableOrder(response.user_answer);
                         }
+                        
+                        // Re-renderizar MathJax después de restaurar el estado
+                        reRenderMathJax();
                     }
                 },
                 error: function(xhr, status, error) {
@@ -796,6 +798,67 @@ c
     // Remove any existing handler and add the new one
     document.removeEventListener('visibilitychange', visibilityHandler);
     document.addEventListener('visibilitychange', visibilityHandler);
+    
+    // Función para refrescar el estado desde el servidor
+    function refreshStateFromServer() {
+        // When returning to the tab, refresh the state from the server
+        $.ajax({
+            type: 'POST',
+            url: runtime.handlerUrl(element, 'get_state'),
+            data: JSON.stringify({}),
+            success: function(response) {
+                if (response) {
+                    // Update UI with the fresh state from server
+                    var state = {
+                        sublocation: sublocation,
+                        ...response
+                    };
+                    updateUIWithState(state);
+                    // Solo restaurar el orden de la tabla si hay una respuesta del usuario y no es la tabla de respuesta correcta
+                    if (response.user_answer && !$element.find('solution').is(':visible')) {
+                        restoreTableOrder(response.user_answer);
+                    }
+                    
+                    // Re-renderizar MathJax después de restaurar el estado
+                    reRenderMathJax();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("[CMM-ORDER] Error al actualizar estado para XBlock " + sublocation + ":", error);
+            }
+        });
+    }
+    
+    // Add sequence tab click handler
+    var sequenceTabHandler = function(event) {
+        // Verificar que el click sea en una pestaña de secuencia
+        var $clickedElement = $(event.target);
+        var isSequenceTab = $clickedElement.closest('#sequence-list').length > 0 && 
+                           $clickedElement.hasClass('nav-item');
+        
+        if (isSequenceTab) {
+            //console.log("[CMM-ORDER] Click detectado en pestaña de secuencia para XBlock " + sublocation);
+            
+            // Ejecutar toda la lógica de caché después del cambio de pestaña
+            setTimeout(function() {
+                refreshStateFromServer();
+            }, 300);
+        }
+    };
+
+    // Add sequence change event handler (triggered by the sequence navigation)
+    var sequenceChangeHandler = function() {
+        //console.log("[CMM-ORDER] Cambio de secuencia detectado para XBlock " + sublocation);
+        
+        // Ejecutar toda la lógica de caché después del cambio de secuencia
+        setTimeout(function() {
+            refreshStateFromServer();
+        }, 300);
+    };
+
+    // Add event listeners for sequence navigation
+    $(document).on('click', '#sequence-list .nav-item', sequenceTabHandler);
+    $element.on('sequence:change', sequenceChangeHandler);
 
     function updateUIWithState(state) {
         if (!state || state.sublocation !== sublocation) {
@@ -829,6 +892,9 @@ c
         $element.data('state', state);
         $xblocksContainer.data(cachedStateId, state);
         
+        // Re-renderizar MathJax después de actualizar el estado
+        reRenderMathJax();
+        
         //console.log("[CMM-ORDER] Estado final para XBlock " + sublocation + " - Score:", currentScore, "Attempts:", attempts, "Status class:", $element.find('.status').attr('class'));
     }
 
@@ -849,6 +915,18 @@ c
         } else {
             console.warn("MathJax no está cargado.");
         }
+    }
+
+    // Función helper para re-renderizar MathJax en el elemento actual
+    function reRenderMathJax() {
+        setTimeout(function() {
+            if (typeof MathJax !== "undefined") {
+                //console.log("[CMM-ORDER] Re-renderizando MathJax para XBlock " + sublocation);
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
+            } else {
+                console.warn("MathJax no está cargado.");
+            }
+        }, 100);
     }
 }
 
