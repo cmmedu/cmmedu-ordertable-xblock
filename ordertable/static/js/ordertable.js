@@ -766,7 +766,7 @@ c
         updateButtonStates();
         
         // Re-render MathJax if needed
-        reRenderMathJax();
+        renderMathForSpecificElements("ordertable_" + settings.sublocation);
     }
 
     // Add visibility change handler
@@ -791,7 +791,7 @@ c
                         }
                         
                         // Re-renderizar MathJax después de restaurar el estado
-                        reRenderMathJax();
+                        renderMathForSpecificElements("ordertable_" + settings.sublocation);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -826,7 +826,7 @@ c
                     }
                     
                     // Re-renderizar MathJax después de restaurar el estado
-                    reRenderMathJax();
+                    renderMathForSpecificElements("ordertable_" + settings.sublocation);
                 }
             },
             error: function(xhr, status, error) {
@@ -899,12 +899,12 @@ c
         $xblocksContainer.data(cachedStateId, state);
         
         // Re-renderizar MathJax después de actualizar el estado
-        reRenderMathJax();
+        renderMathForSpecificElements("ordertable_" + settings.sublocation);
         
         //console.log("[CMM-ORDER] Estado final para XBlock " + sublocation + " - Score:", currentScore, "Attempts:", attempts, "Status class:", $element.find('.status').attr('class'));
     }
 
-    var ordertableid = "order_" + settings.sublocation;
+    var ordertableid = "ordertable_" + settings.sublocation;
     renderMathForSpecificElements(ordertableid);
 
     function renderMathForSpecificElements(id) {
