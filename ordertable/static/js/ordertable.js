@@ -909,17 +909,18 @@ c
 
     function renderMathForSpecificElements(id) {
         //console.log("Render mathjax in " + id)
+        console.log("[CMM-ORDER-TABLE] Render mathjax in " + id)
         if (typeof MathJax !== "undefined") {
             var $ordtab = $('#' + id);
-            //console.log("encontrado " )
+            console.log("[CMM-ORDER-TABLE] encontrado " + $ordtab)
             //console.log($ordtab)
             if ($ordtab.length) {
-                $ordtab.find('.cmm-order-table-content').each(function (index, ordtabelem) {
+                $ordtab.find('.cmmedu-ordertable-table').each(function (index, ordtabelem) {
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, ordtabelem]);
                 });
             }
         } else {
-            console.warn("MathJax no está cargado.");
+            console.warn("[CMM-ORDER-TABLE] MathJax no está cargado.");
         }
     }
 
