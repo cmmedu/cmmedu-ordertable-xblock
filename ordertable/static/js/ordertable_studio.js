@@ -958,12 +958,19 @@ function CmmOrderXBlock(runtime, element) {
         }
     }
 
+    function handleNumberingAffixVisibility() {
+        var numberingType = $('#numbering_type').val();
+        var showAffixFields = numberingType !== 'none';
+        $('.numbering-affix-field').toggle(showAffixFields);
+    }
+
     // Agregar eventos para actualizar los valores por defecto cuando cambie el tipo de numeración
     $('#numbering_type, #uppercase_letters').on('change', function() {
         //console.log('[CMMEDU-ORDERTABLE] Cambio en numbering_type o uppercase_letters');
         if ($('#use_custom_labels').is(':checked')) {
             updateCustomLabelsInputs();
         }
+        handleNumberingAffixVisibility();
     });
 
     // Agregar el evento change al checkbox
@@ -971,6 +978,7 @@ function CmmOrderXBlock(runtime, element) {
 
     // Ejecutar al inicio
     handleCustomLabelsVisibility();
+    handleNumberingAffixVisibility();
     
     // Mostrar el valor de custom_labels al inicio
     //console.log('[CMMEDU-ORDERTABLE] Custom labels al inicio:', $('#current-custom-labels-value').val());
