@@ -3,6 +3,7 @@
 """Bloque de tabla ordenada"""
 
 import pkg_resources
+import re
 from xblock.core import XBlock
 from xblock.fields import String, Dict, Scope, Boolean, List, Integer, Float
 from xblockutils.resources import ResourceLoader
@@ -96,6 +97,13 @@ class CmmEduOrderTableXBlock(XBlock):
         help="Color de fondo de la tabla en formato hexadecimal",
         scope=Scope.settings,
         default="#ececec"
+    )
+
+    submit_button_color = String(
+        display_name="Color del botón de enviar",
+        help="Color de fondo del botón de enviar en formato hexadecimal. Dejar en blanco para usar el color por defecto de la plataforma",
+        scope=Scope.settings,
+        default=""
     )
 
     numbering_type = String(
@@ -235,7 +243,20 @@ class CmmEduOrderTableXBlock(XBlock):
     
     
 
-    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'label_width', 'use_custom_labels', 'custom_labels', 'text_before_answer')
+    editable_fields = ('display_name', 'table_name', 'textcolumn_order', 'textcolumn_content', 'textcolumn_actions', 'background_color', 'submit_button_color', 'numbering_type', 'pretext_num', 'postext_num', 'uppercase_letters', 'ordeingelements', 'correct_answers', 'disordered_order', 'random_disorder', 'weight', 'max_attempts', 'show_answer', 'label_width', 'use_custom_labels', 'custom_labels', 'text_before_answer')
+
+    @staticmethod
+    def normalize_submit_button_color(value):
+        """
+        Returns a safe #rgb or #rrggbb color for the submit button, or '' to
+        defer to the platform's default submit button color.
+        """
+        if value is None:
+            return ''
+        candidate = str(value).strip()
+        if re.match(r'^#[0-9a-fA-F]{3}$', candidate) or re.match(r'^#[0-9a-fA-F]{6}$', candidate):
+            return candidate
+        return ''
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -276,7 +297,8 @@ class CmmEduOrderTableXBlock(XBlock):
             'correct_answers': self.correct_answers,
             'disordered_order': self.disordered_order,
             'random_disorder': self.random_disorder,
-            'text_before_answer': self.text_before_answer
+            'text_before_answer': self.text_before_answer,
+            'submit_button_color': self.normalize_submit_button_color(self.submit_button_color)
         }
 
         fragment.initialize_js(initialize_js_func, json_args=settings)
@@ -393,6 +415,7 @@ class CmmEduOrderTableXBlock(XBlock):
             'sublocation': str(self.location).split('@')[-1],
             'table_name': self.table_name,
             'background_color': self.background_color,
+            'submit_button_color': self.normalize_submit_button_color(self.submit_button_color),
             'textcolumn_order': self.textcolumn_order,
             'textcolumn_content': self.textcolumn_content,
             'textcolumn_actions': self.textcolumn_actions,
@@ -461,6 +484,11 @@ class CmmEduOrderTableXBlock(XBlock):
                 'value': self.background_color,
                 'display_name': self.fields['background_color'].display_name,
                 'help': self.fields['background_color'].help
+            },
+            'submit_button_color': {
+                'value': self.normalize_submit_button_color(self.submit_button_color),
+                'display_name': self.fields['submit_button_color'].display_name,
+                'help': self.fields['submit_button_color'].help
             },
             'numbering_type': {
                 'value': self.numbering_type,
@@ -585,6 +613,9 @@ class CmmEduOrderTableXBlock(XBlock):
             self.display_name = data.get('display_name', self.display_name)
             self.table_name = data.get('table_name', self.table_name)
             self.background_color = data.get('background_color', self.background_color)
+            self.submit_button_color = self.normalize_submit_button_color(
+                data.get('submit_button_color', self.submit_button_color)
+            )
             self.numbering_type = data.get('numbering_type', self.numbering_type)
             self.uppercase_letters = data.get('uppercase_letters', self.uppercase_letters)
             self.random_disorder = data.get('random_disorder', self.random_disorder)
@@ -955,6 +986,7 @@ class CmmEduOrderTableXBlock(XBlock):
             'textcolumn_content': self.textcolumn_content,
             'textcolumn_actions': self.textcolumn_actions,
             'background_color': self.background_color,
+            'submit_button_color': self.normalize_submit_button_color(self.submit_button_color),
             'numbering_type': self.numbering_type,
             'pretext_num': self.pretext_num,
             'postext_num': self.postext_num,

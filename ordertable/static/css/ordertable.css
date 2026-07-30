@@ -3,15 +3,16 @@
     font-family: Arial, sans-serif;
 }
 
-/* Add submit button styles with maximum specificity */
+/* Structural button styles, always applied. Background color is intentionally
+   left to the platform theme (.course-wrapper .submit) unless the Studio
+   author sets an explicit submit_button_color for this block. */
 div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit {
-    background-color: #dc0000 !important;
     background-image: none !important;
     border-color: white !important;
     box-sizing: border-box !important;
     border-radius: 10px !important;
     padding: 8px 20px !important;
-    color: white !important;
+    color: white;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     text-shadow: none !important;
@@ -25,14 +26,21 @@ div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-orde
     font-size: 16px;
 }
 
-div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit:hover {
-    background-color: #750101 !important;
+/* Only applied when the Studio author sets an explicit submit_button_color */
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit.cmmedu-ordertable-submit-custom-color {
+    background-color: var(--cmmedu-submit-color) !important;
+}
+
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit.cmmedu-ordertable-submit-custom-color:hover {
+    background-color: var(--cmmedu-submit-color) !important;
+    filter: brightness(0.75);
     box-shadow: none !important;
     border-width: 1px !important;
 }
 
-div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit:focus {
-    background-color: #b30000 !important;
+div.problem.cmmedu-ordertable-block div.submit-box div.action button.cmmedu-ordertable-submit.cmmedu-ordertable-submit-custom-color:focus {
+    background-color: var(--cmmedu-submit-color) !important;
+    filter: brightness(0.85);
     box-shadow: none !important;
     border-width: 1px !important;
 }

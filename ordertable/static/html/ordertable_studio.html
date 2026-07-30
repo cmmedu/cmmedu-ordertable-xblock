@@ -90,6 +90,15 @@
                 </li>
                 <li class="field comp-setting-entry is-set">
                     <div class="wrapper-comp-setting">
+                        <label class="label setting-label"
+                            for="submit_button_color">{{submit_button_color.display_name}}</label>
+                        <span class="tip setting-help">{{submit_button_color.help}}</span>
+                        <input class="input setting-input" name="submit_button_color" id="submit_button_color"
+                            type="text" maxlength="7" value="{{submit_button_color.value}}" />
+                    </div>
+                </li>
+                <li class="field comp-setting-entry is-set">
+                    <div class="wrapper-comp-setting">
                         <label class="label setting-label" for="numbering_type">{{numbering_type.display_name}}</label>
                         <span class="tip setting-help">{{numbering_type.help}}</span>
                         <select class="input setting-input" name="numbering_type" id="numbering_type">

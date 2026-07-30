@@ -92,6 +92,7 @@ function CmmOrderXBlock(runtime, element) {
             textcolumn_content: $element.find('#textcolumn_content').val(),
             textcolumn_actions: $element.find('#textcolumn_actions').val(),
             background_color: $element.find('#background_color').val(),
+            submit_button_color: $element.find('#submit_button_color').val(),
             numbering_type: $element.find('#numbering_type').val(),
             pretext_num: $element.find('#pretext_num').val(),
             postext_num: $element.find('#postext_num').val(),

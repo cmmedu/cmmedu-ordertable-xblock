@@ -262,13 +262,6 @@
     background-color: #218838;
 }
 
-.cmmedu-ordertable-xblock-studio .eol-order-edit .input.setting-input[type="color"] {
-    width: 50px;
-    height: 30px;
-    padding: 0;
-    border: 1px solid #ccc;
-}
-
 .cmmedu-ordertable-xblock-studio .eol-order-edit .input.setting-input[type="checkbox"] {
     width: auto;
     margin-top: 5px;
