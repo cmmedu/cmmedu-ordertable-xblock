@@ -83,7 +83,7 @@
     </solution>
     <div class="submit-box">
         <div class="action">
-            <button class="cmmedu-ordertable-submit Submit submit{% if submit_button_color %} cmmedu-ordertable-submit-custom-color{% endif %}" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
+            <button class="cmmedu-ordertable-submit Submit submit {% if submit_button_color %} cmmedu-ordertable-submit-custom-color{% endif %}" aria-describedby="status_{{ sublocation }}" {% if no_mas_intentos %}disabled{% endif %}>Enviar</button>
             <span id="submission_feedback_{{ sublocation }}" class="submission-feedback">
                 {% if max_attempts > 0 %}
                     {{ texto_intentos }}

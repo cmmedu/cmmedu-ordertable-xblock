@@ -904,15 +904,14 @@ c
         //console.log("[CMM-ORDER] Estado final para XBlock " + sublocation + " - Score:", currentScore, "Attempts:", attempts, "Status class:", $element.find('.status').attr('class'));
     }
 
-    var ordertableid = "ordertable_" + settings.sublocation;
-    renderMathForSpecificElements(ordertableid);
+
 
     function renderMathForSpecificElements(id) {
         //console.log("Render mathjax in " + id)
-        console.log("[CMM-ORDER-TABLE] Render mathjax in " + id)
+        //console.log("[CMM-ORDER-TABLE] Render mathjax in " + id)
         if (typeof MathJax !== "undefined") {
             var $ordtab = $('#' + id);
-            console.log("[CMM-ORDER-TABLE] encontrado " + $ordtab)
+            //console.log("[CMM-ORDER-TABLE] encontrado " + $ordtab)
             //console.log($ordtab)
             if ($ordtab.length) {
                 $ordtab.find('.cmmedu-ordertable-table').each(function (index, ordtabelem) {
@@ -924,17 +923,7 @@ c
         }
     }
 
-    // Función helper para re-renderizar MathJax en el elemento actual
-    function reRenderMathJax() {
-        setTimeout(function() {
-            if (typeof MathJax !== "undefined") {
-                //console.log("[CMM-ORDER] Re-renderizando MathJax para XBlock " + sublocation);
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
-            } else {
-                console.warn("MathJax no está cargado.");
-            }
-        }, 100);
-    }
+    renderMathForSpecificElements("ordertable_" + settings.sublocation);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
