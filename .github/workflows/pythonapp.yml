@@ -3,14 +3,14 @@ name: Python application
 on:
   push:
     branches:
-      - 'cmmedu-release/*'
+      - 'eol-release/*'
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
     branches:
-      - 'cmmedu-release/*'
+      - 'eol-release/*'
 
 jobs:
   test:
@@ -20,6 +20,6 @@ jobs:
       django-lms: true
       django-cms: false
       platform-eol: true
-      platform-openuchile: true
+      platform-openuchile: false
     secrets:
       private_key: ${{ secrets.EOLITO_BOT_PRIVATE_KEY }}
