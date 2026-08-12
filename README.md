@@ -1,5 +1,7 @@
 # CMM Ordertable XBlock
 
+![coverage](coverage-badge.svg)
+
 [Leer en Español](README_ES.md)
 
 CMM Order Table XBlock is an educational tool designed to integrate into [edX courses](https://www.edx.org/). This tool allows students to order elements in a specific sequence, which is useful for assessing their understanding of processes, steps, or concepts that must follow a particular order.
