@@ -46,3 +46,7 @@ coverage.xml
 
 # Logs
 *.log 
+
+#tests
+test_root/
+wf_tmp/

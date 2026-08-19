@@ -4,7 +4,7 @@ Tests for CmmOrderXBlock
 import json
 import unittest
 from mock import MagicMock, Mock
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from opaque_keys.edx.locator import CourseLocator
 from xblock.field_data import DictFieldData
 from .ordertable import CmmEduOrderTableXBlock
 
@@ -28,7 +28,7 @@ class TestCmmEduOrderTableXBlock(unittest.TestCase):
         """
         Helper method that creates a CmmEduOrderTable XBlock
         """
-        course_id = SlashSeparatedCourseKey('foo', 'bar', 'baz')
+        course_id = CourseLocator('foo', 'bar', 'baz')
         runtime = Mock(
             course_id=course_id,
             service=Mock(
